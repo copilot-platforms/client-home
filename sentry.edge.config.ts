@@ -7,7 +7,8 @@ import { SentryConfig } from '@/config'
 import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
-  dsn: SentryConfig.DSN,
+  // Edge is mostly used for edge computed API routes so use Server DSN for now
+  dsn: SentryConfig.DSN.SERVER,
 
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,

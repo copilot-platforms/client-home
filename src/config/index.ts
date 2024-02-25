@@ -6,6 +6,9 @@ export const apiUrl = `${
 }${process.env.VERCEL_URL}`
 
 export const SentryConfig = {
-  DSN: process.env.SENTRY_DSN || '',
+  DSN: {
+    CLIENT: process.env.SENTRY_DSN_CLIENT || '',
+    SERVER: process.env.SENTRY_DSN_SERVER || '',
+  },
   AUTH_TOKEN: process.env.SENTRY_TOKEN,
 }

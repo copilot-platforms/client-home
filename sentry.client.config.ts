@@ -6,7 +6,7 @@ import { SentryConfig } from '@/config'
 import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
-  dsn: SentryConfig.DSN,
+  dsn: SentryConfig.DSN.CLIENT,
 
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,
