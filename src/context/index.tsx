@@ -16,6 +16,7 @@ export interface IAppState {
   changesCreated: boolean
   settings: ISettings | undefined
   originalTemplate: string | undefined
+  displayTasks: boolean
   loading: boolean
   //this data should be fetched from API in the future
   clientList: IClient[]
@@ -33,6 +34,7 @@ export interface IAppContext {
   toggleChangesCreated: (v: boolean) => void
   setSettings: (settings: ISettings) => void
   setOriginalTemplate: (template: string) => void
+  toggleDisplayTasks: () => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
@@ -61,6 +63,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     changesCreated: false,
     settings: undefined,
     originalTemplate: undefined,
+    displayTasks: false,
     loading: false,
     clientList: [],
     customFields: [],
@@ -97,6 +100,13 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
 
   const setOriginalTemplate = (template: string) => {
     setState((prev) => ({ ...prev, originalTemplate: template }))
+  }
+
+  const toggleDisplayTasks = () => {
+    setState((prev) => ({
+      ...prev,
+      displayTasks: !prev.displayTasks,
+    }))
   }
 
   const setLoading = (v: boolean) => {
@@ -139,6 +149,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         toggleChangesCreated,
         setSettings,
         setOriginalTemplate,
+        toggleDisplayTasks,
         setLoading,
         setClientList,
         setCustomFields,
