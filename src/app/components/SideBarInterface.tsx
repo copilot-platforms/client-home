@@ -11,6 +11,7 @@ import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
+import DisplayTasksToggle from '@/components/DisplayTasks/Toggle'
 
 interface IEditorInterface {
   clientList: IClient[]
@@ -156,6 +157,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
       <ColorPicker />
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}
+      <DisplayTasksToggle />
 
       <AutofillFields />
 
