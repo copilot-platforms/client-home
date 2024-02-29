@@ -18,6 +18,7 @@ export interface IAppState {
   originalTemplate: string | undefined
   displayTasks: boolean
   loading: boolean
+  showNotificationsModal: boolean
   //this data should be fetched from API in the future
   clientList: IClient[]
   customFields: ICustomField[]
@@ -35,6 +36,7 @@ export interface IAppContext {
   setSettings: (settings: ISettings) => void
   setOriginalTemplate: (template: string) => void
   toggleDisplayTasks: (options?: { override: boolean }) => void
+  toggleNotificationsModal: () => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
@@ -68,6 +70,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     clientList: [],
     customFields: [],
     token: '',
+    showNotificationsModal: false,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -106,6 +109,13 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({
       ...prev,
       displayTasks: options ? options.override : !prev.displayTasks,
+    }))
+  }
+
+  const toggleNotificationsModal = () => {
+    setState((prev) => ({
+      ...prev,
+      showNotificationsModal: !prev.showNotificationsModal,
     }))
   }
 
@@ -150,6 +160,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setSettings,
         setOriginalTemplate,
         toggleDisplayTasks,
+        toggleNotificationsModal,
         setLoading,
         setClientList,
         setCustomFields,

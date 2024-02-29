@@ -11,7 +11,10 @@ export const Switch = ({
   const ActiveIcon = value ? SwitchIconSelected : SwitchIconUnselected
 
   return (
-    <Box onClick={onChange} className='cursor-pointer h-full flex align-center'>
+    <Box
+      onClick={onChange}
+      className='cursor-pointer flex justify-center items-center'
+    >
       <ActiveIcon style={{ scale: 1.4 }} />
     </Box>
   )
