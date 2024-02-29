@@ -3,7 +3,6 @@ import { IClient, ISettings } from '@/types/interfaces'
 import ClientPreview from '../components/ClientPreview'
 import { apiUrl } from '@/config'
 import Image from 'next/image'
-import { defaultBannerImagePath } from '@/utils/constants'
 
 export const revalidate = 0
 
@@ -62,14 +61,14 @@ export default async function ClientPreviewPage({
     settings = defaultSetting
   }
 
-  const defaultClient = await getClient(clientId, token)
+  const _client = await getClient(clientId, token)
 
-  const company = await getCompany(defaultClient.companyId, token)
+  const company = await getCompany(_client.companyId, token)
 
   const template = Handlebars?.compile(settings?.content)
 
   //add comma separator for custom fields
-  const customFields: any = defaultClient?.customFields
+  const customFields: any = _client?.customFields
   for (const key in customFields) {
     if (Array.isArray(customFields[key])) {
       //element[0].toUpperCase() + element.substring(1) is a hack to capitalize the first string, however changes in SDK response
@@ -80,7 +79,8 @@ export default async function ClientPreviewPage({
     }
   }
   const client = {
-    ...defaultClient,
+    ..._client,
+    ...(Object.keys(customFields as object).length && customFields),
     company: company.name,
   }
 
