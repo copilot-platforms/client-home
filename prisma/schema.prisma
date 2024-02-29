@@ -16,12 +16,13 @@ model Setting {
   bannerImageId   String?  @unique @db.Uuid
   bannerImage     Media?   @relation(fields: [bannerImageId], references: [id], onDelete: SetNull)
   backgroundColor String?
+  displayTasks    Boolean  @default(false)
   content         String?
   workspaceId     String
   createdById     String   @db.Uuid
   createdAt       DateTime @default(now()) @db.Timestamptz()
   updatedAt       DateTime @updatedAt @ignore @db.Timestamptz()
-
+ 
   @@index([bannerImageId], name: "bannerImageId")
 }
 
