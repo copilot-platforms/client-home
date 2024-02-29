@@ -27,7 +27,9 @@ export class SettingService {
   }
 
   async save(
-    requestData: SettingRequest & { workspaceId: string },
+    requestData: SettingRequest & {
+      workspaceId: string
+    },
   ): Promise<void> {
     const currentUser = await getCurrentUser(requestData.token)
 
@@ -45,6 +47,7 @@ export class SettingService {
           content: requestData.content,
           createdById: currentUser.id,
           workspaceId: requestData.workspaceId,
+          displayTasks: requestData.displayTasks,
         },
       })
 
@@ -59,6 +62,7 @@ export class SettingService {
         bannerImageId: requestData.bannerImageId,
         backgroundColor: requestData.backgroundColor,
         content: requestData.content,
+        displayTasks: requestData.displayTasks,
       },
     })
   }
