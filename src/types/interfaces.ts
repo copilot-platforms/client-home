@@ -11,6 +11,7 @@ export interface ISettings {
     createdById: string
   } | null
   createdById: string
+  displayTasks: boolean
 }
 
 export interface IClient {

@@ -221,7 +221,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
-          appState?.appState.bannerImgUrl
+          appState?.appState.bannerImgUrl ||
+        appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -235,6 +237,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.editorColor,
     appState?.appState.bannerImgUrl,
     appState?.appState.readOnly,
+    appState?.appState.displayTasks,
     appState?.appState.settings,
     editor,
   ])
@@ -275,6 +278,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             createdById: '',
           },
           createdById: '',
+          displayTasks: false,
         }
         appState?.setOriginalTemplate(settings?.content || '')
         appState?.setSettings(settings || _settings)

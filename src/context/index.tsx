@@ -34,7 +34,7 @@ export interface IAppContext {
   toggleChangesCreated: (v: boolean) => void
   setSettings: (settings: ISettings) => void
   setOriginalTemplate: (template: string) => void
-  toggleDisplayTasks: () => void
+  toggleDisplayTasks: (options?: { override: boolean }) => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
@@ -102,10 +102,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, originalTemplate: template }))
   }
 
-  const toggleDisplayTasks = () => {
+  const toggleDisplayTasks = (options?: { override: boolean }) => {
     setState((prev) => ({
       ...prev,
-      displayTasks: !prev.displayTasks,
+      displayTasks: options ? options.override : !prev.displayTasks,
     }))
   }
 

@@ -14,11 +14,13 @@ import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
 import DisplayTasksToggle from '@/components/DisplayTasks/Toggle'
 
 interface IEditorInterface {
+  displayTasks: boolean
   clientList: IClient[]
   customFields: ICustomField[]
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
+  displayTasks,
   clientList,
   customFields,
 }) => {
@@ -43,9 +45,10 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [dropdownSelectedClient])
 
   useEffect(() => {
+    appState?.toggleDisplayTasks({ override: displayTasks })
     appState?.setClientList(clientList)
     appState?.setCustomFields(customFields)
-  }, [clientList, customFields])
+  }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
     ;(async () => {

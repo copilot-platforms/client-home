@@ -75,6 +75,7 @@ export default async function Page({
             }}
           >
             <SideBarInterface
+              displayTasks={settings?.displayTasks}
               clientList={clientList}
               customFields={customFields}
             />
