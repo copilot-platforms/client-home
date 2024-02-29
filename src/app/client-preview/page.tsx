@@ -3,6 +3,7 @@ import { IClient, ISettings } from '@/types/interfaces'
 import ClientPreview from '../components/ClientPreview'
 import { apiUrl } from '@/config'
 import Image from 'next/image'
+import { z } from 'zod'
 
 export const revalidate = 0
 
@@ -38,7 +39,8 @@ export default async function ClientPreviewPage({
 }: {
   searchParams: { token: string; clientId: string }
 }) {
-  const { token, clientId } = searchParams
+  const token = z.string().parse(searchParams.token)
+  const clientId = z.string().uuid().parse(searchParams.clientId)
 
   let settings: ISettings = {
     content: '',
