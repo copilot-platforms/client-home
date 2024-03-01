@@ -51,6 +51,7 @@ import { Box } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -65,6 +66,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   const editor = useEditor({
     extensions: [
       AutofillExtension,
+      NotificationWidgetExtension,
       Document,
       Paragraph,
       Heading,
@@ -255,6 +257,14 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     if (editor) {
       appState?.setEditor(editor)
       editor.chain().focus('start')
+      editor
+        .chain()
+        .focus()
+        .insertContentAt(
+          0,
+          '<notification_widget datatype="draggable-item"></notification_widget>',
+        )
+        .run()
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
