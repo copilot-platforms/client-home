@@ -16,20 +16,13 @@ export const NotificationWidgetExtension = Node.create({
       {
         tag: 'notification_widget',
       },
-      {
-        tag: 'notification_widget[data-type="draggable-item"]',
-      },
     ]
   },
 
   whitespace: 'normal',
 
   renderHTML({ HTMLAttributes }) {
-    return [
-      'notification_widget',
-      mergeAttributes(HTMLAttributes, { 'data-type': 'draggable-item' }),
-      0,
-    ]
+    return ['notification_widget', mergeAttributes(HTMLAttributes), 0]
   },
 
   addNodeView() {

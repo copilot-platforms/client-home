@@ -52,6 +52,7 @@ import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { notificationContent } from '@/components/tiptap/notificationWidget/notificationContent'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -66,7 +67,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   const editor = useEditor({
     extensions: [
       AutofillExtension,
-      NotificationWidgetExtension,
+      NotificationWidgetExtension.configure({
+        class: 'something',
+      }),
       Document,
       Paragraph,
       Heading,
@@ -141,7 +144,13 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: settings?.content || defaultState,
+    content: `
+      <h3>You have {{task.count}} tasks left to complete</h3>
+          <notification_widget>
+          ${notificationContent}
+          </notification_widget>
+         ${settings?.content || defaultState}
+`,
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -155,6 +164,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
+      console.log(appState?.appState.originalTemplate)
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
@@ -181,13 +191,20 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         }
       }
 
+      const task = {
+        count: 10,
+      }
+      const invoice = {
+        count: 99,
+      }
+
       const client = {
         ..._client,
         ...customFields,
         company: appState?.appState.selectedClientCompanyName,
       }
 
-      const c = template({ client })
+      const c = template({ client, task, invoice })
       setTimeout(() => {
         editor?.chain().focus().setContent(c).run()
       })
@@ -208,6 +225,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (!appState?.appState.readOnly) {
       appState?.setOriginalTemplate(editor?.getHTML() as string)
+      // appState?.setOriginalTemplate(editor?.view.dom.innerHTML as string)
     }
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
@@ -257,14 +275,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     if (editor) {
       appState?.setEditor(editor)
       editor.chain().focus('start')
-      editor
-        .chain()
-        .focus()
-        .insertContentAt(
-          0,
-          '<notification_widget datatype="draggable-item"></notification_widget>',
-        )
-        .run()
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
