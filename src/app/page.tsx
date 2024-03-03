@@ -5,6 +5,7 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
+import NotificationsModal from './components/NotificationsModal'
 
 export const revalidate = 0
 
@@ -81,6 +82,7 @@ export default async function Page({
             />
           </div>
         </div>
+        <NotificationsModal />
       </div>
     </>
   )
