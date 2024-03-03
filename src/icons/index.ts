@@ -1,3 +1,5 @@
+export type SVGIcon = React.FC<React.SVGProps<SVGSVGElement>>
+
 export { default as SelectArrowIcon } from './select-arrow.svg'
 export { default as PlusIcon } from './plus.svg'
 export { default as UploadIcon } from './upload-icon.svg'
@@ -23,3 +25,6 @@ export { default as DeleteIcon } from './delete-icon.svg'
 export { default as ResizeIcon } from './resize.svg'
 export { default as SwitchIconSelected } from './switch-icon-selected.svg'
 export { default as SwitchIconUnselected } from './switch-icon-unselected.svg'
+export { default as BillingIcon } from './billing.svg'
+export { default as FormsIcon } from './forms.svg'
+export { default as ContractsIcon } from './contracts.svg'
