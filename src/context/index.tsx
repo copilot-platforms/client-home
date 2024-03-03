@@ -1,6 +1,7 @@
 'use client'
 
 import { IClient, ICustomField, ISettings } from '@/types/interfaces'
+import { NotificationOption } from '@/types/notifications'
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
 
@@ -23,6 +24,7 @@ export interface IAppState {
   clientList: IClient[]
   customFields: ICustomField[]
   token: string
+  notifications: { billing: boolean; forms: boolean; contracts: boolean }
 }
 
 export interface IAppContext {
@@ -44,6 +46,10 @@ export interface IAppContext {
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
+  toggleNotifications: (
+    key: NotificationOption,
+    options?: { override: boolean },
+  ) => void
 }
 
 interface IAppCoreProvider {
@@ -70,7 +76,8 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     clientList: [],
     customFields: [],
     token: '',
-    showNotificationsModal: false,
+    showNotificationsModal: true,
+    notifications: { billing: false, forms: false, contracts: false },
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -147,6 +154,19 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, token: token }))
   }
 
+  const toggleNotifications = (
+    key: NotificationOption,
+    options?: { override: boolean },
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      notifications: {
+        ...prev.notifications,
+        [key]: options?.override || !prev.notifications?.[key],
+      },
+    }))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -168,6 +188,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setBannerImgUrl,
         setBannerImgId,
         setToken,
+        toggleNotifications,
       }}
     >
       {children}
