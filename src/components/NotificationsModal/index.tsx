@@ -8,6 +8,12 @@ import { useState } from 'react'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { order } from '@/utils/orderable'
 import { defaultNotificationOptions } from '@/utils/notifications'
+import { DndContext, DragEndEvent, closestCorners } from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 
 interface NotificationsModalProps {
   settings: ISettings | null
@@ -17,7 +23,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
   const [saving, setSaving] = useState(false)
   const [formState, setFormState] = useState<NonNullable<Notification>>(
-    settings?.notifications || defaultNotificationOptions,
+    order(settings?.notifications || defaultNotificationOptions),
   )
 
   const handleCancel = appState?.toggleNotificationsModal
@@ -38,6 +44,21 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
       console.error(e)
     }
     setSaving(false)
+  }
+
+  const getCheckboxPosition = (id: string) =>
+    formState.findIndex((item) => item.key === id)
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const originalPosition = getCheckboxPosition(active.id as string)
+    const newPosition = getCheckboxPosition(over.id as string)
+
+    const newArr = arrayMove(formState, originalPosition, newPosition)
+    // Use this new order to overwrite over existing one!
+    setFormState([...newArr.map((item, order) => ({ ...item, order }))])
   }
 
   return (
@@ -65,15 +86,25 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
               Enable
             </Typography>
           </Box>
-          {formState?.length &&
-            order(formState).map(({ key }) => (
-              <ModalCheckbox
-                key={key}
-                identifier={key as NotificationOption}
-                formState={formState}
-                setFormState={setFormState}
-              />
-            ))}
+          <DndContext
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={formState.map((i) => i.key)}
+              strategy={verticalListSortingStrategy}
+            >
+              {formState?.length &&
+                formState.map(({ key }) => (
+                  <ModalCheckbox
+                    key={key}
+                    identifier={key as NotificationOption}
+                    formState={formState}
+                    setFormState={setFormState}
+                  />
+                ))}
+            </SortableContext>
+          </DndContext>
         </div>
         <hr />
         <div className='flex justify-end gap-4 py-6 px-8'>

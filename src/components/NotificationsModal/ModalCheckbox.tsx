@@ -3,8 +3,10 @@
 import { BillingIcon, ContractsIcon, FormsIcon, SVGIcon } from '@/icons'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { capitalizeFirstLetter } from '@/utils/string'
+import { useSortable } from '@dnd-kit/sortable'
 import { Box, Checkbox, Typography } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
+import { CSS } from '@dnd-kit/utilities'
 
 const notificationIcons: { [_ in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
@@ -25,6 +27,11 @@ const ModalCheckbox = ({
 }: ModalCheckboxProps) => {
   const Icon: SVGIcon = notificationIcons[identifier]
 
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: identifier })
+
+  const style = { transition, transform: CSS.Transform.toString(transform) }
+
   const handleChange = () => {
     const i = formState.findIndex((item) => item.key === identifier)
     setFormState((prev) => [
@@ -35,7 +42,7 @@ const ModalCheckbox = ({
   }
 
   return (
-    <>
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
       <hr />
       <div className='flex justify-between py-4 relative left-2'>
         <div className='flex gap-5'>
@@ -62,7 +69,7 @@ const ModalCheckbox = ({
           />
         </Box>
       </div>
-    </>
+    </div>
   )
 }
 
