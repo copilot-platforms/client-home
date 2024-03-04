@@ -14,8 +14,8 @@ const notificationIcons: { [_ in NotificationOption]: SVGIcon } = {
 
 interface ModalCheckboxProps {
   identifier: NotificationOption
-  formState: Notification
-  setFormState: Dispatch<SetStateAction<Notification>>
+  formState: NonNullable<Notification>
+  setFormState: Dispatch<SetStateAction<NonNullable<Notification>>>
 }
 
 const ModalCheckbox = ({

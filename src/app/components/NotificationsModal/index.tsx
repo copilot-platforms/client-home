@@ -21,7 +21,7 @@ const defaultNotificationOptions = [
 const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
   const [saving, setSaving] = useState(false)
-  const [formState, setFormState] = useState<Notification>(
+  const [formState, setFormState] = useState<NonNullable<Notification>>(
     settings?.notifications || defaultNotificationOptions,
   )
 
