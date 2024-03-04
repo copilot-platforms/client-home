@@ -1,11 +1,16 @@
+import { z } from 'zod'
+
 export type NotificationOption = 'billing' | 'forms' | 'contracts'
 
-interface NotificationOptionState {
-  show: boolean
-  order: number
-}
-export interface NotificationState {
-  billing: NotificationOptionState
-  forms: NotificationOptionState
-  contracts: NotificationOptionState
-}
+export const NotificationOptionSchema = z.object({
+  show: z.boolean().optional(),
+  order: z.number().optional(),
+})
+
+export const NotificationsSchema = z.object({
+  billing: NotificationOptionSchema,
+  forms: NotificationOptionSchema,
+  contracts: NotificationOptionSchema,
+})
+
+export type Notification = z.infer<typeof NotificationsSchema>
