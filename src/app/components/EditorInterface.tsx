@@ -145,9 +145,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       Code,
     ],
     content: `
-      <h3>You have {{task.count}} tasks left to complete</h3>
           <notification_widget>
-          ${notificationContent}
           </notification_widget>
          ${settings?.content || defaultState}
 `,
@@ -164,7 +162,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
-      console.log(appState?.appState.originalTemplate)
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
@@ -224,7 +221,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (!appState?.appState.readOnly) {
-      appState?.setOriginalTemplate(editor?.getHTML() as string)
+      const t = document.querySelector('.editable')?.outerHTML
+      console.log(t)
+      // appState?.setOriginalTemplate(editor?.getHTML() as string)
+      appState?.setOriginalTemplate(t || '')
       // appState?.setOriginalTemplate(editor?.view.dom.innerHTML as string)
     }
   }, [editor?.getHTML(), appState?.appState.readOnly])

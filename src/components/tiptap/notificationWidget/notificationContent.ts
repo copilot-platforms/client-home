@@ -1,5 +1,5 @@
 export const notificationContent = `
-      <div style="display: flex; width: 100%;">
+      <div>
           <p>Pay {{invoice.count}} invoices</p>
           <p>Go to billing</p>
 </div>

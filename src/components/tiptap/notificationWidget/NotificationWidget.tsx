@@ -1,8 +1,53 @@
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
+import { Stack, Typography } from '@mui/material'
+import RedirectButton from '@/components/atoms/RedirectButton'
+import { PortalRoutes } from '@/types/copilotPortal'
 
 export const NotificationWidget = (props: any) => {
   return (
-    <NodeViewWrapper className='widget-content' data-drag-handle>
+    <NodeViewWrapper className='' data-drag-handle contentEditable={false}>
+      <div contentEditable='false' draggable='true' datatype='draggable-item'>
+        <Typography variant='h2' datatype='draggable-item'>
+          You have {'{{invoice.count}}'} tasks left to complete
+        </Typography>
+
+        <Stack
+          direction='column'
+          rowGap='24px'
+          sx={{
+            background: '#fff',
+            border: '1px solid #DFE1E4',
+            borderRadius: '4px',
+            padding: '24px',
+            margin: '8px 0px 16px 0px',
+          }}
+        >
+          <Stack direction='row' justifyContent='space-between'>
+            <Typography variant='body1'>Pay 3 invoices</Typography>
+            <RedirectButton route='billing'>
+              <Typography variant='body1'>
+                Go to {PortalRoutes.Billing}
+              </Typography>
+            </RedirectButton>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between'>
+            <Typography variant='body1'>Fill out 1 form</Typography>
+            <RedirectButton route='forms'>
+              <Typography variant='body1'>
+                Go to {PortalRoutes.Forms}
+              </Typography>
+            </RedirectButton>
+          </Stack>
+          <Stack direction='row' justifyContent='space-between'>
+            <Typography variant='body1'>Sign 1 contract</Typography>
+            <RedirectButton route='contracts'>
+              <Typography variant='body1'>
+                Go to {PortalRoutes.Contracts}
+              </Typography>
+            </RedirectButton>
+          </Stack>
+        </Stack>
+      </div>
       <NodeViewContent as='div' className='widget' />
     </NodeViewWrapper>
   )
