@@ -3,6 +3,7 @@ import { SettingService } from '@/app/api/settings/services/setting.service'
 import { SettingRequestSchema } from '@/types/setting'
 import { errorHandler, getTokenPayload } from '@/utils/common'
 import { z } from 'zod'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -51,11 +52,7 @@ export async function PUT(request: NextRequest) {
     // Ensure default values are saved if user doesn't customize them on the frontend
     if (!setting.data.notifications) {
       // @ts-expect-error inject default notifications
-      newData.notifications = [
-        { key: 'billing', show: true, order: 0 },
-        { key: 'forms', show: true, order: 1 },
-        { key: 'contracts', show: true, order: 2 },
-      ]
+      newData.notifications = defaultNotificationOptions
     } else {
       try {
         newData.notifications = JSON.parse(setting.data.notifications)

@@ -7,16 +7,11 @@ import { ISettings } from '@/types/interfaces'
 import { useState } from 'react'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { order } from '@/utils/orderable'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 interface NotificationsModalProps {
   settings: ISettings | null
 }
-
-const defaultNotificationOptions = [
-  { key: 'billing', show: true, order: 0 },
-  { key: 'forms', show: true, order: 1 },
-  { key: 'contracts', show: true, order: 2 },
-]
 
 const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
@@ -48,8 +43,6 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   return (
     <Modal
       open={!!appState?.appState.showNotificationsModal}
-      // onClose={() => {
-      // }}
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
