@@ -198,11 +198,16 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
   useEffect(() => {
+    // ! This will break someday
     if (editor && appState?.appState.settings?.content.includes(defaultState)) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
           defaultState.replace(/\s/g, '') ||
-        appState?.appState.bannerImgUrl !== defaultBannerImagePath
+        appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
+        // We also have to check for previously undefined values, such as the case with a new user!
+        (appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks &&
+          appState?.appState.displayTasks !== undefined)
       ) {
         appState?.toggleChangesCreated(true)
       } else {
