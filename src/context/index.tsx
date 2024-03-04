@@ -1,7 +1,7 @@
 'use client'
 
 import { IClient, ICustomField, ISettings } from '@/types/interfaces'
-import { NotificationOption } from '@/types/notifications'
+import { NotificationOption, NotificationState } from '@/types/notifications'
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
 
@@ -24,7 +24,7 @@ export interface IAppState {
   clientList: IClient[]
   customFields: ICustomField[]
   token: string
-  notifications: { billing: boolean; forms: boolean; contracts: boolean }
+  notifications: NotificationState
 }
 
 export interface IAppContext {
@@ -46,10 +46,7 @@ export interface IAppContext {
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
-  toggleNotifications: (
-    key: NotificationOption,
-    options?: { override: boolean },
-  ) => void
+  setNotifications: (newState: NotificationState) => void
 }
 
 interface IAppCoreProvider {
@@ -77,7 +74,11 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     customFields: [],
     token: '',
     showNotificationsModal: true,
-    notifications: { billing: false, forms: false, contracts: false },
+    notifications: {
+      billing: { show: false, order: 0 },
+      forms: { show: false, order: 1 },
+      contracts: { show: false, order: 2 },
+    },
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -119,6 +120,17 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     }))
   }
 
+  const setNotifications = (newState: NotificationState) => {
+    setState((prev) => ({
+      ...prev,
+      notifications: {
+        billing: newState.billing,
+        forms: newState.forms,
+        contracts: newState.contracts,
+      },
+    }))
+  }
+
   const toggleNotificationsModal = () => {
     setState((prev) => ({
       ...prev,
@@ -154,19 +166,6 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, token: token }))
   }
 
-  const toggleNotifications = (
-    key: NotificationOption,
-    options?: { override: boolean },
-  ) => {
-    setState((prev) => ({
-      ...prev,
-      notifications: {
-        ...prev.notifications,
-        [key]: options?.override || !prev.notifications?.[key],
-      },
-    }))
-  }
-
   return (
     <AppContext.Provider
       value={{
@@ -180,6 +179,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setSettings,
         setOriginalTemplate,
         toggleDisplayTasks,
+        setNotifications,
         toggleNotificationsModal,
         setLoading,
         setClientList,
@@ -188,7 +188,6 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setBannerImgUrl,
         setBannerImgId,
         setToken,
-        toggleNotifications,
       }}
     >
       {children}

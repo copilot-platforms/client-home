@@ -4,9 +4,16 @@ import { useAppState } from '@/hooks/useAppState'
 import { Box, Modal, Typography } from '@mui/material'
 import ModalCheckbox from './ModalCheckbox'
 import { BillingIcon, ContractsIcon, FormsIcon } from '@/icons'
+import { useState } from 'react'
+import { NotificationState } from '@/types/notifications'
 
 const NotificationsModal = () => {
   const appState = useAppState()
+  const [formState, setFormState] = useState<NotificationState>({
+    billing: { show: false, order: 0 },
+    forms: { show: false, order: 1 },
+    contracts: { show: false, order: 2 },
+  })
 
   return (
     <Modal
