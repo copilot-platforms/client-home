@@ -18,6 +18,7 @@ model Setting {
   backgroundColor String?
   displayTasks    Boolean  @default(false)
   content         String?
+  notifications   Json?
   workspaceId     String
   createdById     String   @db.Uuid
   createdAt       DateTime @default(now()) @db.Timestamptz()
