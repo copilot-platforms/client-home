@@ -1,14 +1,20 @@
 'use client'
 
-import { BillingIcon, ContractsIcon, FormsIcon, SVGIcon } from '@/icons'
+import {
+  BillingIcon,
+  ContractsIcon,
+  DragHandleIcon,
+  FormsIcon,
+  SVGIcon,
+} from '@/icons'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { capitalizeFirstLetter } from '@/utils/string'
 import { useSortable } from '@dnd-kit/sortable'
 import { Box, Checkbox, Typography } from '@mui/material'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 
-const notificationIcons: { [_ in NotificationOption]: SVGIcon } = {
+const notificationIcons: { [key in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
   forms: FormsIcon,
   contracts: ContractsIcon,
@@ -29,8 +35,15 @@ const ModalCheckbox = ({
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: identifier })
-
   const style = { transition, transform: CSS.Transform.toString(transform) }
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleMouseOver = () => {
+    setIsDragging(true)
+  }
+  const handleMouseOut = () => {
+    setIsDragging(false)
+  }
 
   const handleChange = () => {
     const i = formState.findIndex((item) => item.key === identifier)
@@ -42,10 +55,24 @@ const ModalCheckbox = ({
   }
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+    >
       <hr />
       <div className='flex justify-between py-4 relative left-2'>
         <div className='flex gap-5'>
+          <div className='py-4 absolute left-[-1.5rem] flex items-center'>
+            {isDragging ? (
+              <DragHandleIcon className='w-[20px] scale-125' />
+            ) : (
+              <div className='w-[20px]'></div>
+            )}
+          </div>
           <div className='flex items-center'>
             <Icon style={{ scale: 1.4 }} />
           </div>
