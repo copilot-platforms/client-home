@@ -11,7 +11,7 @@ import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
-import DisplayTasksToggle from '@/components/DisplayTasks/Toggle'
+import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 
 interface IEditorInterface {
   displayTasks: boolean
