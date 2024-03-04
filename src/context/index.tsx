@@ -1,7 +1,6 @@
 'use client'
 
 import { IClient, ICustomField, ISettings } from '@/types/interfaces'
-import { NotificationOption, NotificationState } from '@/types/notifications'
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
 
@@ -24,7 +23,6 @@ export interface IAppState {
   clientList: IClient[]
   customFields: ICustomField[]
   token: string
-  notifications: NotificationState
 }
 
 export interface IAppContext {
@@ -46,7 +44,6 @@ export interface IAppContext {
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
-  setNotifications: (newState: NotificationState) => void
 }
 
 interface IAppCoreProvider {
@@ -74,11 +71,6 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     customFields: [],
     token: '',
     showNotificationsModal: true,
-    notifications: {
-      billing: { show: false, order: 0 },
-      forms: { show: false, order: 1 },
-      contracts: { show: false, order: 2 },
-    },
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -117,17 +109,6 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({
       ...prev,
       displayTasks: options ? options.override : !prev.displayTasks,
-    }))
-  }
-
-  const setNotifications = (newState: NotificationState) => {
-    setState((prev) => ({
-      ...prev,
-      notifications: {
-        billing: newState.billing,
-        forms: newState.forms,
-        contracts: newState.contracts,
-      },
     }))
   }
 
@@ -179,7 +160,6 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setSettings,
         setOriginalTemplate,
         toggleDisplayTasks,
-        setNotifications,
         toggleNotificationsModal,
         setLoading,
         setClientList,

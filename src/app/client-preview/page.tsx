@@ -55,7 +55,6 @@ export default async function ClientPreviewPage({
       createdById: '',
     },
     createdById: '',
-    displayTasks: false,
   }
 
   const defaultSetting = await getSettings(token)

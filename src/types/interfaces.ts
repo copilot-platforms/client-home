@@ -1,3 +1,5 @@
+import { Notification } from './notifications'
+
 export interface ISettings {
   content: string
   backgroundColor: string
@@ -11,7 +13,8 @@ export interface ISettings {
     createdById: string
   } | null
   createdById: string
-  displayTasks: boolean
+  displayTasks?: boolean
+  notifications?: Notification
 }
 
 export interface IClient {
