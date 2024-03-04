@@ -81,8 +81,8 @@ export default async function Page({
               customFields={customFields}
             />
           </div>
+          <NotificationsModal />
         </div>
-        <NotificationsModal />
       </div>
     </>
   )
