@@ -3,17 +3,25 @@
 import { useAppState } from '@/hooks/useAppState'
 import { Box, Modal, Typography } from '@mui/material'
 import ModalCheckbox from './ModalCheckbox'
-import { BillingIcon, ContractsIcon, FormsIcon } from '@/icons'
+import { BillingIcon, ContractsIcon, FormsIcon, SVGIcon } from '@/icons'
+import { ISettings } from '@/types/interfaces'
 import { useState } from 'react'
-import { NotificationState } from '@/types/notifications'
+import { Notification, NotificationOption } from '@/types/notifications'
+import { order } from '@/utils/orderable'
 
-const NotificationsModal = () => {
+interface NotificationsModalProps {
+  settings: ISettings | null
+}
+
+const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
-  const [formState, setFormState] = useState<NotificationState>({
-    billing: { show: false, order: 0 },
-    forms: { show: false, order: 1 },
-    contracts: { show: false, order: 2 },
-  })
+  const [formState, setFormState] = useState<Notification>(
+    settings?.notifications || [],
+  )
+  const handleCancel = () => {
+    setFormState(settings?.notifications || [])
+    appState?.toggleNotificationsModal()
+  }
 
   return (
     <Modal
@@ -42,16 +50,21 @@ const NotificationsModal = () => {
               Enable
             </Typography>
           </Box>
-
-          <ModalCheckbox Icon={BillingIcon} identifier={'billing'} />
-          <ModalCheckbox Icon={FormsIcon} identifier={'forms'} />
-          <ModalCheckbox Icon={ContractsIcon} identifier={'contracts'} />
+          {formState.length &&
+            order(formState).map(({ key }) => (
+              <ModalCheckbox
+                key={key}
+                identifier={key as NotificationOption}
+                formState={formState}
+                setFormState={setFormState}
+              />
+            ))}
         </div>
         <hr />
         <div className='flex justify-end gap-4 py-6 px-8'>
           <button
             className='py-1 px-3 text-new-dark text-[13px] rounded bg-white border border-slate-300'
-            // onClick={handleCancel}
+            onClick={appState?.toggleNotificationsModal}
           >
             Cancel
           </button>

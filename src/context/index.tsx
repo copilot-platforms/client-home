@@ -70,7 +70,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     clientList: [],
     customFields: [],
     token: '',
-    showNotificationsModal: true,
+    showNotificationsModal: false,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
