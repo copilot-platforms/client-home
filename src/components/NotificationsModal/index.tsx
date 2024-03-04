@@ -1,7 +1,7 @@
 'use client'
 
 import { useAppState } from '@/hooks/useAppState'
-import { Box, Modal, Typography } from '@mui/material'
+import { Backdrop, Box, Modal, Typography } from '@mui/material'
 import ModalCheckbox from './ModalCheckbox'
 import { ISettings } from '@/types/interfaces'
 import { useState } from 'react'
@@ -66,6 +66,13 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
       open={!!appState?.appState.showNotificationsModal}
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 250,
+        },
+      }}
     >
       <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[720px] bg-white rounded-md shadow-lg outline-none font-medium'>
         <Typography variant='h6' className='px-6 pt-6 pb-4 font-medium'>
