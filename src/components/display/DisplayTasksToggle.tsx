@@ -17,7 +17,7 @@ const DisplayTasksToggle = () => {
         <When condition={!!appState?.appState.displayTasks}>
           <button
             className='py-1 px-3 text-new-dark text-[13px] rounded bg-white border border-slate-300 scale-90'
-            onClick={() => appState?.toggleNotificationsModal()}
+            onClick={appState?.toggleNotificationsModal}
           >
             Customize
           </button>

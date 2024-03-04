@@ -3,7 +3,6 @@
 import { useAppState } from '@/hooks/useAppState'
 import { Box, Modal, Typography } from '@mui/material'
 import ModalCheckbox from './ModalCheckbox'
-import { BillingIcon, ContractsIcon, FormsIcon, SVGIcon } from '@/icons'
 import { ISettings } from '@/types/interfaces'
 import { useState } from 'react'
 import { Notification, NotificationOption } from '@/types/notifications'
@@ -13,14 +12,37 @@ interface NotificationsModalProps {
   settings: ISettings | null
 }
 
+const defaultNotificationOptions = [
+  { key: 'billing', show: true, order: 0 },
+  { key: 'forms', show: true, order: 1 },
+  { key: 'contracts', show: true, order: 2 },
+]
+
 const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
+  const [saving, setSaving] = useState(false)
   const [formState, setFormState] = useState<Notification>(
-    settings?.notifications || [],
+    settings?.notifications || defaultNotificationOptions,
   )
-  const handleCancel = () => {
-    setFormState(settings?.notifications || [])
-    appState?.toggleNotificationsModal()
+
+  const handleCancel = appState?.toggleNotificationsModal
+
+  const handleSave = async () => {
+    try {
+      setSaving(true)
+      await fetch(`/api/settings?token=${appState?.appState?.token}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          ...settings,
+          token: appState?.appState?.token,
+          notifications: JSON.stringify(formState),
+        }),
+      })
+      appState?.toggleNotificationsModal()
+    } catch (e) {
+      console.error(e)
+    }
+    setSaving(false)
   }
 
   return (
@@ -50,7 +72,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
               Enable
             </Typography>
           </Box>
-          {formState.length &&
+          {formState?.length &&
             order(formState).map(({ key }) => (
               <ModalCheckbox
                 key={key}
@@ -64,15 +86,15 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         <div className='flex justify-end gap-4 py-6 px-8'>
           <button
             className='py-1 px-3 text-new-dark text-[13px] rounded bg-white border border-slate-300'
-            onClick={appState?.toggleNotificationsModal}
+            onClick={handleCancel}
           >
             Cancel
           </button>
           <button
             className='bg-new-dark py-1 px-3 text-white text-[13px] rounded'
-            // onClick={handleSave}
+            onClick={handleSave}
           >
-            Save
+            {saving ? 'Saving' : 'Save'}
           </button>
         </div>
       </div>

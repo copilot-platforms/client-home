@@ -8,6 +8,6 @@ export const NotificationOptionSchema = z.object({
   order: z.number(),
 })
 
-export const NotificationsSchema = z.array(NotificationOptionSchema)
+export const NotificationsSchema = z.array(NotificationOptionSchema).nullish()
 
 export type Notification = z.infer<typeof NotificationsSchema>

@@ -48,6 +48,8 @@ export class SettingService {
           createdById: currentUser.id,
           workspaceId: requestData.workspaceId,
           displayTasks: requestData.displayTasks,
+          // @ts-expect-error Notifications has already been parsed and error handled
+          notifications: requestData.notifications,
         },
       })
 
@@ -63,6 +65,8 @@ export class SettingService {
         backgroundColor: requestData.backgroundColor,
         content: requestData.content,
         displayTasks: requestData.displayTasks,
+        // @ts-expect-error Notifications has already been parsed and error handled
+        notifications: requestData.notifications,
       },
     })
   }
