@@ -8,7 +8,15 @@ import { useState } from 'react'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { order } from '@/utils/orderable'
 import { defaultNotificationOptions } from '@/utils/notifications'
-import { DndContext, DragEndEvent, closestCorners } from '@dnd-kit/core'
+import {
+  DndContext,
+  DragEndEvent,
+  closestCorners,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+} from '@dnd-kit/core'
 import {
   SortableContext,
   arrayMove,
@@ -61,6 +69,21 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
     setFormState([...newArr.map((item, order) => ({ ...item, order }))])
   }
 
+  // Attach sensors to DnDContext. If we don't then the drag handler will take over and we won't be able to check the checkbox inside
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 6,
+      },
+    }),
+  )
+
   return (
     <Modal
       open={!!appState?.appState.showNotificationsModal}
@@ -96,6 +119,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
           <DndContext
             collisionDetection={closestCorners}
             onDragEnd={handleDragEnd}
+            sensors={sensors}
           >
             <SortableContext
               items={formState.map((i) => i.key)}
