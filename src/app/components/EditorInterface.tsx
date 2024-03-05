@@ -50,6 +50,7 @@ import Image from 'next/image'
 import { Box } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
+import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -63,6 +64,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   const editor = useEditor({
     extensions: [
+      AutofillExtension,
       Document,
       Paragraph,
       Heading,
@@ -96,6 +98,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       }),
       Link.extend({
         exitable: true,
+      }).configure({
+        autolink: false,
       }),
       OrderedList.configure({
         itemTypeName: 'listItem',
@@ -157,19 +161,27 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       )
       //add comma separator for custom fields
       const customFields: any = _client?.customFields
+
+      // Iterate through each key in customFields
       for (const key in customFields) {
-        if (Array.isArray(customFields[key])) {
-          //element[0].toUpperCase() + element.substring(1) is a hack to capitalize the first string, however changes in SDK response
-          //is required.
-          customFields[key] = customFields[key].map(
-            (element: any) =>
-              ' ' + element[0].toUpperCase() + element.substring(1),
-          )
+        // Check if the value is an array and if the key exists in allCustomFields
+        if (
+          Array.isArray(customFields[key]) &&
+          appState?.appState.customFields.some((field) => field.key === key)
+        ) {
+          // Map the values to their corresponding labels
+          customFields[key] = customFields[key].map((value: string[]) => {
+            const option: any = (appState?.appState?.customFields as any)
+              .find((field: any) => field.key === key)
+              .options.find((opt: any) => opt.key === value)
+            return option ? ' ' + option.label : ' ' + value
+          })
         }
       }
+
       const client = {
         ..._client,
-        ...(Object.keys(customFields as object).length && customFields),
+        ...customFields,
         company: appState?.appState.selectedClientCompanyName,
       }
 
