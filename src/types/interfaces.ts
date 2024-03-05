@@ -38,6 +38,7 @@ export interface ICustomField {
   type: string
   order: number
   object: string
+  options: any
 }
 
 export enum Formatter {

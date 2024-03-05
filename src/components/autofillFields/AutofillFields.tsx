@@ -1,17 +1,28 @@
 import { useAppState } from '@/hooks/useAppState'
-import { IClient } from '@/types/interfaces'
+import { IClient, ICustomField } from '@/types/interfaces'
 import { staticAutofillValues } from '@/utils/constants'
 import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
 import { Editor } from '@tiptap/react'
 import { When } from '../hoc/When'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const AutofillFields = () => {
   const appState = useAppState()
 
+  const [remainingAutofill, setRemainingAutofill] = useState<ICustomField[]>([])
+
   const tiptapEditorUtils = new TiptapEditorUtils(
     appState?.appState.editor as Editor,
   )
+
+  function getRemainingAutofillFields(
+    customFields: ICustomField[],
+    clientCustomField: any,
+  ) {
+    return customFields.filter(
+      (itemA: any) => !Object.keys(clientCustomField).includes(itemA.key),
+    )
+  }
 
   useEffect(() => {
     if (!appState?.appState?.selectedClient && !appState?.appState?.readOnly)
@@ -19,6 +30,11 @@ const AutofillFields = () => {
     appState?.setClientCompanyName('')
     ;(async () => {
       appState?.setLoading(true)
+      const output = getRemainingAutofillFields(
+        appState?.appState.customFields,
+        appState?.appState.selectedClient?.customFields,
+      )
+      setRemainingAutofill(output)
       const res = await fetch(
         `/api/companies?companyId=${appState?.appState.selectedClient?.companyId}&token=${appState?.appState?.token}`,
       )
@@ -77,6 +93,16 @@ const AutofillFields = () => {
                 />
               )
             })}
+          {appState?.appState?.selectedClient &&
+            remainingAutofill.map((el, key) => {
+              return (
+                <AutofillTextStaticField
+                  key={key}
+                  labelName={el.name}
+                  labelValues={''}
+                />
+              )
+            })}
         </When>
 
         {/* edit mode */}
@@ -88,7 +114,7 @@ const AutofillFields = () => {
                 label={el.replaceAll('{{', '').replaceAll('}}', '')}
                 handleClick={() => {
                   if (appState?.appState.readOnly) return
-                  tiptapEditorUtils.insertContent(`${el}`)
+                  tiptapEditorUtils.insertAutofill(`${el}`)
                 }}
               />
             )
@@ -101,7 +127,7 @@ const AutofillFields = () => {
                   label={`client.${el.key}`}
                   handleClick={() => {
                     if (appState?.appState.readOnly) return
-                    tiptapEditorUtils.insertContent(`{{client.${el.key}}}`)
+                    tiptapEditorUtils.insertAutofill(`{{client.${el.key}}}`)
                   }}
                 />
               )

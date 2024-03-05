@@ -4,7 +4,7 @@ import SideBarInterface from './components/SideBarInterface'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
-import Head from 'next/head'
+import { z } from 'zod'
 
 export const revalidate = 0
 
@@ -43,7 +43,7 @@ export default async function Page({
 }: {
   searchParams: { token: string }
 }) {
-  const { token } = searchParams
+  const token = z.string().parse(searchParams.token)
 
   const clientList = await listClients(token)
   const customFields = await getCustomFields(token)
