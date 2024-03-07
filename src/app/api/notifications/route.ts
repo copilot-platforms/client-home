@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseClientToken } from '@/utils/api'
+import { notificationEvents } from '@/utils/notifications'
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,11 +13,11 @@ export async function GET(request: NextRequest) {
     }
 
     notifications.forEach(({ event }) => {
-      if (event === 'forms.requested') {
+      if (event === notificationEvents.forms) {
         counts.forms += 1
-      } else if (event === 'invoice.requested') {
+      } else if (event === notificationEvents.billing) {
         counts.billing += 1
-      } else if (event === 'contract.requested') {
+      } else if (event === notificationEvents.contracts) {
         counts.contract += 1
       }
     })
