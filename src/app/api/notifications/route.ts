@@ -1,19 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseToken } from '@/utils/api'
+import { parseClientToken } from '@/utils/api'
 
 export async function GET(request: NextRequest) {
-  const { payload, error } = await parseToken(request)
-  if (error) {
-    NextResponse.json({ error }, { status: 401 })
-  }
+  try {
+    const { copilot, payload } = await parseClientToken(request)
+    const notifications = await copilot.getNotifications(payload.clientId)
+    const counts = {
+      forms: 0,
+      billing: 0,
+      contract: 0,
+    }
 
-  if (!payload?.clientId) {
-    NextResponse.json(
-      { error: 'Failed to parse client from token' },
-      { status: 401 },
-    )
-  }
+    notifications.forEach(({ event }) => {
+      if (event === 'forms.requested') {
+        counts.forms += 1
+      } else if (event === 'invoice.requested') {
+        counts.billing += 1
+      } else if (event === 'contract.requested') {
+        counts.contract += 1
+      }
+    })
 
-  // Mock API since notifications support in SDK is still wip
-  return NextResponse.json({ billing: 5, forms: 6, contracts: 7 })
+    return NextResponse.json({ ...counts })
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: error.status })
+  }
 }

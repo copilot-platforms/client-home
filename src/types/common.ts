@@ -8,6 +8,13 @@ export const TokenSchema = z.object({
 })
 export type Token = z.infer<typeof TokenSchema>
 
+export const ClientTokenSchema = z.object({
+  clientId: z.string(),
+  companyId: z.string().optional(),
+  workspaceId: z.string(),
+})
+export type ClientToken = z.infer<typeof ClientTokenSchema>
+
 export const MeResponseSchema = z.object({
   id: z.string(),
   givenName: z.string(),
@@ -75,3 +82,10 @@ export const WorkspaceInfoSchema = z.object({
 })
 
 export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>
+
+export const NotificationsSchema = z.array(
+  z.object({
+    event: z.string(),
+  }),
+)
+export type Notifications = z.infer<typeof NotificationsSchema>
