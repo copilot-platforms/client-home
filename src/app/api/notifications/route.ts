@@ -23,6 +23,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ ...counts })
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: error.status })
+    return NextResponse.json(
+      { error: error.message },
+      { status: error.status || 500 },
+    )
   }
 }
