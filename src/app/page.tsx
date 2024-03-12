@@ -47,7 +47,8 @@ export default async function Page({
 
   const clientList = await listClients(token)
   const customFields = await getCustomFields(token)
-  const settings = await getSettings(token)
+  // const settings = await getSettings(token)
+  const settings = null
   const copilotClient = new CopilotAPI(token)
   const workspace = await copilotClient.getWorkspaceInfo()
   const font = workspace.font?.replaceAll(' ', '+')

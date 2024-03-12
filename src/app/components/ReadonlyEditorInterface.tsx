@@ -52,14 +52,18 @@ import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
-import { notificationContent } from '@/components/tiptap/notificationWidget/notificationContent'
 
 interface IEditorInterface {
   settings: ISettings | null
   token: string
+  content: string
 }
 
-const EditorInterface = ({ settings, token }: IEditorInterface) => {
+const ReadonlyEditorInterface = ({
+  settings,
+  token,
+  content,
+}: IEditorInterface) => {
   const appState = useAppState()
 
   const initialEditorContent = 'Type "/" for commands'
@@ -144,11 +148,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: `
-          <notification_widget>
-          </notification_widget>
-         ${settings?.content || defaultState}
-`,
+    content: content,
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -162,57 +162,56 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
-      const template = Handlebars?.compile(
-        appState?.appState.originalTemplate || '',
-      )
-      const _client = appState.appState.clientList.find(
-        (el) => el.id === (appState.appState.selectedClient as IClient).id,
-      )
-      //add comma separator for custom fields
-      const customFields: any = _client?.customFields
-
-      // Iterate through each key in customFields
-      for (const key in customFields) {
-        // Check if the value is an array and if the key exists in allCustomFields
-        if (
-          Array.isArray(customFields[key]) &&
-          appState?.appState.customFields.some((field) => field.key === key)
-        ) {
-          // Map the values to their corresponding labels
-          customFields[key] = customFields[key].map((value: string[]) => {
-            const option: any = (appState?.appState?.customFields as any)
-              .find((field: any) => field.key === key)
-              .options.find((opt: any) => opt.key === value)
-            return option ? ' ' + option.label : ' ' + value
-          })
-        }
-      }
-
-      const task = {
-        count: 10,
-      }
-      const invoice = {
-        count: 99,
-      }
-
-      const client = {
-        ..._client,
-        ...customFields,
-        company: appState?.appState.selectedClientCompanyName,
-      }
-
-      const c = template({ client, task, invoice })
-      setTimeout(() => {
-        editor?.chain().focus().setContent(c).run()
-      })
+      // const template = Handlebars?.compile(
+      //   appState?.appState.originalTemplate || '',
+      // )
+      // console.log(appState?.appState.originalTemplate)
+      // console.log(appState?.appState.readOnly)
+      // const _client = appState.appState.clientList.find(
+      //   (el) => el.id === (appState.appState.selectedClient as IClient).id,
+      // )
+      // //add comma separator for custom fields
+      // const customFields: any = _client?.customFields
+      // // Iterate through each key in customFields
+      // for (const key in customFields) {
+      //   // Check if the value is an array and if the key exists in allCustomFields
+      //   if (
+      //     Array.isArray(customFields[key]) &&
+      //     appState?.appState.customFields.some((field) => field.key === key)
+      //   ) {
+      //     // Map the values to their corresponding labels
+      //     customFields[key] = customFields[key].map((value: string[]) => {
+      //       const option: any = (appState?.appState?.customFields as any)
+      //         .find((field: any) => field.key === key)
+      //         .options.find((opt: any) => opt.key === value)
+      //       return option ? ' ' + option.label : ' ' + value
+      //     })
+      //   }
+      // }
+      // const task = {
+      //   count: 10,
+      // }
+      // const invoice = {
+      //   count: 99,
+      // }
+      // const client = {
+      //   ..._client,
+      //   ...customFields,
+      //   company: appState?.appState.selectedClientCompanyName,
+      // }
+      // // const c = template({ client, task, invoice })
+      // setTimeout(() => {
+      //   // editor?.chain().focus().setContent(c).run()
+      //   // editor?.chain().focus().setContent(appState?.appState.originalTemplate || '').run()
+      // })
     } else {
-      setTimeout(() => {
-        editor
-          ?.chain()
-          .focus()
-          .setContent(appState?.appState.originalTemplate as string)
-          .run()
-      })
+      // setTimeout(() => {
+      //   editor
+      //     ?.chain()
+      //     .focus()
+      //     .setContent(appState?.appState.originalTemplate as string)
+      //     .run()
+      // })
     }
   }, [
     appState?.appState.selectedClient,
@@ -221,11 +220,11 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (!appState?.appState.readOnly) {
-      const t = document.querySelector('.editable')?.outerHTML
-      appState?.setOriginalTemplate(t || '')
-      console.log(t)
+      // const t = document.querySelector('.editable')?.outerHTML
+      // appState?.setOriginalTemplate(t || '')
+      // console.log(t)
       // appState?.setOriginalTemplate(editor?.getHTML() as string)
-      // appState?.setOriginalTemplate(editor?.view.dom.innerHTML as string)
+      appState?.setOriginalTemplate(editor?.view.dom.innerHTML as string)
     }
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
@@ -275,8 +274,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     if (editor) {
       appState?.setEditor(editor)
       editor.chain().focus('start')
-      const t = document.querySelector('.editable')?.outerHTML
-      appState?.setOriginalTemplate(t || '')
+      appState?.setOriginalTemplate(content)
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
@@ -460,4 +458,4 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   )
 }
 
-export default EditorInterface
+export default ReadonlyEditorInterface
