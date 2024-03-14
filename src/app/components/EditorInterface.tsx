@@ -52,7 +52,7 @@ import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
-import { notificationContent } from '@/components/tiptap/notificationWidget/notificationContent'
+import { useAppDataContext } from '@/hooks/useAppData'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -160,48 +160,14 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     }
   }, [appState?.appState.readOnly, editor])
 
+  const appData = useAppDataContext()
+
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
-      const _client = appState.appState.clientList.find(
-        (el) => el.id === (appState.appState.selectedClient as IClient).id,
-      )
-      //add comma separator for custom fields
-      const customFields: any = _client?.customFields
-
-      // Iterate through each key in customFields
-      for (const key in customFields) {
-        // Check if the value is an array and if the key exists in allCustomFields
-        if (
-          Array.isArray(customFields[key]) &&
-          appState?.appState.customFields.some((field) => field.key === key)
-        ) {
-          // Map the values to their corresponding labels
-          customFields[key] = customFields[key].map((value: string[]) => {
-            const option: any = (appState?.appState?.customFields as any)
-              .find((field: any) => field.key === key)
-              .options.find((opt: any) => opt.key === value)
-            return option ? ' ' + option.label : ' ' + value
-          })
-        }
-      }
-
-      const task = {
-        count: 10,
-      }
-      const invoice = {
-        count: 99,
-      }
-
-      const client = {
-        ..._client,
-        ...customFields,
-        company: appState?.appState.selectedClientCompanyName,
-      }
-
-      const c = template({ client, task, invoice })
+      const c = template(appData)
       setTimeout(() => {
         editor?.chain().focus().setContent(c).run()
       })
@@ -221,11 +187,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (!appState?.appState.readOnly) {
-      const t = document.querySelector('.editable')?.outerHTML
-      appState?.setOriginalTemplate(t || '')
-      console.log(t)
-      // appState?.setOriginalTemplate(editor?.getHTML() as string)
-      // appState?.setOriginalTemplate(editor?.view.dom.innerHTML as string)
+      appState?.setOriginalTemplate(editor?.getHTML() as string)
     }
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
@@ -274,9 +236,15 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (editor) {
       appState?.setEditor(editor)
-      editor.chain().focus('start')
-      const t = document.querySelector('.editable')?.outerHTML
-      appState?.setOriginalTemplate(t || '')
+      editor
+        .chain()
+        .focus('start')
+        .setContent(
+          `<notification_widget>
+          </notification_widget>
+         ${settings?.content || defaultState}
+`,
+        )
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {

@@ -1,14 +1,19 @@
-import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
+import { NodeViewWrapper } from '@tiptap/react'
 import { Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { PortalRoutes } from '@/types/copilotPortal'
+import React from 'react'
+import { useAppData } from '@/hooks/useAppData'
 
-export const NotificationWidget = (props: any) => {
+export const NotificationWidget = () => {
+  const invoiceCount = useAppData('{{invoice.count}}')
+  const taskCount = useAppData('{{task.count}}')
+
   return (
     <NodeViewWrapper className='' data-drag-handle contentEditable={false}>
-      <div contentEditable='false' draggable='true' datatype='draggable-item'>
+      <div draggable='true' datatype='draggable-item'>
         <Typography variant='h2' datatype='draggable-item'>
-          You have {'{{invoice.count}}'} tasks left to complete
+          You have {taskCount} tasks left to complete
         </Typography>
 
         <Stack
@@ -23,7 +28,7 @@ export const NotificationWidget = (props: any) => {
           }}
         >
           <Stack direction='row' justifyContent='space-between'>
-            <Typography variant='body1'>Pay 3 invoices</Typography>
+            <Typography variant='body1'>Pay {invoiceCount} invoices</Typography>
             <RedirectButton route='billing'>
               <Typography variant='body1'>
                 Go to {PortalRoutes.Billing}
@@ -48,7 +53,6 @@ export const NotificationWidget = (props: any) => {
           </Stack>
         </Stack>
       </div>
-      <NodeViewContent as='div' className='widget' />
     </NodeViewWrapper>
   )
 }

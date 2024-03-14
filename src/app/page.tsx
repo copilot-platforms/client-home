@@ -5,6 +5,7 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
+import Head from 'next/head'
 
 export const revalidate = 0
 
@@ -45,22 +46,26 @@ export default async function Page({
 }) {
   const token = z.string().parse(searchParams.token)
 
-  const clientList = await listClients(token)
-  const customFields = await getCustomFields(token)
-  // const settings = await getSettings(token)
-  const settings = null
   const copilotClient = new CopilotAPI(token)
-  const workspace = await copilotClient.getWorkspaceInfo()
+
+  const [clientList, settings, workspace, customFields] = await Promise.all([
+    listClients(token),
+    // getSettings(token).catch(() => null),
+    Promise.resolve(null),
+    copilotClient.getWorkspaceInfo(),
+    getCustomFields(token),
+  ])
+
   const font = workspace.font?.replaceAll(' ', '+')
 
   return (
     <>
-      <head>
+      <Head>
         <link
           href={`https://fonts.googleapis.com/css2?family=${font}&display=swap`}
           rel='stylesheet'
         />
-      </head>
+      </Head>
       <div style={{ fontFamily: workspace.font }}>
         <div className='flex flex-row'>
           <div className='relative w-full'>

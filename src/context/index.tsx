@@ -3,6 +3,7 @@
 import { IClient, ICustomField, ISettings } from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
+import { AppDataProvider } from '@/hooks/useAppData'
 
 export interface IAppState {
   editor: Editor | null
@@ -148,7 +149,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setToken,
       }}
     >
-      {children}
+      <AppDataProvider>{children}</AppDataProvider>
     </AppContext.Provider>
   )
 }
