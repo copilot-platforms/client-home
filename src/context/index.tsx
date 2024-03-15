@@ -17,7 +17,9 @@ export interface IAppState {
   changesCreated: boolean
   settings: ISettings | undefined
   originalTemplate: string | undefined
+  displayTasks: boolean
   loading: boolean
+  showNotificationsModal: boolean
   //this data should be fetched from API in the future
   clientList: IClient[]
   customFields: ICustomField[]
@@ -34,6 +36,8 @@ export interface IAppContext {
   toggleChangesCreated: (v: boolean) => void
   setSettings: (settings: ISettings) => void
   setOriginalTemplate: (template: string) => void
+  toggleDisplayTasks: (options?: { override: boolean }) => void
+  toggleNotificationsModal: () => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
@@ -62,10 +66,12 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     changesCreated: false,
     settings: undefined,
     originalTemplate: undefined,
+    displayTasks: false,
     loading: false,
     clientList: [],
     customFields: [],
     token: '',
+    showNotificationsModal: false,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -98,6 +104,20 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
 
   const setOriginalTemplate = (template: string) => {
     setState((prev) => ({ ...prev, originalTemplate: template }))
+  }
+
+  const toggleDisplayTasks = (options?: { override: boolean }) => {
+    setState((prev) => ({
+      ...prev,
+      displayTasks: options ? options.override : !prev.displayTasks,
+    }))
+  }
+
+  const toggleNotificationsModal = () => {
+    setState((prev) => ({
+      ...prev,
+      showNotificationsModal: !prev.showNotificationsModal,
+    }))
   }
 
   const setLoading = (v: boolean) => {
@@ -140,6 +160,8 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         toggleChangesCreated,
         setSettings,
         setOriginalTemplate,
+        toggleDisplayTasks,
+        toggleNotificationsModal,
         setLoading,
         setClientList,
         setCustomFields,

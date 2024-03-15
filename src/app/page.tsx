@@ -6,6 +6,8 @@ import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
 import Head from 'next/head'
+import InvalidToken from './components/InvalidToken'
+import NotificationsModal from '@/components/NotificationsModal'
 
 export const revalidate = 0
 
@@ -44,7 +46,12 @@ export default async function Page({
 }: {
   searchParams: { token: string }
 }) {
-  const token = z.string().parse(searchParams.token)
+  const tokenParsed = z.string().safeParse(searchParams.token)
+  if (!tokenParsed.success) {
+    return <InvalidToken />
+  }
+
+  const token = tokenParsed.data
 
   const copilotClient = new CopilotAPI(token)
 
@@ -81,10 +88,12 @@ export default async function Page({
             }}
           >
             <SideBarInterface
+              displayTasks={settings?.displayTasks}
               clientList={clientList}
               customFields={customFields}
             />
           </div>
+          <NotificationsModal settings={settings} />
         </div>
       </div>
     </>

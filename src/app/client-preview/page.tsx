@@ -1,9 +1,11 @@
 import Handlebars from 'handlebars'
-import { IClient, ISettings } from '@/types/interfaces'
+import { IClient, ICustomField, ISettings } from '@/types/interfaces'
 import ClientPreview from '../components/ClientPreview'
 import { apiUrl } from '@/config'
 import Image from 'next/image'
 import { z } from 'zod'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import InvalidToken from '../components/InvalidToken'
 
 export const revalidate = 0
 
@@ -34,13 +36,27 @@ async function getCompany(companyId: string, token: string) {
   return data
 }
 
+async function getCustomFields(token: string) {
+  const copilotClient = new CopilotAPI(token)
+  const customFieldsList = await copilotClient.getCustomFields()
+
+  return (customFieldsList.data || []) as ICustomField[]
+}
+
 export default async function ClientPreviewPage({
   searchParams,
 }: {
   searchParams: { token: string; clientId: string }
 }) {
-  const token = z.string().parse(searchParams.token)
+  const tokenParsed = z.string().safeParse(searchParams.token)
+  if (!tokenParsed.success) {
+    return <InvalidToken />
+  }
+
+  const token = tokenParsed.data
+
   const clientId = z.string().uuid().parse(searchParams.clientId)
+  const allCustomFields = await getCustomFields(searchParams.token)
 
   let settings: ISettings = {
     content: '',
@@ -71,18 +87,26 @@ export default async function ClientPreviewPage({
 
   //add comma separator for custom fields
   const customFields: any = _client?.customFields
+
   for (const key in customFields) {
-    if (Array.isArray(customFields[key])) {
-      //element[0].toUpperCase() + element.substring(1) is a hack to capitalize the first string, however changes in SDK response
-      //is required.
-      customFields[key] = customFields[key].map(
-        (element: any) => ' ' + element[0].toUpperCase() + element.substring(1),
-      )
+    // Check if the value is an array and if the key exists in allCustomFields
+    if (
+      Array.isArray(customFields[key]) &&
+      allCustomFields.some((field) => field.key === key)
+    ) {
+      // Map the values to their corresponding labels
+      customFields[key] = customFields[key].map((value: string[]) => {
+        const option: any = (allCustomFields as any)
+          .find((field: any) => field.key === key)
+          .options.find((opt: any) => opt.key === value)
+        return option ? ' ' + option.label : ' ' + value
+      })
     }
   }
+
   const client = {
     ..._client,
-    ...(Object.keys(customFields as object).length && customFields),
+    ...customFields,
     company: company.name,
   }
 
