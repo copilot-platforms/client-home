@@ -67,9 +67,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   const editor = useEditor({
     extensions: [
       AutofillExtension,
-      NotificationWidgetExtension.configure({
-        class: 'something',
-      }),
+      NotificationWidgetExtension,
       Document,
       Paragraph,
       Heading,
