@@ -210,11 +210,16 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
   useEffect(() => {
+    // ! This will break someday
     if (editor && appState?.appState.settings?.content.includes(defaultState)) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
           defaultState.replace(/\s/g, '') ||
-        appState?.appState.bannerImgUrl !== defaultBannerImagePath
+        appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
+        // We also have to check for previously undefined values, such as the case with a new user!
+        (appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks &&
+          appState?.appState.displayTasks !== undefined)
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -233,7 +238,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
-          appState?.appState.bannerImgUrl
+          appState?.appState.bannerImgUrl ||
+        appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -247,6 +254,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.editorColor,
     appState?.appState.bannerImgUrl,
     appState?.appState.readOnly,
+    appState?.appState.displayTasks,
     appState?.appState.settings,
     editor,
   ])
@@ -287,6 +295,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             createdById: '',
           },
           createdById: '',
+          displayTasks: false,
         }
         appState?.setOriginalTemplate(settings?.content || '')
         appState?.setSettings(settings || _settings)

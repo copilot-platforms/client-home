@@ -6,6 +6,7 @@ import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
 import InvalidToken from './components/InvalidToken'
+import NotificationsModal from '@/components/NotificationsModal'
 
 export const revalidate = 0
 
@@ -81,10 +82,12 @@ export default async function Page({
             }}
           >
             <SideBarInterface
+              displayTasks={settings?.displayTasks}
               clientList={clientList}
               customFields={customFields}
             />
           </div>
+          <NotificationsModal settings={settings} />
         </div>
       </div>
     </>

@@ -11,13 +11,16 @@ import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
+import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 
 interface IEditorInterface {
+  displayTasks: boolean
   clientList: IClient[]
   customFields: ICustomField[]
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
+  displayTasks,
   clientList,
   customFields,
 }) => {
@@ -42,9 +45,10 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [dropdownSelectedClient])
 
   useEffect(() => {
+    appState?.toggleDisplayTasks({ override: displayTasks })
     appState?.setClientList(clientList)
     appState?.setCustomFields(customFields)
-  }, [clientList, customFields])
+  }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
     ;(async () => {
@@ -156,6 +160,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
       <ColorPicker />
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}
+      <DisplayTasksToggle />
 
       <AutofillFields />
 
