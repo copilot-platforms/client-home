@@ -50,8 +50,8 @@ export default async function Page({
 
   const [clientList, settings, workspace, customFields] = await Promise.all([
     listClients(token),
-    // getSettings(token).catch(() => null),
-    Promise.resolve(null),
+    getSettings(token),
+    // Promise.resolve(null),
     copilotClient.getWorkspaceInfo(),
     getCustomFields(token),
   ])
