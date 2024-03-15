@@ -145,8 +145,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       Code,
     ],
     content: `
-          <notification_widget>
-          </notification_widget>
          ${settings?.content || defaultState}
 `,
   })
