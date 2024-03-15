@@ -85,7 +85,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
                 appState?.appState.clientList.map((val, key) => {
                   return (
                     <Stack
-                      key={key}
+                      key={val.id ?? key}
                       direction='row'
                       alignItems='flex-start'
                       columnGap={0.5}

@@ -51,6 +51,8 @@ import { Box } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppDataContext } from '@/hooks/useAppData'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -65,6 +67,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   const editor = useEditor({
     extensions: [
       AutofillExtension,
+      NotificationWidgetExtension,
       Document,
       Paragraph,
       Heading,
@@ -139,7 +142,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: settings?.content || defaultState,
+    content: `
+         ${settings?.content || defaultState}
+`,
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -151,41 +156,14 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     }
   }, [appState?.appState.readOnly, editor])
 
+  const appData = useAppDataContext()
+
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
-      const _client = appState.appState.clientList.find(
-        (el) => el.id === (appState.appState.selectedClient as IClient).id,
-      )
-      //add comma separator for custom fields
-      const customFields: any = _client?.customFields
-
-      // Iterate through each key in customFields
-      for (const key in customFields) {
-        // Check if the value is an array and if the key exists in allCustomFields
-        if (
-          Array.isArray(customFields[key]) &&
-          appState?.appState.customFields.some((field) => field.key === key)
-        ) {
-          // Map the values to their corresponding labels
-          customFields[key] = customFields[key].map((value: string[]) => {
-            const option: any = (appState?.appState?.customFields as any)
-              .find((field: any) => field.key === key)
-              .options.find((opt: any) => opt.key === value)
-            return option ? ' ' + option.label : ' ' + value
-          })
-        }
-      }
-
-      const client = {
-        ..._client,
-        ...customFields,
-        company: appState?.appState.selectedClientCompanyName,
-      }
-
-      const c = template({ client })
+      const c = template(appData)
       setTimeout(() => {
         editor?.chain().focus().setContent(c).run()
       })
@@ -262,7 +240,15 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (editor) {
       appState?.setEditor(editor)
-      editor.chain().focus('start')
+      editor
+        .chain()
+        .focus('start')
+        .setContent(
+          `<notification_widget>
+          </notification_widget>
+         ${settings?.content || defaultState}
+`,
+        )
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
