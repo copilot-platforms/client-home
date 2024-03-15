@@ -2,22 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.widget-content {
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
-  border: 1px solid #dfe1e4;
-  padding: 24px;
-  border-radius: 4px;
-}
-.widget-content .widget {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
 .pill-extension {
   display: inline-flex;
   flex-wrap: wrap;
