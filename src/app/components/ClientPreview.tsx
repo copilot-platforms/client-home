@@ -147,7 +147,6 @@ const ClientPreview = ({
     return null
   }
 
-  console.log(content)
   return <EditorContent editor={editor} readOnly={true} content={content} />
 }
 

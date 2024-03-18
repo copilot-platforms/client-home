@@ -48,6 +48,11 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         }),
       })
       appState?.toggleNotificationsModal()
+      const newSettings = {
+        ...appState?.appState.settings,
+        notifications: formState,
+      }
+      appState?.setSettings(newSettings as ISettings)
     } catch (e) {
       console.error(e)
     }

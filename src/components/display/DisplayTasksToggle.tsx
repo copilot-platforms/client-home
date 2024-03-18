@@ -6,7 +6,6 @@ const DisplayTasksToggle = () => {
   const appState = useAppState()
 
   const handleClick = () => {
-    console.log(appState?.appState.originalTemplate)
     if (!appState?.appState.settings?.displayTasks) {
       if (appState?.appState.editor) {
         appState?.appState?.editor

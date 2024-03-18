@@ -48,7 +48,6 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
         })
       }
     }
-    console.log(appState?.appState.notifications)
 
     const task = {
       count:
