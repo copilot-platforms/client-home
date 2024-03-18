@@ -5,7 +5,9 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
+import Head from 'next/head'
 import InvalidToken from './components/InvalidToken'
+import NotificationsModal from '@/components/NotificationsModal'
 
 export const revalidate = 0
 
@@ -51,21 +53,25 @@ export default async function Page({
 
   const token = tokenParsed.data
 
-  const clientList = await listClients(token)
-  const customFields = await getCustomFields(token)
-  const settings = await getSettings(token)
   const copilotClient = new CopilotAPI(token)
-  const workspace = await copilotClient.getWorkspaceInfo()
+
+  const [clientList, settings, workspace, customFields] = await Promise.all([
+    listClients(token),
+    getSettings(token),
+    copilotClient.getWorkspaceInfo(),
+    getCustomFields(token),
+  ])
+
   const font = workspace.font?.replaceAll(' ', '+')
 
   return (
     <>
-      <head>
+      <Head>
         <link
           href={`https://fonts.googleapis.com/css2?family=${font}&display=swap`}
           rel='stylesheet'
         />
-      </head>
+      </Head>
       <div style={{ fontFamily: workspace.font }}>
         <div className='flex flex-row'>
           <div className='relative w-full'>
@@ -81,10 +87,12 @@ export default async function Page({
             }}
           >
             <SideBarInterface
+              displayTasks={settings?.displayTasks}
               clientList={clientList}
               customFields={customFields}
             />
           </div>
+          <NotificationsModal settings={settings} />
         </div>
       </div>
     </>
