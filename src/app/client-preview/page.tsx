@@ -5,6 +5,7 @@ import { apiUrl } from '@/config'
 import Image from 'next/image'
 import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
+import InvalidToken from '../components/InvalidToken'
 
 export const revalidate = 0
 
@@ -47,7 +48,13 @@ export default async function ClientPreviewPage({
 }: {
   searchParams: { token: string; clientId: string }
 }) {
-  const token = z.string().parse(searchParams.token)
+  const tokenParsed = z.string().safeParse(searchParams.token)
+  if (!tokenParsed.success) {
+    return <InvalidToken />
+  }
+
+  const token = tokenParsed.data
+
   const clientId = z.string().uuid().parse(searchParams.clientId)
   const allCustomFields = await getCustomFields(searchParams.token)
 

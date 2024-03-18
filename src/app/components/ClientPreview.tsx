@@ -32,6 +32,7 @@ import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/au
 import { EditorContent, useEditor } from '@tiptap/react'
 import { useEffect } from 'react'
 import { ImageResize } from '@/components/tiptap/image/image'
+import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 
 const ClientPreview = ({ content }: { content: string }) => {
   /**
@@ -42,6 +43,7 @@ const ClientPreview = ({ content }: { content: string }) => {
    */
   const editor = useEditor({
     extensions: [
+      AutofillExtension,
       Document,
       Paragraph,
       Heading,

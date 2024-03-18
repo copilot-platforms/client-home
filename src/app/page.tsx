@@ -5,6 +5,7 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
+import InvalidToken from './components/InvalidToken'
 
 export const revalidate = 0
 
@@ -43,7 +44,12 @@ export default async function Page({
 }: {
   searchParams: { token: string }
 }) {
-  const token = z.string().parse(searchParams.token)
+  const tokenParsed = z.string().safeParse(searchParams.token)
+  if (!tokenParsed.success) {
+    return <InvalidToken />
+  }
+
+  const token = tokenParsed.data
 
   const clientList = await listClients(token)
   const customFields = await getCustomFields(token)

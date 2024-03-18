@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.pill-extension {
+.editable .pill-extension {
   display: inline-flex;
   flex-wrap: wrap;
   background-color: #eff1f4;
