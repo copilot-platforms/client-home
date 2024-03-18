@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientToken, ClientTokenSchema, Token } from '@/types/common'
-import { APIError } from '@/exceptions/APIError'
+import { ApiError } from '@/exceptions/ApiError'
 import httpStatus from 'http-status'
 
 const parseToken = async (
@@ -11,7 +11,7 @@ const parseToken = async (
   const searchParams = request.nextUrl.searchParams
   const token = z.string().safeParse(searchParams?.get('token'))
   if (!token.success)
-    throw new APIError(
+    throw new ApiError(
       httpStatus.UNPROCESSABLE_ENTITY,
       'Please provide a valid token',
     )
@@ -19,7 +19,7 @@ const parseToken = async (
   const copilot = new CopilotAPI(token.data)
   const payload = await copilot.getTokenPayload?.()
   if (!payload)
-    throw new APIError(
+    throw new ApiError(
       httpStatus.UNPROCESSABLE_ENTITY,
       'Cannot parse authorization data from token',
     )
@@ -34,7 +34,7 @@ export const parseClientToken = async (
 
   const clientPayload = ClientTokenSchema.safeParse(payload)
   if (!clientPayload.success)
-    throw new APIError(
+    throw new ApiError(
       httpStatus.UNAUTHORIZED,
       'Unable to authorize client from token',
     )
