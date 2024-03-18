@@ -13,8 +13,9 @@ import {
   WorkspaceInfoSchema,
   Token,
   TokenSchema,
+  NotificationsSchema,
 } from '@/types/common'
-import type { WorkspaceInfo } from '@/types/common'
+import type { Notifications, WorkspaceInfo } from '@/types/common'
 import { copilotAPIKey } from '@/config'
 
 export type SDK = typeof Copilot & {
@@ -65,5 +66,12 @@ export class CopilotAPI {
     return CustomFieldResponseSchema.parse(
       await this.copilot.listCustomFields(),
     )
+  }
+
+  async getNotifications(recipientId: string): Promise<Notifications> {
+    const notifications = await this.copilot.listNotifications({
+      recipientId,
+    })
+    return NotificationsSchema.parse(notifications.data)
   }
 }
