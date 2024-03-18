@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
-import { ClientToken, ClientTokenSchema, Token } from '@/types/common'
+import { Token } from '@/types/common'
 import { ApiError } from '@/exceptions/ApiError'
 import httpStatus from 'http-status'
 
-const parseToken = async (
+export const parseToken = async (
   request: NextRequest,
 ): Promise<{ token: string; payload: Token; copilot: CopilotAPI }> => {
   const searchParams = request.nextUrl.searchParams
@@ -24,20 +24,5 @@ const parseToken = async (
       'Cannot parse authorization data from token',
     )
 
-  return { token: token.data, payload, copilot }
-}
-
-export const parseClientToken = async (
-  request: NextRequest,
-): Promise<{ token: string; payload: ClientToken; copilot: CopilotAPI }> => {
-  const { token, payload, copilot } = await parseToken(request)
-
-  const clientPayload = ClientTokenSchema.safeParse(payload)
-  if (!clientPayload.success)
-    throw new ApiError(
-      httpStatus.UNAUTHORIZED,
-      'Unable to authorize client from token',
-    )
-
-  return { token, payload: clientPayload.data, copilot }
+  return { token: token.data, payload: payload, copilot }
 }

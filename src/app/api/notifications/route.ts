@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseClientToken } from '@/utils/api'
+import { parseToken } from '@/utils/api'
 import { notificationEvents } from '@/utils/notifications'
 import { errorHandler } from '@/utils/common'
+import httpStatus from 'http-status'
+import { ApiError } from '@/exceptions/ApiError'
 
 export async function GET(request: NextRequest) {
   try {
-    const { copilot, payload } = await parseClientToken(request)
-    const notifications = await copilot.getNotifications(payload.clientId)
+    const { copilot, payload } = await parseToken(request)
+    const clientId =
+      request.nextUrl.searchParams?.get('clientId') || payload.clientId
+
+    if (!clientId) {
+      throw new ApiError(
+        httpStatus.UNPROCESSABLE_ENTITY,
+        'Failed to parse clientId',
+      )
+    }
+
+    const notifications = await copilot.getNotifications(clientId)
     const counts = {
       forms: 0,
       billing: 0,
