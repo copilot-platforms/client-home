@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseClientToken } from '@/utils/api'
 import { notificationEvents } from '@/utils/notifications'
+import { errorHandler } from '@/utils/common'
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,10 +24,10 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({ ...counts })
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: error.status || 500 },
-    )
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const status = 'status' in error ? Number(error.status) : 500
+      return errorHandler(error.message, status)
+    }
   }
 }
