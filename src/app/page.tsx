@@ -5,7 +5,6 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { ClientsResponseSchema } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
-import Head from 'next/head'
 import InvalidToken from './components/InvalidToken'
 import NotificationsModal from '@/components/NotificationsModal'
 
@@ -66,12 +65,12 @@ export default async function Page({
 
   return (
     <>
-      <Head>
+      <head>
         <link
           href={`https://fonts.googleapis.com/css2?family=${font}&display=swap`}
           rel='stylesheet'
         />
-      </Head>
+      </head>
       <div style={{ fontFamily: workspace.font }}>
         <div className='flex flex-row'>
           <div className='relative w-full'>

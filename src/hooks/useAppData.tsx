@@ -48,12 +48,24 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
         })
       }
     }
+    console.log(appState?.appState.notifications)
 
     const task = {
-      count: 10,
+      count:
+        (appState?.appState.notifications?.forms || 0) +
+        (appState?.appState.notifications?.billing || 0) +
+        (appState?.appState.notifications?.contract || 0),
     }
     const invoice = {
-      count: 99,
+      count: appState?.appState.notifications?.billing,
+    }
+
+    const form = {
+      count: appState?.appState.notifications?.forms,
+    }
+
+    const contract = {
+      count: appState?.appState.notifications?.contract,
     }
 
     const client = {
@@ -66,10 +78,13 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       client,
       invoice,
       task,
+      form,
+      contract,
     }
   }, [
     appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
+    appState?.appState.notifications,
   ])
 
   return (

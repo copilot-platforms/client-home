@@ -33,17 +33,31 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import { useEffect } from 'react'
 import { ImageResize } from '@/components/tiptap/image/image'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppState } from '@/hooks/useAppState'
+import { INotification, ISettings } from '@/types/interfaces'
 
-const ClientPreview = ({ content }: { content: string }) => {
+const ClientPreview = ({
+  content,
+  settings,
+  notifications,
+}: {
+  content: string
+  settings: ISettings
+  notifications: INotification
+}) => {
   /**
    * Importing all the editor related imports and settings up this editor
    * in this route again is intentional. This is because client-preview is
    * a separate route which stays independent to the main route. Main route
    * will never load for client preview and thus editor will never load as well.
    */
+  const appState = useAppState()
+
   const editor = useEditor({
     extensions: [
       AutofillExtension,
+      NotificationWidgetExtension,
       Document,
       Paragraph,
       Heading,
@@ -103,9 +117,29 @@ const ClientPreview = ({ content }: { content: string }) => {
 
   useEffect(() => {
     if (editor && content) {
-      editor.chain().focus().setContent(content).run()
+      const _settings = {
+        content: '',
+        backgroundColor: '#ffffff',
+        id: '',
+        bannerImage: {
+          id: '',
+          url: '',
+          filename: '',
+          contentType: '',
+          size: 0,
+          createdById: '',
+        },
+        createdById: '',
+        displayTasks: false,
+      }
       editor.setEditable(false)
-      editor.chain().focus('start').run()
+      editor.chain().focus('start').setContent(content).run()
+      appState?.toggleReadOnly(true)
+      if (settings?.displayTasks) {
+        appState?.toggleDisplayTasks()
+      }
+      appState?.setSettings(settings || _settings)
+      appState?.setNotification(notifications)
     }
   }, [editor, content])
 
@@ -113,6 +147,7 @@ const ClientPreview = ({ content }: { content: string }) => {
     return null
   }
 
+  console.log(content)
   return <EditorContent editor={editor} readOnly={true} content={content} />
 }
 

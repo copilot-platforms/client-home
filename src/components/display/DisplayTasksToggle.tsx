@@ -6,6 +6,23 @@ const DisplayTasksToggle = () => {
   const appState = useAppState()
 
   const handleClick = () => {
+    console.log(appState?.appState.originalTemplate)
+    if (!appState?.appState.settings?.displayTasks) {
+      if (appState?.appState.editor) {
+        appState?.appState?.editor
+          .chain()
+          .focus()
+          .setContent(
+            `
+               ${appState?.appState.originalTemplate}
+      `,
+          )
+          .run()
+      }
+      appState?.setOriginalTemplate(
+        appState?.appState.editor?.getHTML() as string,
+      )
+    }
     appState?.toggleDisplayTasks()
     appState?.toggleChangesCreated(true)
   }

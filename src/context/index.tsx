@@ -1,6 +1,11 @@
 'use client'
 
-import { IClient, ICustomField, ISettings } from '@/types/interfaces'
+import {
+  IClient,
+  ICustomField,
+  INotification,
+  ISettings,
+} from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
 import { AppDataProvider } from '@/hooks/useAppData'
@@ -24,6 +29,7 @@ export interface IAppState {
   clientList: IClient[]
   customFields: ICustomField[]
   token: string
+  notifications: INotification | undefined
 }
 
 export interface IAppContext {
@@ -45,6 +51,7 @@ export interface IAppContext {
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
+  setNotification: (notification: INotification) => void
 }
 
 interface IAppCoreProvider {
@@ -72,6 +79,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     customFields: [],
     token: '',
     showNotificationsModal: false,
+    notifications: undefined,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -148,6 +156,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, token: token }))
   }
 
+  const setNotification = (notification: INotification) => {
+    setState((prev) => ({ ...prev, notifications: notification }))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -169,6 +181,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setBannerImgUrl,
         setBannerImgId,
         setToken,
+        setNotification,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>

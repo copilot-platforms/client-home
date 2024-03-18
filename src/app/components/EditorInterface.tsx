@@ -240,15 +240,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (editor) {
       appState?.setEditor(editor)
-      editor
-        .chain()
-        .focus('start')
-        .setContent(
-          `<notification_widget>
-          </notification_widget>
-         ${settings?.content || defaultState}
-`,
-        )
 
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
@@ -284,6 +275,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           displayTasks: false,
         }
         appState?.setOriginalTemplate(settings?.content || '')
+        if (settings?.displayTasks) {
+          appState?.toggleDisplayTasks()
+        }
         appState?.setSettings(settings || _settings)
         appState?.setToken(token)
       }
