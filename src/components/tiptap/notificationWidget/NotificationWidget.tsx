@@ -1,11 +1,12 @@
 import { NodeViewWrapper } from '@tiptap/react'
 import { Box, Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
-import { AvailablePortalRoutes, PortalRoutes } from '@/types/copilotPortal'
+import { PortalRoutes } from '@/types/copilotPortal'
 import React, { useState } from 'react'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
 import { DragIndicatorRounded } from '@mui/icons-material'
+import { usePathname } from 'next/navigation'
 
 export const NotificationWidget = () => {
   const invoiceCount = useAppData('{{invoice.count}}')
@@ -101,10 +102,17 @@ const NotificationComponent = ({
   name: string
   route: PortalRoutes
 }) => {
+  const appState = useAppState()
+  const pathname = usePathname()
   return (
     <Stack direction='row' justifyContent='space-between'>
       <Typography variant='body1'>{name}</Typography>
-      <RedirectButton route={route}>
+      <RedirectButton
+        route={route}
+        execute={
+          pathname.includes('client-preview') || !appState?.appState.readOnly
+        }
+      >
         <Typography variant='body1'>Go to {route}</Typography>
       </RedirectButton>
     </Stack>

@@ -7,11 +7,14 @@ import { AvailablePortalRoutes } from '@/types/copilotPortal'
 interface RedirectButtonProps {
   route: AvailablePortalRoutes
   children: string | ReactNode
+  execute: boolean
 }
 
-const RedirectButton = ({ route, children }: RedirectButtonProps) => {
+const RedirectButton = ({ route, children, execute }: RedirectButtonProps) => {
   const handleClick = () => {
-    window.parent.postMessage({ type: 'history.push', route }, '*')
+    if (execute) {
+      window.parent.postMessage({ type: 'history.push', route }, '*')
+    }
   }
 
   return <Button handleClick={handleClick}>{children}</Button>
