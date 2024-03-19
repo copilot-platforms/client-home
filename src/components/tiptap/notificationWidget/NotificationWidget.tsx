@@ -16,10 +16,14 @@ export const NotificationWidget = () => {
   const appState = useAppState()
 
   const [hovered, setHovered] = useState(false)
+  const pathname = usePathname()
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
-      {appState?.appState.displayTasks && (
+      {(pathname.includes('client-preview')
+        ? appState?.appState.displayTasks && Number(taskCount) > 0
+        : !appState?.appState.readOnly ||
+          (appState?.appState.readOnly && Number(taskCount) > 0)) && (
         <div
           draggable='true'
           datatype='draggable-item'
@@ -51,6 +55,13 @@ export const NotificationWidget = () => {
                         key={key}
                         name={`Pay ${invoiceCount} invoices`}
                         route={PortalRoutes.Billing}
+                        display={
+                          pathname.includes('client-preview')
+                            ? Number(invoiceCount) > 0
+                            : appState?.appState.readOnly
+                              ? Number(invoiceCount) > 0
+                              : true
+                        }
                       />
                     )
                   }
@@ -60,6 +71,13 @@ export const NotificationWidget = () => {
                         key={key}
                         name={`Fill out ${formCount} forms`}
                         route={PortalRoutes.Forms}
+                        display={
+                          pathname.includes('client-preview')
+                            ? Number(formCount) > 0
+                            : appState?.appState.readOnly
+                              ? Number(formCount) > 0
+                              : true
+                        }
                       />
                     )
                   }
@@ -69,6 +87,13 @@ export const NotificationWidget = () => {
                         key={key}
                         name={`Sign ${contractCount} contract`}
                         route={PortalRoutes.Contracts}
+                        display={
+                          pathname.includes('client-preview')
+                            ? Number(contractCount) > 0
+                            : appState?.appState.readOnly
+                              ? Number(contractCount) > 0
+                              : true
+                        }
                       />
                     )
                   }
@@ -98,14 +123,20 @@ export const NotificationWidget = () => {
 const NotificationComponent = ({
   name,
   route,
+  display,
 }: {
   name: string
   route: PortalRoutes
+  display?: boolean
 }) => {
   const appState = useAppState()
   const pathname = usePathname()
   return (
-    <Stack direction='row' justifyContent='space-between'>
+    <Stack
+      direction='row'
+      justifyContent='space-between'
+      display={display ? 'flex' : 'none'}
+    >
       <Typography variant='body1'>{name}</Typography>
       <RedirectButton
         route={route}
