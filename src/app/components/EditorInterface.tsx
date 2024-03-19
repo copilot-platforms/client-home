@@ -142,9 +142,15 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: `
-         ${settings?.content || defaultState}
-`,
+    content: settings?.content || defaultState,
+    onUpdate: ({ editor }) => {
+      if (!editor?.getHTML().includes('notification_widget')) {
+        appState?.toggleDisplayTasks({ override: false })
+      }
+      if (!appState?.appState.readOnly) {
+        appState?.setOriginalTemplate(editor?.getHTML() as string)
+      }
+    },
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -180,12 +186,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
   ])
-
-  useEffect(() => {
-    if (!appState?.appState.readOnly) {
-      appState?.setOriginalTemplate(editor?.getHTML() as string)
-    }
-  }, [editor?.getHTML(), appState?.appState.readOnly])
 
   useEffect(() => {
     // ! This will break someday
@@ -406,6 +406,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                 editor={editor}
                 readOnly={appState?.appState.readOnly}
                 className={appState?.appState.readOnly ? '' : 'editable'}
+                onChange={() => {
+                  console.log(editor?.getHTML().includes('notification_widget'))
+                }}
               />
             </div>
             <When condition={!!appState?.appState.readOnly}>

@@ -6,15 +6,15 @@ const DisplayTasksToggle = () => {
   const appState = useAppState()
 
   const handleClick = () => {
-    if (!appState?.appState.settings?.displayTasks) {
+    if (!appState?.appState?.displayTasks) {
       if (appState?.appState.editor) {
         appState?.appState?.editor
           .chain()
           .focus()
           .setContent(
-            `
-               ${appState?.appState.originalTemplate}
-      `,
+            appState?.appState.originalTemplate?.includes('notification_widget')
+              ? appState?.appState.originalTemplate
+              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`,
           )
           .run()
       }
