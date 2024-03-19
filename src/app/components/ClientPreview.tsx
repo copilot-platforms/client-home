@@ -36,6 +36,8 @@ import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_aut
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppState } from '@/hooks/useAppState'
 import { INotification, ISettings } from '@/types/interfaces'
+import { defaultBannerImagePath } from '@/utils/constants'
+import { defaultState } from '../../../defaultState'
 
 const ClientPreview = ({
   content,
@@ -112,18 +114,18 @@ const ClientPreview = ({
       CodeBlock,
       Code,
     ],
-    content: content,
+    content: content || defaultState,
   })
 
   useEffect(() => {
     if (editor && content) {
       const _settings = {
-        content: '',
+        content: defaultState,
         backgroundColor: '#ffffff',
         id: '',
         bannerImage: {
           id: '',
-          url: '',
+          url: defaultBannerImagePath,
           filename: '',
           contentType: '',
           size: 0,
