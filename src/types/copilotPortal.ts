@@ -3,7 +3,7 @@ export enum PortalRoutes {
   Files = 'files',
   Contracts = 'contracts',
   Forms = 'forms',
-  Billing = 'invoices',
+  Billing = 'billing',
   Helpdesk = 'helpdesk',
   Profile = 'profile',
   Settings = 'settings',
