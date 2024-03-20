@@ -6,7 +6,7 @@ import AutofillFields from '@/components/autofillFields/AutofillFields'
 import Select from '@/components/select/Select'
 import { useAppState } from '@/hooks/useAppState'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
@@ -34,13 +34,26 @@ const SideBarInterface: FC<IEditorInterface> = ({
     IClient | string | null
   >(defaultValue)
 
-  useEffect(() => {
+  const getNotifications = async (clientId: string) => {
+    const notifications = await fetch(
+      `api/notifications?token=${appState?.appState?.token}&clientId=${clientId}`,
+    )
+    return await notifications.json()
+  }
+
+  useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {
       appState?.toggleReadOnly(false)
       appState?.setSelectedClient(null)
     } else {
-      appState?.toggleReadOnly(true)
-      appState?.setSelectedClient(dropdownSelectedClient as IClient)
+      ;(async () => {
+        appState?.toggleReadOnly(true)
+        appState?.setSelectedClient(dropdownSelectedClient as IClient)
+        const notifications = await getNotifications(
+          (dropdownSelectedClient as IClient).id,
+        )
+        appState?.setNotification(notifications)
+      })()
     }
   }, [dropdownSelectedClient])
 

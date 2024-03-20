@@ -43,11 +43,17 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         method: 'PUT',
         body: JSON.stringify({
           ...settings,
+          displayTasks: appState?.appState.displayTasks,
           token: appState?.appState?.token,
-          notifications: JSON.stringify(formState),
+          notifications: formState,
         }),
       })
       appState?.toggleNotificationsModal()
+      const newSettings = {
+        ...appState?.appState.settings,
+        notifications: formState,
+      }
+      appState?.setSettings(newSettings as ISettings)
     } catch (e) {
       console.error(e)
     }

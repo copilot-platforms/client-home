@@ -43,6 +43,12 @@ async function getCustomFields(token: string) {
   return (customFieldsList.data || []) as ICustomField[]
 }
 
+async function getNotification(token: string) {
+  const res = await fetch(`${apiUrl}/api/notifications?token=${token}`)
+
+  return await res.json()
+}
+
 export default async function ClientPreviewPage({
   searchParams,
 }: {
@@ -71,6 +77,7 @@ export default async function ClientPreviewPage({
       createdById: '',
     },
     createdById: '',
+    displayTasks: false,
   }
 
   const defaultSetting = await getSettings(token)
@@ -82,6 +89,8 @@ export default async function ClientPreviewPage({
   const _client = await getClient(clientId, token)
 
   const company = await getCompany(_client.companyId, token)
+
+  const notifications = await getNotification(token)
 
   const template = Handlebars?.compile(settings?.content)
 
@@ -123,21 +132,23 @@ export default async function ClientPreviewPage({
         background: `${settings.backgroundColor}`,
       }}
     >
-      {settings?.bannerImage?.url && (
-        <Image
-          className='w-full'
-          src={bannerImgUrl || '/images/default_banner.png'}
-          alt='banner image'
-          width={0}
-          height={0}
-          sizes='100vw'
-          style={{
-            width: '100%',
-            height: '25vh',
-            objectFit: 'cover',
-          }}
-        />
-      )}
+      <Image
+        className='w-full'
+        src={
+          settings.bannerImage?.url
+            ? (bannerImgUrl as string)
+            : '/images/default_banner.png'
+        }
+        alt='banner image'
+        width={0}
+        height={0}
+        sizes='100vw'
+        style={{
+          width: '100%',
+          height: '25vh',
+          objectFit: 'cover',
+        }}
+      />
       <div
         className='px-14 py-350 max-w-xl'
         style={{
@@ -145,7 +156,11 @@ export default async function ClientPreviewPage({
           margin: '0 auto',
         }}
       >
-        <ClientPreview content={htmlContent} />
+        <ClientPreview
+          content={htmlContent}
+          settings={settings}
+          notifications={notifications}
+        />
       </div>
     </div>
   )

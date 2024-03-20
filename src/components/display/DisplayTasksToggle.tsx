@@ -1,14 +1,53 @@
 import { Switch } from '@/components/Forms/Switch'
 import { When } from '@/components/hoc/When'
 import { useAppState } from '@/hooks/useAppState'
+import { useEffect } from 'react'
 
 const DisplayTasksToggle = () => {
   const appState = useAppState()
+
+  const handleNotificationWidget = () => {
+    if (appState?.appState?.displayTasks) {
+      if (appState?.appState.editor) {
+        appState?.appState?.editor
+          .chain()
+          .focus()
+          .setContent(
+            appState?.appState.originalTemplate?.includes('notification_widget')
+              ? appState?.appState.originalTemplate
+              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`,
+          )
+          .run()
+      }
+      appState?.setOriginalTemplate(
+        appState?.appState.editor?.getHTML() as string,
+      )
+    } else {
+      if (appState?.appState.editor) {
+        appState?.appState?.editor
+          .chain()
+          .focus()
+          .setContent(
+            appState?.appState.originalTemplate?.replace(
+              '<notification_widget></notification_widget>',
+              '',
+            ) || '',
+          )
+          .run()
+      }
+    }
+  }
 
   const handleClick = () => {
     appState?.toggleDisplayTasks()
     appState?.toggleChangesCreated(true)
   }
+
+  useEffect(() => {
+    if (appState?.appState.editor) {
+      handleNotificationWidget()
+    }
+  }, [appState?.appState.displayTasks])
 
   return (
     <div className='py-600 px-500 border-1 border-b relative flex justify-between p-4 gap-3 z-0 items-center'>

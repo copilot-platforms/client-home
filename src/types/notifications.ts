@@ -9,5 +9,6 @@ export const NotificationOptionSchema = z.object({
 })
 
 export const NotificationsSchema = z.array(NotificationOptionSchema).nullish()
+// export const NotificationsSchema = z.any()
 
 export type Notification = z.infer<typeof NotificationsSchema>

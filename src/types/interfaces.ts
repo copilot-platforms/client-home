@@ -61,3 +61,9 @@ export enum Formatter {
   callout = 'Callout',
   empty = 'No Options',
 }
+
+export interface INotification {
+  forms: number
+  billing: number
+  contract: number
+}
