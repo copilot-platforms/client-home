@@ -17,6 +17,6 @@ export const handleBannerImageUpload = async (
     // appState?.setBannerImgId(data.id)
     // appState?.setBannerImgUrl(data.url)
   } catch (e) {
-    console.error('Something went wrong!')
+    console.error('Something went wrong!', e)
   }
 }

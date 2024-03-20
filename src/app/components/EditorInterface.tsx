@@ -142,9 +142,18 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: `
-         ${settings?.content || defaultState}
-`,
+    content: settings?.content || defaultState,
+    onUpdate: ({ editor }) => {
+      if (
+        !editor?.getHTML().includes('notification_widget') &&
+        appState?.appState?.displayTasks
+      ) {
+        appState?.toggleDisplayTasks({ override: false })
+      }
+      if (!appState?.appState.readOnly) {
+        appState?.setOriginalTemplate(editor?.getHTML() as string)
+      }
+    },
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -182,14 +191,11 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   ])
 
   useEffect(() => {
-    if (!appState?.appState.readOnly) {
-      appState?.setOriginalTemplate(editor?.getHTML() as string)
-    }
-  }, [editor?.getHTML(), appState?.appState.readOnly])
-
-  useEffect(() => {
     // ! This will break someday
-    if (editor && appState?.appState.settings?.content.includes(defaultState)) {
+    if (
+      editor &&
+      appState?.appState.settings?.content?.includes(defaultState)
+    ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
           defaultState.replace(/\s/g, '') ||
@@ -212,7 +218,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content.toString() ||
+          appState?.appState.settings?.content?.toString() ||
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
@@ -240,7 +246,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (editor) {
       appState?.setEditor(editor)
-
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
           event.preventDefault() // Prevent the default behavior of Cmd+Z (e.g., browser undo)
@@ -259,7 +264,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       appState?.setLoading(true)
 
       if (token) {
-        const _settings = {
+        const _settings: ISettings = {
           content: defaultState,
           backgroundColor: '#ffffff',
           id: '',
@@ -273,10 +278,27 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           },
           createdById: '',
           displayTasks: false,
+          notifications: [
+            {
+              key: 'contracts',
+              show: false,
+              order: 0,
+            },
+            {
+              key: 'billing',
+              show: false,
+              order: 1,
+            },
+            {
+              key: 'forms',
+              show: false,
+              order: 1,
+            },
+          ],
         }
         appState?.setOriginalTemplate(settings?.content || '')
         if (settings?.displayTasks) {
-          appState?.toggleDisplayTasks()
+          appState?.toggleDisplayTasks({ override: true })
         }
         appState?.setSettings(settings || _settings)
         appState?.setToken(token)

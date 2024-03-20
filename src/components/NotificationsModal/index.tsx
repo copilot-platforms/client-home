@@ -43,8 +43,9 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         method: 'PUT',
         body: JSON.stringify({
           ...settings,
+          displayTasks: appState?.appState.displayTasks,
           token: appState?.appState?.token,
-          notifications: JSON.stringify(formState),
+          notifications: formState,
         }),
       })
       appState?.toggleNotificationsModal()
