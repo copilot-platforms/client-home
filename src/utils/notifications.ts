@@ -1,6 +1,6 @@
 // These events are included in the `event` key from Copilot API notifications response
 export const notificationEvents = {
-  forms: 'forms.requested',
+  forms: 'formResponse.requested',
   billing: 'invoice.requested',
   contracts: 'contract.requested',
 }

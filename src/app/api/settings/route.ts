@@ -50,19 +50,9 @@ export async function PUT(request: NextRequest) {
   // Add notification settings if displayTasks is enabled
   if (setting.data.displayTasks) {
     // Ensure default values are saved if user doesn't customize them on the frontend
-    if (!setting.data.notifications) {
-      // @ts-expect-error inject default notifications
-      newData.notifications = defaultNotificationOptions
-    } else {
-      try {
-        newData.notifications = JSON.parse(setting.data.notifications)
-      } catch {
-        return NextResponse.json(
-          { error: 'Failed to parse notifications' },
-          { status: 400 },
-        )
-      }
-    }
+    newData.notifications = !setting.data.notifications
+      ? defaultNotificationOptions
+      : setting.data.notifications
   }
   await settingService.save(newData)
 
