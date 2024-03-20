@@ -59,6 +59,7 @@ export const Footer = () => {
         bannerImageId: data?.id,
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
       saveUtility(payload)
       return
@@ -71,6 +72,7 @@ export const Footer = () => {
         token: appState?.appState.token,
         bannerImageId: null,
         displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
       await fetch(`/api/media`, {
         method: 'DELETE',
@@ -103,6 +105,7 @@ export const Footer = () => {
         bannerImageId: data?.id,
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
     } else {
       payload = {
@@ -110,6 +113,7 @@ export const Footer = () => {
         content: content,
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
     }
     saveUtility(payload)

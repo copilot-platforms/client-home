@@ -5,7 +5,7 @@ import { NotificationsSchema } from './notifications'
 export const SettingRequestSchema = z.object({
   bannerImageId: z.string().nullable().optional(),
   backgroundColor: z.string().nullable().optional(),
-  notifications: z.string().nullish(),
+  notifications: NotificationsSchema,
   displayTasks: z.boolean(),
   content: z.string().nullable().optional(),
   token: z.string(),
