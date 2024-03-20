@@ -2,7 +2,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Box, Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { PortalRoutes } from '@/types/copilotPortal'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
 import { DragIndicatorRounded } from '@mui/icons-material'
@@ -39,34 +39,13 @@ export const NotificationWidget = () => {
     }
   }
 
-  const decideNotificationWidgetDisplay = () => {
-    if (appState?.appState.displayTasks) {
-      if (pathname.includes('client-preview')) {
-        if (Number(taskCount) > 0) {
-          return true
-        } else {
-          console.log('1')
-          if (!appState?.appState.readOnly) {
-            console.log('2')
-            if (detectAllFalsy()) {
-              return true
-            }
-          } else {
-            console.log('3')
-            if (Number(taskCount) > 0) {
-              return true
-            }
-          }
-        }
-      }
-    }
-  }
-
-  console.log(decideNotificationWidgetDisplay())
-
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
-      {decideNotificationWidgetDisplay() && (
+      {
+        appState?.appState.displayTasks &&
+        (pathname.includes('client-preview')
+          ? Number(taskCount) > 0 || (!appState?.appState.readOnly && !detectAllFalsy())
+          : !appState?.appState.readOnly || !detectAllFalsy() || Number(taskCount) > 0) &&
         <div
           draggable='true'
           datatype='draggable-item'
@@ -123,7 +102,7 @@ export const NotificationWidget = () => {
                     )
                   }
                 }
-              },
+              }
             )}
           </Stack>
           <Box
@@ -140,7 +119,7 @@ export const NotificationWidget = () => {
             <DragIndicatorRounded fontSize='small' />
           </Box>
         </div>
-      )}
+      }
     </NodeViewWrapper>
   )
 }
@@ -176,34 +155,3 @@ const NotificationComponent = ({
   )
 }
 
-const DecideWidgetDisplay = (children: { children: ReactNode }) => {
-  const appState = useAppState()
-  const pathname = usePathname()
-  const taskCount = useAppData('{{task.count}}')
-  const detectAllFalsy = () => {
-    appState?.appState?.settings?.notifications?.map((el) => {
-      if (el.show) {
-        return false
-      }
-    })
-    return true
-  }
-
-  if (appState?.appState.displayTasks) {
-    if (pathname.includes('client-preview')) {
-      if (Number(taskCount) > 0) {
-        return children
-      } else {
-        if (!appState?.appState.readOnly) {
-          if (!detectAllFalsy()) {
-            return children
-          }
-        } else {
-          if (Number(taskCount) > 0) {
-            return children
-          }
-        }
-      }
-    }
-  }
-}
