@@ -24,12 +24,14 @@ interface ModalCheckboxProps {
   identifier: NotificationOption
   formState: NonNullable<Notification>
   setFormState: Dispatch<SetStateAction<NonNullable<Notification>>>
+  setShowError: Dispatch<SetStateAction<NonNullable<boolean>>>
 }
 
 const ModalCheckbox = ({
   identifier,
   formState,
   setFormState,
+  setShowError,
 }: ModalCheckboxProps) => {
   const Icon: SVGIcon = notificationIcons[identifier]
 
@@ -47,11 +49,20 @@ const ModalCheckbox = ({
 
   const handleChange = () => {
     const i = formState.findIndex((item) => item.key === identifier)
-    setFormState((prev) => [
-      ...prev.slice(0, i),
-      { ...prev[i], show: !prev[i].show },
-      ...prev.slice(i + 1),
-    ])
+    setFormState((prev) => {
+      const newState = [
+        ...prev.slice(0, i),
+        { ...prev[i], show: !prev[i].show },
+        ...prev.slice(i + 1),
+      ]
+      const checkIfAllFalse = newState.every((item) => !item.show)
+      if (checkIfAllFalse) {
+        setShowError(true)
+        return prev
+      } else {
+        return newState
+      }
+    })
   }
 
   return (

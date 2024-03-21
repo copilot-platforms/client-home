@@ -1,10 +1,10 @@
 'use client'
 
 import { useAppState } from '@/hooks/useAppState'
-import { Backdrop, Box, Modal, Typography } from '@mui/material'
+import { Alert, Backdrop, Box, Fade, Modal, Typography } from '@mui/material'
 import ModalCheckbox from './ModalCheckbox'
 import { ISettings } from '@/types/interfaces'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { order } from '@/utils/orderable'
 import { defaultNotificationOptions } from '@/utils/notifications'
@@ -29,10 +29,17 @@ interface NotificationsModalProps {
 
 const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const appState = useAppState()
+  const [showError, setShowError] = useState(false)
   const [saving, setSaving] = useState(false)
   const [formState, setFormState] = useState<NonNullable<Notification>>(
     order(settings?.notifications || defaultNotificationOptions),
   )
+
+  useMemo(() => {
+    if (showError) {
+      setTimeout(() => setShowError(false), 2000)
+    }
+  }, [showError])
 
   const handleCancel = () => {
     setFormState(
@@ -112,6 +119,17 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
       }}
     >
       <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[720px] bg-white rounded-md shadow-lg outline-none font-medium'>
+        <Fade in={showError}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 10,
+              width: '100%',
+            }}
+          >
+            <Alert severity='error'>At least 1 app should be selected.</Alert>
+          </Box>
+        </Fade>
         <Typography variant='h6' className='px-6 pt-6 pb-4 font-medium'>
           Customize notifications widget
         </Typography>
@@ -146,6 +164,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
                     identifier={key as NotificationOption}
                     formState={formState}
                     setFormState={setFormState}
+                    setShowError={setShowError}
                   />
                 ))}
             </SortableContext>
