@@ -18,13 +18,15 @@ export const NotificationWidget = () => {
   const [hovered, setHovered] = useState(false)
   const pathname = usePathname()
 
-  const detectAllFalsy = () => {
-    appState?.appState?.settings?.notifications?.map((el) => {
-      if (el.show) {
-        return false
+  function detectAllFalsy() {
+    if (appState?.appState.settings?.notifications) {
+      for (let i = 0; i < appState?.appState.settings?.notifications?.length; i++) {
+        if (appState?.appState.settings?.notifications[i].show) {
+          return false;
+        }
       }
-    })
-    return true
+      return true;
+    }
   }
 
   const detectDisplay = (value: string) => {
@@ -38,14 +40,15 @@ export const NotificationWidget = () => {
       }
     }
   }
+  console.log('all falsy', detectAllFalsy())
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
       {
-        appState?.appState.displayTasks &&
+        appState?.appState.displayTasks && !detectAllFalsy() &&
         (pathname.includes('client-preview')
-          ? Number(taskCount) > 0 || (!appState?.appState.readOnly && !detectAllFalsy())
-          : !appState?.appState.readOnly || !detectAllFalsy() || Number(taskCount) > 0) &&
+          ? Number(taskCount) > 0 && !detectAllFalsy()
+          : (appState?.appState.readOnly ? (!detectAllFalsy() && Number(taskCount) > 0) : true)) &&
         <div
           draggable='true'
           datatype='draggable-item'
