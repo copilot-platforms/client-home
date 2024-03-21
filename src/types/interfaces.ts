@@ -65,5 +65,5 @@ export enum Formatter {
 export interface INotification {
   forms: number
   billing: number
-  contract: number
+  contracts: number
 }

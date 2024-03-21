@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const counts = {
       forms: 0,
       billing: 0,
-      contract: 0,
+      contracts: 0,
     }
 
     notifications.forEach(({ event }) => {
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       } else if (event === notificationEvents.billing) {
         counts.billing += 1
       } else if (event === notificationEvents.contracts) {
-        counts.contract += 1
+        counts.contracts += 1
       }
     })
 
