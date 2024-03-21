@@ -51,7 +51,7 @@ export const NotificationWidget = () => {
           style={{ position: 'relative', cursor: 'pointer' }}
         >
           <Typography variant='h2' datatype='draggable-item'>
-            You have {taskCount} task{!appState?.appState?.readOnly ? '/s' : ''}{Number(taskCount) > 1 ? 's' : ''} left to complete
+            You have {taskCount} task{!appState?.appState?.readOnly || Number(taskCount) > 1 ? 's' : ''} left to complete
           </Typography>
 
           <Stack
@@ -72,7 +72,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Pay ${invoiceCount} invoice${!appState?.appState?.readOnly ? '/s' : ''}${Number(invoiceCount) > 1 ? 's' : ''}`}
+                        name={`Pay ${invoiceCount} invoice${!appState?.appState?.readOnly || Number(invoiceCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Billing}
                         display={detectDisplay(invoiceCount)}
                       />
@@ -82,7 +82,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Fill out ${formCount} form${!appState?.appState?.readOnly ? '/s' : ''}${Number(formCount) > 1 ? 's' : ''}`}
+                        name={`Fill out ${formCount} form${!appState?.appState?.readOnly || Number(formCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Forms}
                         display={detectDisplay(formCount)}
                       />
@@ -92,7 +92,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Sign ${contractCount} contract${!appState?.appState?.readOnly ? '/s' : ''}${Number(contractCount) > 1 ? 's' : ''}`}
+                        name={`Sign ${contractCount} contract${!appState?.appState?.readOnly || Number(contractCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
                       />
