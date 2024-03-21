@@ -6,7 +6,7 @@ import AutofillFields from '@/components/autofillFields/AutofillFields'
 import Select from '@/components/select/Select'
 import { useAppState } from '@/hooks/useAppState'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
@@ -24,6 +24,8 @@ const SideBarInterface: FC<IEditorInterface> = ({
   clientList,
   customFields,
 }) => {
+  const sideBarRef = useRef<HTMLDivElement | null>(null)
+
   const appState = useAppState()
 
   const [showImage, setShowImage] = useState('')
@@ -45,6 +47,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
     if (dropdownSelectedClient === defaultValue) {
       appState?.toggleReadOnly(false)
       appState?.setSelectedClient(null)
+      sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
     } else {
       ;(async () => {
         appState?.toggleReadOnly(true)
@@ -53,6 +56,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           (dropdownSelectedClient as IClient).id,
         )
         appState?.setNotification(notifications)
+        sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
       })()
     }
   }, [dropdownSelectedClient])
@@ -79,7 +83,15 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [appState?.appState.bannerImgUrl])
 
   return (
-    <div>
+    <div
+      style={{
+        height: appState?.appState?.changesCreated
+          ? 'calc(100vh - 60px)'
+          : '100vh',
+        overflowY: 'scroll',
+      }}
+      ref={sideBarRef}
+    >
       <div className='py-600 px-500 flex border-1 border-y items-center justify-between'>
         <p className='font-medium'>Preview mode</p>
         <Select
