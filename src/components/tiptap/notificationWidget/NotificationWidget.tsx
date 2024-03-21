@@ -135,7 +135,6 @@ const NotificationComponent = ({
   route: PortalRoutes
   display?: boolean
 }) => {
-  const appState = useAppState()
   const pathname = usePathname()
 
   return (
@@ -149,7 +148,7 @@ const NotificationComponent = ({
       <RedirectButton
         route={route}
         execute={
-          pathname.includes('client-preview') || !appState?.appState.readOnly
+          pathname.includes('client-preview')
         }
       >
         <Typography variant='body1'>Go to {route}</Typography>
