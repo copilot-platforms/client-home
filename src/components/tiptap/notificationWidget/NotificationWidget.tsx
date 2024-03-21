@@ -20,12 +20,7 @@ export const NotificationWidget = () => {
 
   function detectAllFalsy() {
     if (appState?.appState.settings?.notifications) {
-      for (let i = 0; i < appState?.appState.settings?.notifications?.length; i++) {
-        if (appState?.appState.settings?.notifications[i].show) {
-          return false;
-        }
-      }
-      return true;
+      return !appState?.appState.settings?.notifications?.some(notification => notification.show)
     }
   }
 
