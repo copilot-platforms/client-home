@@ -145,6 +145,10 @@ const ClientPreview = ({
     }
   }, [editor, content])
 
+  useEffect(() => {
+    if (editor) editor.chain().focus('start').run()
+  }, [editor])
+
   if (!editor) {
     return null
   }

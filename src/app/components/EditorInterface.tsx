@@ -174,7 +174,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       )
       const c = template(appData)
       setTimeout(() => {
-        editor?.chain().focus().setContent(c).run()
+        editor?.chain().focus('start').setContent(c).run()
       })
     } else {
       setTimeout(() => {
@@ -184,6 +184,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           .setContent(appState?.appState.originalTemplate as string)
           .run()
       })
+      editor?.chain().focus('start').run()
     }
   }, [
     appState?.appState.selectedClient,
@@ -348,7 +349,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           autoHide={true}
           hideTracksWhenNotNeeded
           style={{
-            height: '100vh',
+            height: appState?.appState?.changesCreated
+              ? 'calc(100vh - 60px)'
+              : '100vh',
             background: `${appState?.appState.editorColor}`,
             marginBottom: appState?.appState.changesCreated ? '60px' : '0px',
           }}
