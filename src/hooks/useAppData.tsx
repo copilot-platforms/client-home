@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { useAppState } from '@/hooks/useAppState'
-import { IClient } from '@/types/interfaces'
+import { IClient, INotification } from '@/types/interfaces'
 import Handlebars from 'handlebars'
 
 const AppDataContext = createContext<null | Record<string, unknown>>({})
@@ -49,12 +49,18 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       }
     }
 
-    const task = {
-      count:
-        (appState?.appState.notifications?.forms || 0) +
-        (appState?.appState.notifications?.billing || 0) +
-        (appState?.appState.notifications?.contract || 0),
-    }
+    let count = 0
+    appState?.appState.settings?.notifications?.map((el) => {
+      if (el.show) {
+        if (appState?.appState.notifications) {
+          count +=
+            appState?.appState.notifications[el.key as keyof INotification]
+        }
+      }
+    })
+
+    const task = { count }
+
     const invoice = {
       count: appState?.appState.notifications?.billing,
     }
@@ -64,7 +70,7 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
     }
 
     const contract = {
-      count: appState?.appState.notifications?.contract,
+      count: appState?.appState.notifications?.contracts,
     }
 
     const client = {

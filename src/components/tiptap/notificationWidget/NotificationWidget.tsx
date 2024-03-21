@@ -2,7 +2,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Box, Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { PortalRoutes } from '@/types/copilotPortal'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
 import { DragIndicatorRounded } from '@mui/icons-material'
@@ -18,13 +18,10 @@ export const NotificationWidget = () => {
   const [hovered, setHovered] = useState(false)
   const pathname = usePathname()
 
-  const detectAllFalsy = () => {
-    appState?.appState?.settings?.notifications?.map((el) => {
-      if (el.show) {
-        return false
-      }
-    })
-    return true
+  function detectAllFalsy() {
+    if (appState?.appState.settings?.notifications) {
+      return !appState?.appState.settings?.notifications?.some(notification => notification.show)
+    }
   }
 
   const detectDisplay = (value: string) => {
@@ -42,10 +39,10 @@ export const NotificationWidget = () => {
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
       {
-        appState?.appState.displayTasks &&
+        appState?.appState.displayTasks && !detectAllFalsy() &&
         (pathname.includes('client-preview')
-          ? Number(taskCount) > 0 || (!appState?.appState.readOnly && !detectAllFalsy())
-          : !appState?.appState.readOnly || !detectAllFalsy() || Number(taskCount) > 0) &&
+          ? Number(taskCount) > 0 && !detectAllFalsy()
+          : (appState?.appState.readOnly ? (!detectAllFalsy() && Number(taskCount) > 0) : true)) &&
         <div
           draggable='true'
           datatype='draggable-item'
@@ -54,7 +51,7 @@ export const NotificationWidget = () => {
           style={{ position: 'relative', cursor: 'pointer' }}
         >
           <Typography variant='h2' datatype='draggable-item'>
-            You have {taskCount} tasks left to complete
+            You have {taskCount} task{!appState?.appState?.readOnly ? '/s' : ''}{Number(taskCount) > 1 ? 's' : ''} left to complete
           </Typography>
 
           <Stack
@@ -75,7 +72,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Pay ${invoiceCount} invoices`}
+                        name={`Pay ${invoiceCount} invoice${!appState?.appState?.readOnly ? '/s' : ''}${Number(invoiceCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Billing}
                         display={detectDisplay(invoiceCount)}
                       />
@@ -85,7 +82,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Fill out ${formCount} forms`}
+                        name={`Fill out ${formCount} form${!appState?.appState?.readOnly ? '/s' : ''}${Number(formCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Forms}
                         display={detectDisplay(formCount)}
                       />
@@ -95,7 +92,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Sign ${contractCount} contract`}
+                        name={`Sign ${contractCount} contract${!appState?.appState?.readOnly ? '/s' : ''}${Number(contractCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
                       />
@@ -133,7 +130,6 @@ const NotificationComponent = ({
   route: PortalRoutes
   display?: boolean
 }) => {
-  const appState = useAppState()
   const pathname = usePathname()
 
   return (
@@ -141,12 +137,13 @@ const NotificationComponent = ({
       direction='row'
       justifyContent='space-between'
       display={display ? 'flex' : 'none'}
+      alignItems="center"
     >
       <Typography variant='body1'>{name}</Typography>
       <RedirectButton
         route={route}
         execute={
-          pathname.includes('client-preview') || !appState?.appState.readOnly
+          pathname.includes('client-preview')
         }
       >
         <Typography variant='body1'>Go to {route}</Typography>
