@@ -56,7 +56,7 @@ export const NotificationWidget = () => {
           style={{ position: 'relative', cursor: 'pointer' }}
         >
           <Typography variant='h2' datatype='draggable-item'>
-            You have {taskCount} task/s left to complete
+            You have {taskCount} task{!appState?.appState?.readOnly ? '/s' : ''}{Number(taskCount) > 1 ? 's' : ''} left to complete
           </Typography>
 
           <Stack
