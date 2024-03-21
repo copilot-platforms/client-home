@@ -53,6 +53,7 @@ import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppDataContext } from '@/hooks/useAppData'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -279,23 +280,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           },
           createdById: '',
           displayTasks: false,
-          notifications: [
-            {
-              key: 'contracts',
-              show: true,
-              order: 0,
-            },
-            {
-              key: 'billing',
-              show: true,
-              order: 1,
-            },
-            {
-              key: 'forms',
-              show: true,
-              order: 1,
-            },
-          ],
+          notifications: defaultNotificationOptions,
         }
         appState?.setOriginalTemplate(settings?.content || '')
         if (settings?.displayTasks) {

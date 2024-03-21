@@ -34,7 +34,15 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
     order(settings?.notifications || defaultNotificationOptions),
   )
 
-  const handleCancel = appState?.toggleNotificationsModal
+  const handleCancel = () => {
+    setFormState(
+      order(
+        appState?.appState?.settings?.notifications ||
+          defaultNotificationOptions,
+      ),
+    )
+    appState?.toggleNotificationsModal()
+  }
 
   const handleSave = async () => {
     try {
