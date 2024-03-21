@@ -281,17 +281,17 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           notifications: [
             {
               key: 'contracts',
-              show: false,
+              show: true,
               order: 0,
             },
             {
               key: 'billing',
-              show: false,
+              show: true,
               order: 1,
             },
             {
               key: 'forms',
-              show: false,
+              show: true,
               order: 1,
             },
           ],
