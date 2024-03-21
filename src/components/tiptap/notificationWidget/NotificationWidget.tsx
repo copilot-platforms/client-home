@@ -40,7 +40,6 @@ export const NotificationWidget = () => {
       }
     }
   }
-  console.log('all falsy', detectAllFalsy())
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
@@ -78,7 +77,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Pay ${invoiceCount} invoices`}
+                        name={`Pay ${invoiceCount} invoice${Number(invoiceCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Billing}
                         display={detectDisplay(invoiceCount)}
                       />
@@ -88,7 +87,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Fill out ${formCount} forms`}
+                        name={`Fill out ${formCount} form${Number(formCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Forms}
                         display={detectDisplay(formCount)}
                       />
@@ -98,7 +97,7 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Sign ${contractCount} contract`}
+                        name={`Sign ${contractCount} contract${Number(contractCount) > 1 ? 's' : ''}`}
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
                       />
@@ -144,6 +143,7 @@ const NotificationComponent = ({
       direction='row'
       justifyContent='space-between'
       display={display ? 'flex' : 'none'}
+      alignItems="center"
     >
       <Typography variant='body1'>{name}</Typography>
       <RedirectButton
