@@ -29,8 +29,11 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
     const _client = appState.appState.clientList.find(
       (el) => el.id === (appState.appState.selectedClient as IClient)?.id,
     )
+    console.log('client', _client)
+    console.log('appState', appState?.appState)
     //add comma separator for custom fields
     const customFields: any = _client?.customFields
+    console.log('customField', _client?.customFields)
 
     // Iterate through each key in customFields
     for (const key in customFields) {
