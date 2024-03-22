@@ -167,6 +167,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [appState?.appState.readOnly, editor])
 
   const appData = useAppDataContext()
+  console.log('appData', appData)
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
@@ -187,9 +188,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       })
     }
   }, [
-    appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
+    appState?.appState.selectedClient,
     appState?.appState.notifications,
+    appData,
   ])
 
   useEffect(() => {
