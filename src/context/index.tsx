@@ -1,8 +1,14 @@
 'use client'
 
-import { IClient, ICustomField, ISettings } from '@/types/interfaces'
+import {
+  IClient,
+  ICustomField,
+  INotification,
+  ISettings,
+} from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
-import { FC, ReactNode, useState, createContext } from 'react'
+import { FC, ReactNode, useState, createContext, useEffect } from 'react'
+import { AppDataProvider } from '@/hooks/useAppData'
 
 export interface IAppState {
   editor: Editor | null
@@ -16,11 +22,14 @@ export interface IAppState {
   changesCreated: boolean
   settings: ISettings | undefined
   originalTemplate: string | undefined
+  displayTasks: boolean
   loading: boolean
+  showNotificationsModal: boolean
   //this data should be fetched from API in the future
   clientList: IClient[]
   customFields: ICustomField[]
   token: string
+  notifications: INotification | undefined
 }
 
 export interface IAppContext {
@@ -33,6 +42,8 @@ export interface IAppContext {
   toggleChangesCreated: (v: boolean) => void
   setSettings: (settings: ISettings) => void
   setOriginalTemplate: (template: string) => void
+  toggleDisplayTasks: (options?: { override: boolean }) => void
+  toggleNotificationsModal: () => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
@@ -40,6 +51,7 @@ export interface IAppContext {
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
+  setNotification: (notification: INotification) => void
 }
 
 interface IAppCoreProvider {
@@ -61,10 +73,13 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     changesCreated: false,
     settings: undefined,
     originalTemplate: undefined,
+    displayTasks: false,
     loading: false,
     clientList: [],
     customFields: [],
     token: '',
+    showNotificationsModal: false,
+    notifications: undefined,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -99,6 +114,20 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, originalTemplate: template }))
   }
 
+  const toggleDisplayTasks = (options?: { override: boolean }) => {
+    setState((prev) => ({
+      ...prev,
+      displayTasks: options ? options.override : !prev.displayTasks,
+    }))
+  }
+
+  const toggleNotificationsModal = () => {
+    setState((prev) => ({
+      ...prev,
+      showNotificationsModal: !prev.showNotificationsModal,
+    }))
+  }
+
   const setLoading = (v: boolean) => {
     setState((prev) => ({ ...prev, loading: v }))
   }
@@ -127,6 +156,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, token: token }))
   }
 
+  const setNotification = (notification: INotification) => {
+    setState((prev) => ({ ...prev, notifications: notification }))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -139,6 +172,8 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         toggleChangesCreated,
         setSettings,
         setOriginalTemplate,
+        toggleDisplayTasks,
+        toggleNotificationsModal,
         setLoading,
         setClientList,
         setCustomFields,
@@ -146,9 +181,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setBannerImgUrl,
         setBannerImgId,
         setToken,
+        setNotification,
       }}
     >
-      {children}
+      <AppDataProvider>{children}</AppDataProvider>
     </AppContext.Provider>
   )
 }

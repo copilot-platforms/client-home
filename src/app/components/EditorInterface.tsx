@@ -51,6 +51,9 @@ import { Box } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppDataContext } from '@/hooks/useAppData'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -65,6 +68,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   const editor = useEditor({
     extensions: [
       AutofillExtension,
+      NotificationWidgetExtension,
       Document,
       Paragraph,
       Heading,
@@ -151,41 +155,14 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     }
   }, [appState?.appState.readOnly, editor])
 
+  const appData = useAppDataContext()
+
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
-      const _client = appState.appState.clientList.find(
-        (el) => el.id === (appState.appState.selectedClient as IClient).id,
-      )
-      //add comma separator for custom fields
-      const customFields: any = _client?.customFields
-
-      // Iterate through each key in customFields
-      for (const key in customFields) {
-        // Check if the value is an array and if the key exists in allCustomFields
-        if (
-          Array.isArray(customFields[key]) &&
-          appState?.appState.customFields.some((field) => field.key === key)
-        ) {
-          // Map the values to their corresponding labels
-          customFields[key] = customFields[key].map((value: string[]) => {
-            const option: any = (appState?.appState?.customFields as any)
-              .find((field: any) => field.key === key)
-              .options.find((opt: any) => opt.key === value)
-            return option ? ' ' + option.label : ' ' + value
-          })
-        }
-      }
-
-      const client = {
-        ..._client,
-        ...customFields,
-        company: appState?.appState.selectedClientCompanyName,
-      }
-
-      const c = template({ client })
+      const c = template(appData)
       setTimeout(() => {
         editor?.chain().focus().setContent(c).run()
       })
@@ -199,22 +176,23 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       })
     }
   }, [
-    appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
+    appState?.appState.selectedClient,
+    appState?.appState.notifications,
   ])
 
   useEffect(() => {
-    if (!appState?.appState.readOnly) {
-      appState?.setOriginalTemplate(editor?.getHTML() as string)
-    }
-  }, [editor?.getHTML(), appState?.appState.readOnly])
-
-  useEffect(() => {
-    if (editor && appState?.appState.settings?.content.includes(defaultState)) {
+    if (
+      editor &&
+      appState?.appState.settings?.content?.includes(defaultState)
+    ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
           defaultState.replace(/\s/g, '') ||
-        appState?.appState.bannerImgUrl !== defaultBannerImagePath
+        appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
+        (appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks &&
+          appState?.appState.displayTasks !== undefined)
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -229,11 +207,13 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content.toString() ||
+          appState?.appState.settings?.content?.toString() ||
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
-          appState?.appState.bannerImgUrl
+          appState?.appState.bannerImgUrl ||
+        appState?.appState.settings.displayTasks !==
+          appState?.appState.displayTasks
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -247,6 +227,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.editorColor,
     appState?.appState.bannerImgUrl,
     appState?.appState.readOnly,
+    appState?.appState.displayTasks,
     appState?.appState.settings,
     editor,
   ])
@@ -254,8 +235,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (editor) {
       appState?.setEditor(editor)
-      editor.chain().focus('start')
-
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
           event.preventDefault() // Prevent the default behavior of Cmd+Z (e.g., browser undo)
@@ -274,7 +253,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       appState?.setLoading(true)
 
       if (token) {
-        const _settings = {
+        const _settings: ISettings = {
           content: defaultState,
           backgroundColor: '#ffffff',
           id: '',
@@ -287,6 +266,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             createdById: '',
           },
           createdById: '',
+          displayTasks: true,
+          notifications: defaultNotificationOptions,
         }
         appState?.setOriginalTemplate(settings?.content || '')
         appState?.setSettings(settings || _settings)
@@ -325,6 +306,18 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.toggleShowLinkInput(false)
   }, [editor?.isFocused])
 
+  useEffect(() => {
+    if (!appState?.appState.readOnly) {
+      appState?.setOriginalTemplate(editor?.getHTML() as string)
+    }
+    if (
+      !editor?.getHTML().includes('notification_widget') &&
+      appState?.appState?.displayTasks
+    ) {
+      appState?.toggleDisplayTasks({ override: false })
+    }
+  }, [editor?.getHTML(), appState?.appState.readOnly])
+
   if (!editor) return null
 
   return (
@@ -337,7 +330,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           autoHide={true}
           hideTracksWhenNotNeeded
           style={{
-            height: '100vh',
+            height: appState?.appState?.changesCreated
+              ? 'calc(100vh - 60px)'
+              : '100vh',
             background: `${appState?.appState.editorColor}`,
             marginBottom: appState?.appState.changesCreated ? '60px' : '0px',
           }}

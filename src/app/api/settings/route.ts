@@ -3,6 +3,7 @@ import { SettingService } from '@/app/api/settings/services/setting.service'
 import { SettingRequestSchema } from '@/types/setting'
 import { errorHandler, getTokenPayload } from '@/utils/common'
 import { z } from 'zod'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -27,10 +28,9 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const data = await request.json()
-
   const setting = SettingRequestSchema.safeParse(data)
   if (!setting.success) {
-    return NextResponse.json(setting.error.issues)
+    return NextResponse.json(setting.error.issues, { status: 400 })
   }
 
   const payload = await getTokenPayload(z.string().parse(setting.data.token))
@@ -42,10 +42,19 @@ export async function PUT(request: NextRequest) {
   }
 
   const settingService = new SettingService()
-  await settingService.save({
+  const newData = {
     ...setting.data,
     workspaceId: payload.workspaceId,
-  })
+  }
+
+  // Add notification settings if displayTasks is enabled
+  if (setting.data.displayTasks) {
+    // Ensure default values are saved if user doesn't customize them on the frontend
+    newData.notifications = !setting.data.notifications
+      ? defaultNotificationOptions
+      : setting.data.notifications
+  }
+  await settingService.save(newData)
 
   return NextResponse.json({ message: 'Successfully saved new settings' })
 }

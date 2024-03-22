@@ -6,4 +6,5 @@ export const apiUrl = `${
 export const SentryConfig = {
   DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+  ENVIRONMENT: process.env.SENTRY_ENVIRONMENT || 'development',
 }

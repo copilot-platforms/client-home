@@ -58,6 +58,8 @@ export const Footer = () => {
         content: content,
         bannerImageId: data?.id,
         token: appState?.appState.token,
+        displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
       saveUtility(payload)
       return
@@ -69,6 +71,8 @@ export const Footer = () => {
         content: content,
         token: appState?.appState.token,
         bannerImageId: null,
+        displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
       await fetch(`/api/media`, {
         method: 'DELETE',
@@ -100,12 +104,16 @@ export const Footer = () => {
         content: content,
         bannerImageId: data?.id,
         token: appState?.appState.token,
+        displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
     } else {
       payload = {
         backgroundColor: appState?.appState?.editorColor,
         content: content,
         token: appState?.appState.token,
+        displayTasks: appState?.appState.displayTasks,
+        notifications: appState?.appState.settings?.notifications,
       }
     }
     saveUtility(payload)
@@ -127,6 +135,9 @@ export const Footer = () => {
     )
     appState?.setBannerImgId(appState?.appState.settings?.bannerImage?.id || '')
     appState?.toggleChangesCreated(false)
+    appState?.toggleDisplayTasks({
+      override: appState?.appState.settings?.displayTasks || false,
+    })
   }
 
   useEffect(() => {

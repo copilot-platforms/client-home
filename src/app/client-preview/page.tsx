@@ -43,6 +43,12 @@ async function getCustomFields(token: string) {
   return (customFieldsList.data || []) as ICustomField[]
 }
 
+async function getNotification(token: string) {
+  const res = await fetch(`${apiUrl}/api/notifications?token=${token}`)
+
+  return await res.json()
+}
+
 export default async function ClientPreviewPage({
   searchParams,
 }: {
@@ -71,6 +77,7 @@ export default async function ClientPreviewPage({
       createdById: '',
     },
     createdById: '',
+    displayTasks: false,
   }
 
   const defaultSetting = await getSettings(token)
@@ -82,6 +89,8 @@ export default async function ClientPreviewPage({
   const _client = await getClient(clientId, token)
 
   const company = await getCompany(_client.companyId, token)
+
+  const notifications = await getNotification(token)
 
   const template = Handlebars?.compile(settings?.content)
 
@@ -123,10 +132,10 @@ export default async function ClientPreviewPage({
         background: `${settings.backgroundColor}`,
       }}
     >
-      {settings?.bannerImage?.url && (
+      {bannerImgUrl && (
         <Image
           className='w-full'
-          src={bannerImgUrl || '/images/default_banner.png'}
+          src={bannerImgUrl}
           alt='banner image'
           width={0}
           height={0}
@@ -145,7 +154,11 @@ export default async function ClientPreviewPage({
           margin: '0 auto',
         }}
       >
-        <ClientPreview content={htmlContent} />
+        <ClientPreview
+          content={htmlContent}
+          settings={settings}
+          notifications={notifications}
+        />
       </div>
     </div>
   )

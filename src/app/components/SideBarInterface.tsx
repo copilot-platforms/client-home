@@ -6,21 +6,26 @@ import AutofillFields from '@/components/autofillFields/AutofillFields'
 import Select from '@/components/select/Select'
 import { useAppState } from '@/hooks/useAppState'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
+import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 
 interface IEditorInterface {
+  displayTasks: boolean
   clientList: IClient[]
   customFields: ICustomField[]
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
+  displayTasks,
   clientList,
   customFields,
 }) => {
+  const sideBarRef = useRef<HTMLDivElement | null>(null)
+
   const appState = useAppState()
 
   const [showImage, setShowImage] = useState('')
@@ -31,20 +36,36 @@ const SideBarInterface: FC<IEditorInterface> = ({
     IClient | string | null
   >(defaultValue)
 
-  useEffect(() => {
+  const getNotifications = async (clientId: string) => {
+    const notifications = await fetch(
+      `api/notifications?token=${appState?.appState?.token}&clientId=${clientId}`,
+    )
+    return await notifications.json()
+  }
+
+  useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {
       appState?.toggleReadOnly(false)
       appState?.setSelectedClient(null)
+      sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      appState?.toggleReadOnly(true)
-      appState?.setSelectedClient(dropdownSelectedClient as IClient)
+      ;(async () => {
+        appState?.toggleReadOnly(true)
+        appState?.setSelectedClient(dropdownSelectedClient as IClient)
+        const notifications = await getNotifications(
+          (dropdownSelectedClient as IClient).id,
+        )
+        appState?.setNotification(notifications)
+        sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
+      })()
     }
   }, [dropdownSelectedClient])
 
   useEffect(() => {
+    appState?.toggleDisplayTasks({ override: displayTasks })
     appState?.setClientList(clientList)
     appState?.setCustomFields(customFields)
-  }, [clientList, customFields])
+  }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
     ;(async () => {
@@ -62,7 +83,15 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [appState?.appState.bannerImgUrl])
 
   return (
-    <div>
+    <div
+      style={{
+        height: appState?.appState?.changesCreated
+          ? 'calc(100vh - 60px)'
+          : '100vh',
+        overflowY: 'scroll',
+      }}
+      ref={sideBarRef}
+    >
       <div className='py-600 px-500 flex border-1 border-y items-center justify-between'>
         <p className='font-medium'>Preview mode</p>
         <Select
@@ -81,7 +110,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
                 appState?.appState.clientList.map((val, key) => {
                   return (
                     <Stack
-                      key={key}
+                      key={val.id ?? key}
                       direction='row'
                       alignItems='flex-start'
                       columnGap={0.5}
@@ -156,6 +185,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
       <ColorPicker />
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}
+      <DisplayTasksToggle />
 
       <AutofillFields />
 
