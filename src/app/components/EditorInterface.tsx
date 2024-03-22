@@ -191,8 +191,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.selectedClientCompanyName,
     appState?.appState.selectedClient,
     appState?.appState.notifications,
-    //@ts-expect-error some error bug debugging
-    appData?.client.givenName,
   ])
 
   useEffect(() => {
