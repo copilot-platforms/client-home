@@ -1,3 +1,3 @@
 ## Client Home App
 
-This is the client home app built with NextJS.
+This is the client home app built with NextJS and Tiptap.
