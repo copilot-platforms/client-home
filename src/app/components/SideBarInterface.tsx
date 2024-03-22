@@ -49,7 +49,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
       appState?.setSelectedClient(null)
       sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      ;(async () => {
+      (async () => {
         appState?.toggleReadOnly(true)
         appState?.setSelectedClient(dropdownSelectedClient as IClient)
         const notifications = await getNotifications(
@@ -68,7 +68,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setShowImage(
