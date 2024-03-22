@@ -18,7 +18,7 @@ export const NotificationWidget = () => {
   const [hovered, setHovered] = useState(false)
   const pathname = usePathname()
 
-  function detectAllFalsy() {
+  function isAllNotificationsTurnedOff() {
     if (appState?.appState.settings?.notifications) {
       return !appState?.appState.settings?.notifications?.some(
         (notification) => notification.show,
@@ -39,16 +39,16 @@ export const NotificationWidget = () => {
   }
 
   const show = useMemo(() => {
-    return (
-      appState?.appState.displayTasks &&
-      !detectAllFalsy() &&
-      (pathname.includes('client-preview')
-        ? Number(taskCount) > 0 && !detectAllFalsy()
-        : appState?.appState.readOnly
-          ? !detectAllFalsy() && Number(taskCount) > 0
-          : true)
-    )
-  }, [])
+    if (!appState?.appState.displayTasks || isAllNotificationsTurnedOff()) {
+      return false
+    }
+
+    if (!appState?.appState.readOnly) {
+      return true
+    }
+
+    return Number(taskCount) > 0
+  }, [appState?.appState.displayTasks, appState?.appState.readOnly, taskCount])
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
