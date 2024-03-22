@@ -175,7 +175,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       )
       const c = template(appData)
       setTimeout(() => {
-        editor?.chain().focus('start').setContent(c).run()
+        editor?.chain().focus().setContent(c).run()
       })
     } else {
       setTimeout(() => {
@@ -185,7 +185,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           .setContent(appState?.appState.originalTemplate as string)
           .run()
       })
-      editor?.chain().focus('start').run()
+      editor?.chain().focus().run()
     }
   }, [
     appState?.appState.selectedClient,
