@@ -2,7 +2,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Box, Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { PortalRoutes } from '@/types/copilotPortal'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
 import { DragIndicatorRounded } from '@mui/icons-material'
@@ -20,7 +20,9 @@ export const NotificationWidget = () => {
 
   function detectAllFalsy() {
     if (appState?.appState.settings?.notifications) {
-      return !appState?.appState.settings?.notifications?.some(notification => notification.show)
+      return !appState?.appState.settings?.notifications?.some(
+        (notification) => notification.show,
+      )
     }
   }
 
@@ -36,13 +38,21 @@ export const NotificationWidget = () => {
     }
   }
 
+  const show = useMemo(() => {
+    return (
+      appState?.appState.displayTasks &&
+      !detectAllFalsy() &&
+      (pathname.includes('client-preview')
+        ? Number(taskCount) > 0 && !detectAllFalsy()
+        : appState?.appState.readOnly
+          ? !detectAllFalsy() && Number(taskCount) > 0
+          : true)
+    )
+  }, [])
+
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
-      {
-        appState?.appState.displayTasks && !detectAllFalsy() &&
-        (pathname.includes('client-preview')
-          ? Number(taskCount) > 0 && !detectAllFalsy()
-          : (appState?.appState.readOnly ? (!detectAllFalsy() && Number(taskCount) > 0) : true)) &&
+      {show && (
         <div
           draggable='true'
           datatype='draggable-item'
@@ -51,7 +61,11 @@ export const NotificationWidget = () => {
           style={{ position: 'relative', cursor: 'pointer' }}
         >
           <Typography variant='h2' datatype='draggable-item'>
-            You have {taskCount} task{!appState?.appState?.readOnly || Number(taskCount) > 1 ? 's' : ''} left to complete
+            You have {taskCount} task
+            {!appState?.appState?.readOnly || Number(taskCount) > 1
+              ? 's'
+              : ''}{' '}
+            left to complete
           </Typography>
 
           <Stack
@@ -72,7 +86,12 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Pay ${invoiceCount} invoice${!appState?.appState?.readOnly || Number(invoiceCount) > 1 ? 's' : ''}`}
+                        name={`Pay ${invoiceCount} invoice${
+                          !appState?.appState?.readOnly ||
+                          Number(invoiceCount) > 1
+                            ? 's'
+                            : ''
+                        }`}
                         route={PortalRoutes.Billing}
                         display={detectDisplay(invoiceCount)}
                       />
@@ -82,7 +101,11 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Fill out ${formCount} form${!appState?.appState?.readOnly || Number(formCount) > 1 ? 's' : ''}`}
+                        name={`Fill out ${formCount} form${
+                          !appState?.appState?.readOnly || Number(formCount) > 1
+                            ? 's'
+                            : ''
+                        }`}
                         route={PortalRoutes.Forms}
                         display={detectDisplay(formCount)}
                       />
@@ -92,14 +115,19 @@ export const NotificationWidget = () => {
                     return (
                       <NotificationComponent
                         key={key}
-                        name={`Sign ${contractCount} contract${!appState?.appState?.readOnly || Number(contractCount) > 1 ? 's' : ''}`}
+                        name={`Sign ${contractCount} contract${
+                          !appState?.appState?.readOnly ||
+                          Number(contractCount) > 1
+                            ? 's'
+                            : ''
+                        }`}
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
                       />
                     )
                   }
                 }
-              }
+              },
             )}
           </Stack>
           <Box
@@ -116,7 +144,7 @@ export const NotificationWidget = () => {
             <DragIndicatorRounded fontSize='small' />
           </Box>
         </div>
-      }
+      )}
     </NodeViewWrapper>
   )
 }
@@ -137,18 +165,15 @@ const NotificationComponent = ({
       direction='row'
       justifyContent='space-between'
       display={display ? 'flex' : 'none'}
-      alignItems="center"
+      alignItems='center'
     >
       <Typography variant='body1'>{name}</Typography>
       <RedirectButton
         route={route}
-        execute={
-          pathname.includes('client-preview')
-        }
+        execute={pathname.includes('client-preview')}
       >
         <Typography variant='body1'>Go to {route}</Typography>
       </RedirectButton>
     </Stack>
   )
 }
-
