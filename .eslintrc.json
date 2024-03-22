@@ -15,7 +15,10 @@
     "sourceType": "module"
   },
   "rules": {
-    "indent": ["error", 2],
+    "indent": [
+      "error",
+      2
+    ],
     "camelcase": [
       "error",
       {
@@ -23,7 +26,9 @@
       }
     ],
     "no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": [
+      "warn"
+    ],
     "@next/next/no-img-element": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-explicit-any": "warn"
