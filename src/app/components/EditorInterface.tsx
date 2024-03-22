@@ -266,13 +266,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             createdById: '',
           },
           createdById: '',
-          displayTasks: false,
+          displayTasks: true,
           notifications: defaultNotificationOptions,
         }
         appState?.setOriginalTemplate(settings?.content || '')
-        if (settings?.displayTasks) {
-          appState?.toggleDisplayTasks({ override: true })
-        }
         appState?.setSettings(settings || _settings)
         appState?.setToken(token)
       }
