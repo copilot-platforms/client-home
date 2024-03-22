@@ -125,7 +125,7 @@ const ClientPreview = ({
         id: '',
         bannerImage: {
           id: '',
-          url: defaultBannerImagePath,
+          url: '',
           filename: '',
           contentType: '',
           size: 0,

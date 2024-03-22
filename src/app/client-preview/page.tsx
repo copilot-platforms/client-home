@@ -132,23 +132,21 @@ export default async function ClientPreviewPage({
         background: `${settings.backgroundColor}`,
       }}
     >
-      <Image
-        className='w-full'
-        src={
-          settings.bannerImage?.url
-            ? (bannerImgUrl as string)
-            : '/images/default_banner.png'
-        }
-        alt='banner image'
-        width={0}
-        height={0}
-        sizes='100vw'
-        style={{
-          width: '100%',
-          height: '25vh',
-          objectFit: 'cover',
-        }}
-      />
+      {bannerImgUrl && (
+        <Image
+          className='w-full'
+          src={bannerImgUrl}
+          alt='banner image'
+          width={0}
+          height={0}
+          sizes='100vw'
+          style={{
+            width: '100%',
+            height: '25vh',
+            objectFit: 'cover',
+          }}
+        />
+      )}
       <div
         className='px-14 py-350 max-w-xl'
         style={{

@@ -190,6 +190,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [
     appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
+    appState?.appState.notifications,
   ])
 
   useEffect(() => {
