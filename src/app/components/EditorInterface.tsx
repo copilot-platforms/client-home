@@ -185,7 +185,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           .setContent(appState?.appState.originalTemplate as string)
           .run()
       })
-      editor?.chain().focus().run()
     }
   }, [
     appState?.appState.selectedClient,
