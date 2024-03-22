@@ -125,8 +125,6 @@ export default async function ClientPreviewPage({
     ? '/images/default_banner.png'
     : settings?.bannerImage?.url
 
-  console.log(defaultSetting)
-
   return (
     <div
       className={`overflow-y-auto overflow-x-hidden max-h-screen w-full`}
