@@ -188,7 +188,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
-          defaultState.replace(/\s/g, '') ||
+        defaultState.replace(/\s/g, '') ||
         appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
         (appState?.appState.settings.displayTasks !==
           appState?.appState.displayTasks &&
@@ -207,13 +207,13 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content?.toString() ||
+        appState?.appState.settings?.content?.toString() ||
         appState?.appState.settings?.backgroundColor !==
-          appState?.appState.editorColor ||
+        appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
-          appState?.appState.bannerImgUrl ||
+        appState?.appState.bannerImgUrl ||
         appState?.appState.settings.displayTasks !==
-          appState?.appState.displayTasks
+        appState?.appState.displayTasks
       ) {
         appState?.toggleChangesCreated(true)
       } else {
@@ -249,7 +249,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [editor])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       appState?.setLoading(true)
       if (token) {
         const _settings: ISettings = {
@@ -272,10 +272,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         appState?.setSettings(
           settings
             ? {
-                ...settings,
-                notifications:
-                  settings?.notifications || defaultNotificationOptions,
-              }
+              ...settings,
+              notifications:
+                settings?.notifications || defaultNotificationOptions,
+            }
             : _settings,
         )
         appState?.setToken(token)
@@ -295,7 +295,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [appState?.appState.settings])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setBannerImage(
