@@ -167,10 +167,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [appState?.appState.readOnly, editor])
 
   const appData = useAppDataContext()
-  console.log('appData', appData)
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
+      console.log('appData1', appData)
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
