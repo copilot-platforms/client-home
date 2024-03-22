@@ -251,7 +251,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     ;(async () => {
       appState?.setLoading(true)
-
       if (token) {
         const _settings: ISettings = {
           content: defaultState,
@@ -270,7 +269,15 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           notifications: defaultNotificationOptions,
         }
         appState?.setOriginalTemplate(settings?.content || '')
-        appState?.setSettings(settings || _settings)
+        appState?.setSettings(
+          settings
+            ? {
+                ...settings,
+                notifications:
+                  settings?.notifications || defaultNotificationOptions,
+              }
+            : _settings,
+        )
         appState?.setToken(token)
       }
       appState?.setLoading(false)
