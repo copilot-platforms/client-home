@@ -7,7 +7,7 @@ import {
   ISettings,
 } from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
-import { FC, ReactNode, useState, createContext } from 'react'
+import { FC, ReactNode, useState, createContext, useEffect } from 'react'
 import { AppDataProvider } from '@/hooks/useAppData'
 
 export interface IAppState {

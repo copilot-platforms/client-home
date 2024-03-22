@@ -144,17 +144,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       Code,
     ],
     content: settings?.content || defaultState,
-    onUpdate: ({ editor }) => {
-      if (
-        !editor?.getHTML().includes('notification_widget') &&
-        appState?.appState?.displayTasks
-      ) {
-        appState?.toggleDisplayTasks({ override: false })
-      }
-      if (!appState?.appState.readOnly) {
-        appState?.setOriginalTemplate(editor?.getHTML() as string)
-      }
-    },
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
@@ -170,7 +159,6 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
-      console.log('appData1', appData)
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || '',
       )
@@ -322,6 +310,18 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     appState?.toggleShowLinkInput(false)
   }, [editor?.isFocused])
+
+  useEffect(() => {
+    if (!appState?.appState.readOnly) {
+      appState?.setOriginalTemplate(editor?.getHTML() as string)
+    }
+    if (
+      !editor?.getHTML().includes('notification_widget') &&
+      appState?.appState?.displayTasks
+    ) {
+      appState?.toggleDisplayTasks({ override: false })
+    }
+  }, [editor?.getHTML(), appState?.appState.readOnly])
 
   if (!editor) return null
 

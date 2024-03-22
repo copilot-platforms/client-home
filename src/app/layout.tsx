@@ -3,8 +3,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Footer } from './components/Footer'
 
-export const dynamic = 'force-dynamic'
-
 export const metadata: Metadata = {
   title: 'Client Home App',
   description: 'Copilot Client Home App',
