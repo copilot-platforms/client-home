@@ -249,7 +249,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [editor])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       appState?.setLoading(true)
       if (token) {
         const _settings: ISettings = {
@@ -272,10 +272,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         appState?.setSettings(
           settings
             ? {
-              ...settings,
-              notifications:
+                ...settings,
+                notifications:
                   settings?.notifications || defaultNotificationOptions,
-            }
+              }
             : _settings,
         )
         appState?.setToken(token)
@@ -295,7 +295,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   }, [appState?.appState.settings])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setBannerImage(
