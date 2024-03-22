@@ -43,11 +43,8 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
   })
   useEffect(() => {
     ;(() => {
-      if (!appState) {
-        return null
-      }
-      const _client = appState.appState.clientList.find(
-        (el) => el.id === (appState.appState.selectedClient as IClient)?.id,
+      const _client = appState?.appState.clientList.find(
+        (el) => el.id === (appState?.appState.selectedClient as IClient)?.id,
       )
       //add comma separator for custom fields
       const customFields: any = _client?.customFields
