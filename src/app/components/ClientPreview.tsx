@@ -38,15 +38,17 @@ import { useAppState } from '@/hooks/useAppState'
 import { INotification, ISettings } from '@/types/interfaces'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { defaultState } from '../../../defaultState'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 const ClientPreview = ({
   content,
   settings,
-  notifications,
+  token,
 }: {
   content: string
   settings: ISettings
-  notifications: INotification
+  token: string
 }) => {
   /**
    * Importing all the editor related imports and settings up this editor
@@ -117,6 +119,10 @@ const ClientPreview = ({
     content: content || defaultState,
   })
 
+  const { data } = useSWR(`api/notifications?token=${token}`, fetcher, {
+    refreshInterval: 5000,
+  })
+
   useEffect(() => {
     appState?.toggleReadOnly(true)
     if (editor && content) {
@@ -141,13 +147,16 @@ const ClientPreview = ({
         appState?.toggleDisplayTasks()
       }
       appState?.setSettings(settings || _settings)
-      appState?.setNotification(notifications)
     }
   }, [editor, content])
 
   useEffect(() => {
     if (editor) editor.chain().focus('start').run()
   }, [editor])
+
+  useEffect(() => {
+    appState?.setNotification(data)
+  }, [data])
 
   if (!editor) {
     return null
