@@ -40,6 +40,7 @@ import { defaultBannerImagePath } from '@/utils/constants'
 import { defaultState } from '../../../defaultState'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 
 const ClientPreview = ({
   content,
@@ -62,6 +63,9 @@ const ClientPreview = ({
     extensions: [
       AutofillExtension,
       NotificationWidgetExtension,
+      IframeExtension.configure({
+        allowFullscreen: true,
+      }),
       Document,
       Paragraph,
       Heading,
