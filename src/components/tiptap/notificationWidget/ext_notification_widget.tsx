@@ -1,6 +1,6 @@
-import { mergeAttributes, Node } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { NotificationWidget } from './NotificationWidget';
+import { mergeAttributes, Node } from '@tiptap/core'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { NotificationWidget } from './NotificationWidget'
 
 export const NotificationWidgetExtension = Node.create({
   name: 'notificationWidget',
@@ -16,16 +16,16 @@ export const NotificationWidgetExtension = Node.create({
       {
         tag: 'notification_widget',
       },
-    ];
+    ]
   },
 
   whitespace: 'normal',
 
   renderHTML({ HTMLAttributes }) {
-    return ['notification_widget', mergeAttributes(HTMLAttributes), 0];
+    return ['notification_widget', mergeAttributes(HTMLAttributes), 0]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(NotificationWidget);
+    return ReactNodeViewRenderer(NotificationWidget)
   },
-});
+})

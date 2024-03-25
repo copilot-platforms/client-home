@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import ImagePicker from '@/components/ImagePicker/ImagePicker';
-import ColorPicker from '@/components/colorPicker/ColorPicker';
-import AutofillFields from '@/components/autofillFields/AutofillFields';
-import Select from '@/components/select/Select';
-import { useAppState } from '@/hooks/useAppState';
-import { ImagePickerUtils } from '@/utils/imagePickerUtils';
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { IClient, ICustomField } from '@/types/interfaces';
-import { Box, Stack } from '@mui/material';
-import Image from 'next/image';
-import { generateRandomHexColor } from '@/utils/generateRandomHexColor';
-import DisplayTasksToggle from '@/components/display/DisplayTasksToggle';
-import useSWR from 'swr';
-import { fetcher } from '@/utils/fetcher';
+import ImagePicker from '@/components/ImagePicker/ImagePicker'
+import ColorPicker from '@/components/colorPicker/ColorPicker'
+import AutofillFields from '@/components/autofillFields/AutofillFields'
+import Select from '@/components/select/Select'
+import { useAppState } from '@/hooks/useAppState'
+import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { IClient, ICustomField } from '@/types/interfaces'
+import { Box, Stack } from '@mui/material'
+import Image from 'next/image'
+import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
+import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 interface IEditorInterface {
-  displayTasks: boolean;
-  clientList: IClient[];
-  customFields: ICustomField[];
+  displayTasks: boolean
+  clientList: IClient[]
+  customFields: ICustomField[]
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
@@ -26,17 +26,17 @@ const SideBarInterface: FC<IEditorInterface> = ({
   clientList,
   customFields,
 }) => {
-  const sideBarRef = useRef<HTMLDivElement | null>(null);
+  const sideBarRef = useRef<HTMLDivElement | null>(null)
 
-  const appState = useAppState();
+  const appState = useAppState()
 
-  const [showImage, setShowImage] = useState('');
+  const [showImage, setShowImage] = useState('')
 
-  const defaultValue = 'Preview mode off';
+  const defaultValue = 'Preview mode off'
 
   const [dropdownSelectedClient, setDropdownSelectedClient] = useState<
     IClient | string | null
-  >(defaultValue);
+  >(defaultValue)
 
   const { data } = useSWR(
     `${
@@ -48,43 +48,43 @@ const SideBarInterface: FC<IEditorInterface> = ({
     }`,
     fetcher,
     { refreshInterval: 5000 }
-  );
+  )
 
   useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {
-      appState?.toggleReadOnly(false);
-      appState?.setSelectedClient(null);
-      sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' });
+      appState?.toggleReadOnly(false)
+      appState?.setSelectedClient(null)
+      sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      (async () => {
-        appState?.toggleReadOnly(true);
-        appState?.setSelectedClient(dropdownSelectedClient as IClient);
-        appState?.setNotification(data);
-        sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' });
-      })();
+      ;(async () => {
+        appState?.toggleReadOnly(true)
+        appState?.setSelectedClient(dropdownSelectedClient as IClient)
+        appState?.setNotification(data)
+        sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
+      })()
     }
-  }, [dropdownSelectedClient, data]);
+  }, [dropdownSelectedClient, data])
 
   useEffect(() => {
-    appState?.toggleDisplayTasks({ override: displayTasks });
-    appState?.setClientList(clientList);
-    appState?.setCustomFields(customFields);
-  }, [displayTasks, clientList, customFields]);
+    appState?.toggleDisplayTasks({ override: displayTasks })
+    appState?.setClientList(clientList)
+    appState?.setCustomFields(customFields)
+  }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
-    (async () => {
-      const imagePickerUtils = new ImagePickerUtils();
+    ;(async () => {
+      const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setShowImage(
           (await imagePickerUtils.convertBlobToUrlString(
             appState?.appState.bannerImgUrl
           )) as string
-        );
+        )
       } else {
-        setShowImage(appState?.appState.bannerImgUrl || '');
+        setShowImage(appState?.appState.bannerImgUrl || '')
       }
-    })();
-  }, [appState?.appState.bannerImgUrl]);
+    })()
+  }, [appState?.appState.bannerImgUrl])
 
   return (
     <div
@@ -162,7 +162,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
                         {val.givenName} {val.familyName}
                       </div>
                     </Stack>
-                  );
+                  )
                 })}
             </>
           }
@@ -179,8 +179,8 @@ const SideBarInterface: FC<IEditorInterface> = ({
       <ImagePicker
         showImage={showImage}
         getImage={async (image) => {
-          appState?.setBannerImgUrl(image as Blob);
-          appState?.setBannerImgId(image?.type as string);
+          appState?.setBannerImgUrl(image as Blob)
+          appState?.setBannerImgId(image?.type as string)
         }}
       />
 
@@ -195,7 +195,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}
     </div>
-  );
-};
+  )
+}
 
-export default SideBarInterface;
+export default SideBarInterface

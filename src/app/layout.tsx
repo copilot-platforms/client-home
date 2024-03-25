@@ -1,17 +1,17 @@
-import { AppContextProvider } from '@/context';
-import './globals.css';
-import type { Metadata } from 'next';
-import { Footer } from './components/Footer';
+import { AppContextProvider } from '@/context'
+import './globals.css'
+import type { Metadata } from 'next'
+import { Footer } from './components/Footer'
 
 export const metadata: Metadata = {
   title: 'Client Home App',
   description: 'Copilot Client Home App',
-};
+}
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang='en'>
@@ -22,5 +22,5 @@ export default async function RootLayout({
         </AppContextProvider>
       </body>
     </html>
-  );
+  )
 }

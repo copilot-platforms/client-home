@@ -12,7 +12,7 @@ const InvalidToken = () => {
     >
       Please provide a valid token!
     </div>
-  );
-};
+  )
+}
 
-export default InvalidToken;
+export default InvalidToken

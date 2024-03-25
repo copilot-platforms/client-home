@@ -1,6 +1,6 @@
-import { mergeAttributes, Node } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { AutofillComponent } from './AutofillComponent';
+import { mergeAttributes, Node } from '@tiptap/core'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { AutofillComponent } from './AutofillComponent'
 
 export const AutofillExtension = Node.create({
   name: 'autofillComponent',
@@ -14,16 +14,16 @@ export const AutofillExtension = Node.create({
       {
         tag: 'autofill',
       },
-    ];
+    ]
   },
 
   whitespace: 'normal',
 
   renderHTML({ HTMLAttributes }) {
-    return ['autofill', mergeAttributes(HTMLAttributes), 0];
+    return ['autofill', mergeAttributes(HTMLAttributes), 0]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(AutofillComponent);
+    return ReactNodeViewRenderer(AutofillComponent)
   },
-});
+})

@@ -1,24 +1,24 @@
-import { BubbleMenu, Editor } from '@tiptap/react';
-import { FC, ReactNode } from 'react';
+import { BubbleMenu, Editor } from '@tiptap/react'
+import { FC, ReactNode } from 'react'
 
 import {
   BulletListIcon2,
   DollarIcon,
   LinkIcon2,
   NumberedListIcon2,
-} from '@/icons';
+} from '@/icons'
 
-import DropdownBubbleMenu from './DropdownBubbleMenu';
-import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils';
-import { useAppState } from '@/hooks/useAppState';
+import DropdownBubbleMenu from './DropdownBubbleMenu'
+import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
+import { useAppState } from '@/hooks/useAppState'
 
 interface IBubbleMenuContainer {
-  editor: Editor;
+  editor: Editor
 }
 
 const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
-  const tiptapEditorUtils = new TiptapEditorUtils(editor);
-  const appState = useAppState();
+  const tiptapEditorUtils = new TiptapEditorUtils(editor)
+  const appState = useAppState()
 
   return (
     <div className='flex flex-row border border-slate-300 rounded bg-white w-fit shadow-variant-1'>
@@ -27,7 +27,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={'B'}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleBold();
+          tiptapEditorUtils.toggleBold()
         }}
         className='border-r-2'
       />
@@ -35,7 +35,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={'i'}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleItalic();
+          tiptapEditorUtils.toggleItalic()
         }}
         className='border-r-2'
       />
@@ -43,7 +43,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={'U'}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleUnderline();
+          tiptapEditorUtils.toggleUnderline()
         }}
         className='border-r-2'
       />
@@ -51,7 +51,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={<DollarIcon />}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleStrike();
+          tiptapEditorUtils.toggleStrike()
         }}
         className={'pt-4 border-r-2'}
       />
@@ -59,7 +59,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={<BulletListIcon2 />}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleBulletList();
+          tiptapEditorUtils.toggleBulletList()
         }}
         className={'pt-4 border-r-2'}
       />
@@ -67,7 +67,7 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={<NumberedListIcon2 />}
         handleOnClick={() => {
-          tiptapEditorUtils.toggleNumberedList();
+          tiptapEditorUtils.toggleNumberedList()
         }}
         className={'pt-4 border-r-2'}
       />
@@ -75,24 +75,24 @@ const BubbleMenuContainer: FC<IBubbleMenuContainer> = ({ editor }) => {
       <BubbleMenuBtnContainer
         icon={<LinkIcon2 />}
         handleOnClick={() => {
-          appState?.toggleShowLinkInput(!appState?.appState.showLinkInput);
+          appState?.toggleShowLinkInput(!appState?.appState.showLinkInput)
         }}
         className={'pt-4 rounded-r'}
       />
     </div>
-  );
-};
+  )
+}
 
-export default BubbleMenuContainer;
+export default BubbleMenuContainer
 
 const BubbleMenuBtnContainer = ({
   icon,
   handleOnClick,
   className,
 }: {
-  icon: ReactNode;
-  handleOnClick: () => void;
-  className?: string;
+  icon: ReactNode
+  handleOnClick: () => void
+  className?: string
 }) => {
   return (
     <button
@@ -101,5 +101,5 @@ const BubbleMenuBtnContainer = ({
     >
       <div>{icon}</div>
     </button>
-  );
-};
+  )
+}

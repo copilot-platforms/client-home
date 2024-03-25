@@ -1,63 +1,63 @@
-import Handlebars from 'handlebars';
-import { IClient, ICustomField, ISettings } from '@/types/interfaces';
-import ClientPreview from '../components/ClientPreview';
-import { apiUrl } from '@/config';
-import Image from 'next/image';
-import { z } from 'zod';
-import { CopilotAPI } from '@/utils/copilotApiUtils';
-import InvalidToken from '../components/InvalidToken';
-import { defaultState } from '../../../defaultState';
+import Handlebars from 'handlebars'
+import { IClient, ICustomField, ISettings } from '@/types/interfaces'
+import ClientPreview from '../components/ClientPreview'
+import { apiUrl } from '@/config'
+import Image from 'next/image'
+import { z } from 'zod'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import InvalidToken from '../components/InvalidToken'
+import { defaultState } from '../../../defaultState'
 
-export const revalidate = 0;
+export const revalidate = 0
 
 async function getSettings(token: string) {
   const { data } = await fetch(`${apiUrl}/api/settings?token=${token}`).then(
     (res) => res.json()
-  );
-  return data;
+  )
+  return data
 }
 
 async function getClient(clientId: string, token: string): Promise<IClient> {
   const res = await fetch(
     `${apiUrl}/api/client?clientId=${clientId}&token=${token}`
-  );
+  )
   if (!res.ok) {
-    throw new Error(`No client found with '${token}' token`);
+    throw new Error(`No client found with '${token}' token`)
   }
-  const { data } = await res.json();
-  return data;
+  const { data } = await res.json()
+  return data
 }
 
 async function getCompany(companyId: string, token: string) {
   const res = await fetch(
     `${apiUrl}/api/companies?companyId=${companyId}&token=${token}`
-  );
+  )
 
-  const { data } = await res.json();
-  return data;
+  const { data } = await res.json()
+  return data
 }
 
 async function getCustomFields(token: string) {
-  const copilotClient = new CopilotAPI(token);
-  const customFieldsList = await copilotClient.getCustomFields();
+  const copilotClient = new CopilotAPI(token)
+  const customFieldsList = await copilotClient.getCustomFields()
 
-  return (customFieldsList.data || []) as ICustomField[];
+  return (customFieldsList.data || []) as ICustomField[]
 }
 
 export default async function ClientPreviewPage({
   searchParams,
 }: {
-  searchParams: { token: string; clientId: string };
+  searchParams: { token: string; clientId: string }
 }) {
-  const tokenParsed = z.string().safeParse(searchParams.token);
+  const tokenParsed = z.string().safeParse(searchParams.token)
   if (!tokenParsed.success) {
-    return <InvalidToken />;
+    return <InvalidToken />
   }
 
-  const token = tokenParsed.data;
+  const token = tokenParsed.data
 
-  const clientId = z.string().uuid().parse(searchParams.clientId);
-  const allCustomFields = await getCustomFields(searchParams.token);
+  const clientId = z.string().uuid().parse(searchParams.clientId)
+  const allCustomFields = await getCustomFields(searchParams.token)
 
   let settings: ISettings = {
     content: defaultState,
@@ -73,22 +73,22 @@ export default async function ClientPreviewPage({
     },
     createdById: '',
     displayTasks: false,
-  };
-
-  const defaultSetting = await getSettings(token);
-
-  if (defaultSetting) {
-    settings = defaultSetting;
   }
 
-  const _client = await getClient(clientId, token);
+  const defaultSetting = await getSettings(token)
 
-  const company = await getCompany(_client.companyId, token);
+  if (defaultSetting) {
+    settings = defaultSetting
+  }
 
-  const template = Handlebars?.compile(settings?.content);
+  const _client = await getClient(clientId, token)
+
+  const company = await getCompany(_client.companyId, token)
+
+  const template = Handlebars?.compile(settings?.content)
 
   //add comma separator for custom fields
-  const customFields: any = _client?.customFields;
+  const customFields: any = _client?.customFields
 
   for (const key in customFields) {
     // Check if the value is an array and if the key exists in allCustomFields
@@ -100,9 +100,9 @@ export default async function ClientPreviewPage({
       customFields[key] = customFields[key].map((value: string[]) => {
         const option: any = (allCustomFields as any)
           .find((field: any) => field.key === key)
-          .options.find((opt: any) => opt.key === value);
-        return option ? ' ' + option.label : ' ' + value;
-      });
+          .options.find((opt: any) => opt.key === value)
+        return option ? ' ' + option.label : ' ' + value
+      })
     }
   }
 
@@ -110,13 +110,13 @@ export default async function ClientPreviewPage({
     ..._client,
     ...customFields,
     company: company.name,
-  };
+  }
 
-  const htmlContent = template({ client });
+  const htmlContent = template({ client })
 
   const bannerImgUrl = !defaultSetting
     ? '/images/default_banner.png'
-    : settings?.bannerImage?.url;
+    : settings?.bannerImage?.url
 
   return (
     <div
@@ -154,5 +154,5 @@ export default async function ClientPreviewPage({
         />
       </div>
     </div>
-  );
+  )
 }

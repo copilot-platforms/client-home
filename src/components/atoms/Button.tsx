@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { Typography, Button as MuiButton } from '@mui/material';
-import { TypographyPropsVariantOverrides } from '@mui/material/Typography/Typography';
-import { OverridableStringUnion } from '@mui/types';
-import { Variant } from '@mui/material/styles/createTypography';
-import { ReactNode } from 'react';
+import { Typography, Button as MuiButton } from '@mui/material'
+import { TypographyPropsVariantOverrides } from '@mui/material/Typography/Typography'
+import { OverridableStringUnion } from '@mui/types'
+import { Variant } from '@mui/material/styles/createTypography'
+import { ReactNode } from 'react'
 
 interface ButtonProps {
-  children: string | ReactNode;
+  children: string | ReactNode
   typographyVariant?: OverridableStringUnion<
     Variant | 'inherit',
     TypographyPropsVariantOverrides
-  >;
-  handleClick?: () => void;
+  >
+  handleClick?: () => void
 }
 
 const Button = ({
@@ -39,7 +39,7 @@ const Button = ({
     >
       <Typography variant={typographyVariant}>{children}</Typography>
     </MuiButton>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

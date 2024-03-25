@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   BillingIcon,
@@ -6,25 +6,25 @@ import {
   DragHandleIcon,
   FormsIcon,
   SVGIcon,
-} from '@/icons';
-import { Notification, NotificationOption } from '@/types/notifications';
-import { capitalizeFirstLetter } from '@/utils/string';
-import { useSortable } from '@dnd-kit/sortable';
-import { Box, Checkbox, Typography } from '@mui/material';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { CSS } from '@dnd-kit/utilities';
+} from '@/icons'
+import { Notification, NotificationOption } from '@/types/notifications'
+import { capitalizeFirstLetter } from '@/utils/string'
+import { useSortable } from '@dnd-kit/sortable'
+import { Box, Checkbox, Typography } from '@mui/material'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { CSS } from '@dnd-kit/utilities'
 
 const notificationIcons: { [key in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
   forms: FormsIcon,
   contracts: ContractsIcon,
-};
+}
 
 interface ModalCheckboxProps {
-  identifier: NotificationOption;
-  formState: NonNullable<Notification>;
-  setFormState: Dispatch<SetStateAction<NonNullable<Notification>>>;
-  setShowError: Dispatch<SetStateAction<NonNullable<boolean>>>;
+  identifier: NotificationOption
+  formState: NonNullable<Notification>
+  setFormState: Dispatch<SetStateAction<NonNullable<Notification>>>
+  setShowError: Dispatch<SetStateAction<NonNullable<boolean>>>
 }
 
 const ModalCheckbox = ({
@@ -33,37 +33,37 @@ const ModalCheckbox = ({
   setFormState,
   setShowError,
 }: ModalCheckboxProps) => {
-  const Icon: SVGIcon = notificationIcons[identifier];
+  const Icon: SVGIcon = notificationIcons[identifier]
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: identifier });
-  const style = { transition, transform: CSS.Transform.toString(transform) };
-  const [isDragging, setIsDragging] = useState(false);
+    useSortable({ id: identifier })
+  const style = { transition, transform: CSS.Transform.toString(transform) }
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleMouseOver = () => {
-    setIsDragging(true);
-  };
+    setIsDragging(true)
+  }
   const handleMouseOut = () => {
-    setIsDragging(false);
-  };
+    setIsDragging(false)
+  }
 
   const handleChange = () => {
-    const i = formState.findIndex((item) => item.key === identifier);
+    const i = formState.findIndex((item) => item.key === identifier)
     setFormState((prev) => {
       const newState = [
         ...prev.slice(0, i),
         { ...prev[i], show: !prev[i].show },
         ...prev.slice(i + 1),
-      ];
-      const checkIfAllFalse = newState.every((item) => !item.show);
+      ]
+      const checkIfAllFalse = newState.every((item) => !item.show)
       if (checkIfAllFalse) {
-        setShowError(true);
-        return prev;
+        setShowError(true)
+        return prev
       } else {
-        return newState;
+        return newState
       }
-    });
-  };
+    })
+  }
 
   return (
     <div
@@ -108,7 +108,7 @@ const ModalCheckbox = ({
         </Box>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ModalCheckbox;
+export default ModalCheckbox

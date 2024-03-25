@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
 const NoticeIcon = () => {
   return (
@@ -14,11 +14,11 @@ const NoticeIcon = () => {
         fill='#212B36'
       />
     </svg>
-  );
-};
+  )
+}
 
 interface INoteDisplay {
-  content: string;
+  content: string
 }
 
 const NoteDisplay: FC<INoteDisplay> = ({ content }) => {
@@ -29,7 +29,7 @@ const NoteDisplay: FC<INoteDisplay> = ({ content }) => {
       </div>
       <p className='font-normal text-xs'>{content}</p>
     </div>
-  );
-};
+  )
+}
 
-export default NoteDisplay;
+export default NoteDisplay

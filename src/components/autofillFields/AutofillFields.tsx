@@ -1,21 +1,19 @@
-import { useAppState } from '@/hooks/useAppState';
-import { IClient, ICustomField } from '@/types/interfaces';
-import { staticAutofillValues } from '@/utils/constants';
-import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils';
-import { Editor } from '@tiptap/react';
-import { When } from '../hoc/When';
-import { useEffect, useState } from 'react';
+import { useAppState } from '@/hooks/useAppState'
+import { IClient, ICustomField } from '@/types/interfaces'
+import { staticAutofillValues } from '@/utils/constants'
+import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
+import { Editor } from '@tiptap/react'
+import { When } from '../hoc/When'
+import { useEffect, useState } from 'react'
 
 const AutofillFields = () => {
-  const appState = useAppState();
+  const appState = useAppState()
 
-  const [remainingAutofill, setRemainingAutofill] = useState<ICustomField[]>(
-    []
-  );
+  const [remainingAutofill, setRemainingAutofill] = useState<ICustomField[]>([])
 
   const tiptapEditorUtils = new TiptapEditorUtils(
     appState?.appState.editor as Editor
-  );
+  )
 
   function getRemainingAutofillFields(
     customFields: ICustomField[],
@@ -23,32 +21,32 @@ const AutofillFields = () => {
   ) {
     return customFields.filter(
       (itemA: any) => !Object.keys(clientCustomField).includes(itemA.key)
-    );
+    )
   }
 
   useEffect(() => {
     if (!appState?.appState?.selectedClient && !appState?.appState?.readOnly)
-      return;
-    appState?.setClientCompanyName('');
-    (async () => {
-      appState?.setLoading(true);
+      return
+    appState?.setClientCompanyName('')
+    ;(async () => {
+      appState?.setLoading(true)
       const output = getRemainingAutofillFields(
         appState?.appState.customFields,
         appState?.appState.selectedClient?.customFields
-      );
-      setRemainingAutofill(output);
+      )
+      setRemainingAutofill(output)
       const res = await fetch(
         `/api/companies?companyId=${appState?.appState.selectedClient?.companyId}&token=${appState?.appState?.token}`
-      );
-      const { data } = await res.json();
+      )
+      const { data } = await res.json()
       if (data.name) {
-        appState?.setClientCompanyName(data.name);
+        appState?.setClientCompanyName(data.name)
       } else {
-        appState?.setClientCompanyName('');
+        appState?.setClientCompanyName('')
       }
-      appState?.setLoading(false);
-    })();
-  }, [appState?.appState?.selectedClient]);
+      appState?.setLoading(false)
+    })()
+  }, [appState?.appState?.selectedClient])
 
   return (
     <div className='p-5'>
@@ -93,7 +91,7 @@ const AutofillFields = () => {
                   labelName={value[0]}
                   labelValues={value[1]}
                 />
-              );
+              )
             })}
           {appState?.appState?.selectedClient &&
             remainingAutofill.map((el, key) => {
@@ -103,7 +101,7 @@ const AutofillFields = () => {
                   labelName={el.name}
                   labelValues={''}
                 />
-              );
+              )
             })}
         </When>
 
@@ -115,11 +113,11 @@ const AutofillFields = () => {
                 key={key}
                 label={el.replaceAll('{{', '').replaceAll('}}', '')}
                 handleClick={() => {
-                  if (appState?.appState.readOnly) return;
-                  tiptapEditorUtils.insertAutofill(`${el}`);
+                  if (appState?.appState.readOnly) return
+                  tiptapEditorUtils.insertAutofill(`${el}`)
                 }}
               />
-            );
+            )
           })}
           {appState?.appState.customFields &&
             appState?.appState.customFields.map((el, key) => {
@@ -128,26 +126,26 @@ const AutofillFields = () => {
                   key={key}
                   label={`client.${el.key}`}
                   handleClick={() => {
-                    if (appState?.appState.readOnly) return;
-                    tiptapEditorUtils.insertAutofill(`{{client.${el.key}}}`);
+                    if (appState?.appState.readOnly) return
+                    tiptapEditorUtils.insertAutofill(`{{client.${el.key}}}`)
                   }}
                 />
-              );
+              )
             })}
         </When>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AutofillFields;
+export default AutofillFields
 
 const AutofillText = ({
   label,
   handleClick,
 }: {
-  label: string;
-  handleClick?: () => void;
+  label: string
+  handleClick?: () => void
 }) => {
   return (
     <p
@@ -156,48 +154,48 @@ const AutofillText = ({
     >
       &#123;&#123;{label}&#125;&#125;
     </p>
-  );
-};
+  )
+}
 
 const AutofillTextStaticField = ({
   labelName,
   labelValues,
 }: {
-  labelName: string;
-  labelValues: string;
+  labelName: string
+  labelValues: string
 }) => {
   return (
     <p className='text-new-gray hover:text-text cursor-pointer'>
       {labelName}: {labelValues}
     </p>
-  );
-};
+  )
+}
 
 const AutofillTextReadonlyMode = ({
   labelName,
   labelValues,
 }: {
-  labelName: string;
-  labelValues: string | string[];
+  labelName: string
+  labelValues: string | string[]
 }) => {
-  const appState = useAppState();
+  const appState = useAppState()
   const name = appState?.appState.customFields.find(
     (el) => el.key === labelName
-  )?.name;
+  )?.name
   if (Array.isArray(labelValues)) {
     return (
       <p className='text-new-gray hover:text-text cursor-pointer'>
         {name}: {labelValues.join(', ')}
       </p>
-    );
+    )
   } else {
     return (
       <p className='text-new-gray hover:text-text cursor-pointer'>
         {name}: {labelValues}
       </p>
-    );
+    )
   }
-};
+}
 
 /**
   *

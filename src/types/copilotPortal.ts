@@ -10,4 +10,4 @@ export enum PortalRoutes {
   Notifications = 'notifications',
 }
 
-export type AvailablePortalRoutes = `${PortalRoutes}`; // NOTE: this creates string union of enum values
+export type AvailablePortalRoutes = `${PortalRoutes}` // NOTE: this creates string union of enum values

@@ -1,14 +1,14 @@
-import { SwitchIconSelected, SwitchIconUnselected } from '@/icons';
-import { Box } from '@mui/material';
+import { SwitchIconSelected, SwitchIconUnselected } from '@/icons'
+import { Box } from '@mui/material'
 
 export const Switch = ({
   value,
   onChange,
 }: {
-  value: boolean;
-  onChange?: () => void;
+  value: boolean
+  onChange?: () => void
 }) => {
-  const ActiveIcon = value ? SwitchIconSelected : SwitchIconUnselected;
+  const ActiveIcon = value ? SwitchIconSelected : SwitchIconUnselected
 
   return (
     <Box
@@ -17,5 +17,5 @@ export const Switch = ({
     >
       <ActiveIcon style={{ scale: 1.4 }} />
     </Box>
-  );
-};
+  )
+}

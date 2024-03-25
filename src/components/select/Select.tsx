@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import { FC, ReactNode, useState } from 'react';
-import { When } from '../hoc/When';
-import { SelectArrowIcon } from '@/icons';
+import { FC, ReactNode, useState } from 'react'
+import { When } from '../hoc/When'
+import { SelectArrowIcon } from '@/icons'
 
 interface IDropDown {
-  customOptions: ReactNode;
-  name: string;
-  selected: string | null;
-  className?: string;
+  customOptions: ReactNode
+  name: string
+  selected: string | null
+  className?: string
 }
 
 interface ISelectOptions extends Pick<IDropDown, 'customOptions'> {}
@@ -26,8 +26,8 @@ const SelectOptions: FC<ISelectOptions> = ({ customOptions }) => {
     >
       {customOptions}
     </div>
-  );
-};
+  )
+}
 
 const Select: FC<IDropDown> = ({
   customOptions,
@@ -35,7 +35,7 @@ const Select: FC<IDropDown> = ({
   selected,
   className,
 }) => {
-  const [showDropDown, setShowDropDown] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false)
 
   return (
     <div
@@ -59,7 +59,7 @@ const Select: FC<IDropDown> = ({
 
       <div>{selected}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

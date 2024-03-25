@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { useAppState } from '@/hooks/useAppState';
-import { Alert, Backdrop, Box, Fade, Modal, Typography } from '@mui/material';
-import ModalCheckbox from './ModalCheckbox';
-import { ISettings } from '@/types/interfaces';
-import { useMemo, useState } from 'react';
-import { Notification, NotificationOption } from '@/types/notifications';
-import { order } from '@/utils/orderable';
-import { defaultNotificationOptions } from '@/utils/notifications';
+import { useAppState } from '@/hooks/useAppState'
+import { Alert, Backdrop, Box, Fade, Modal, Typography } from '@mui/material'
+import ModalCheckbox from './ModalCheckbox'
+import { ISettings } from '@/types/interfaces'
+import { useMemo, useState } from 'react'
+import { Notification, NotificationOption } from '@/types/notifications'
+import { order } from '@/utils/orderable'
+import { defaultNotificationOptions } from '@/utils/notifications'
 import {
   DndContext,
   DragEndEvent,
@@ -16,30 +16,30 @@ import {
   useSensor,
   MouseSensor,
   TouchSensor,
-} from '@dnd-kit/core';
+} from '@dnd-kit/core'
 import {
   SortableContext,
   arrayMove,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+} from '@dnd-kit/sortable'
 
 interface NotificationsModalProps {
-  settings: ISettings | null;
+  settings: ISettings | null
 }
 
 const NotificationsModal = ({ settings }: NotificationsModalProps) => {
-  const appState = useAppState();
-  const [showError, setShowError] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const appState = useAppState()
+  const [showError, setShowError] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [formState, setFormState] = useState<NonNullable<Notification>>(
     order(settings?.notifications || defaultNotificationOptions)
-  );
+  )
 
   useMemo(() => {
     if (showError) {
-      setTimeout(() => setShowError(false), 2000);
+      setTimeout(() => setShowError(false), 2000)
     }
-  }, [showError]);
+  }, [showError])
 
   const handleCancel = () => {
     setFormState(
@@ -47,13 +47,13 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         appState?.appState?.settings?.notifications ||
           defaultNotificationOptions
       )
-    );
-    appState?.toggleNotificationsModal();
-  };
+    )
+    appState?.toggleNotificationsModal()
+  }
 
   const handleSave = async () => {
     try {
-      setSaving(true);
+      setSaving(true)
       await fetch(`/api/settings?token=${appState?.appState?.token}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -62,33 +62,33 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
           token: appState?.appState?.token,
           notifications: formState,
         }),
-      });
-      appState?.toggleNotificationsModal();
+      })
+      appState?.toggleNotificationsModal()
       const newSettings = {
         ...appState?.appState.settings,
         notifications: formState,
-      };
-      appState?.setSettings(newSettings as ISettings);
+      }
+      appState?.setSettings(newSettings as ISettings)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
-    setSaving(false);
-  };
+    setSaving(false)
+  }
 
   const getCheckboxPosition = (id: string) =>
-    formState.findIndex((item) => item.key === id);
+    formState.findIndex((item) => item.key === id)
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    const { active, over } = event
+    if (!over || active.id === over.id) return
 
-    const originalPosition = getCheckboxPosition(active.id as string);
-    const newPosition = getCheckboxPosition(over.id as string);
+    const originalPosition = getCheckboxPosition(active.id as string)
+    const newPosition = getCheckboxPosition(over.id as string)
 
-    const newArr = arrayMove(formState, originalPosition, newPosition);
+    const newArr = arrayMove(formState, originalPosition, newPosition)
     // Use this new order to overwrite over existing one!
-    setFormState([...newArr.map((item, order) => ({ ...item, order }))]);
-  };
+    setFormState([...newArr.map((item, order) => ({ ...item, order }))])
+  }
 
   // Attach sensors to DnDContext. If we don't then the drag handler will take over and we won't be able to check the checkbox inside
   const sensors = useSensors(
@@ -103,7 +103,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         tolerance: 6,
       },
     })
-  );
+  )
 
   return (
     <Modal
@@ -187,7 +187,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default NotificationsModal;
+export default NotificationsModal

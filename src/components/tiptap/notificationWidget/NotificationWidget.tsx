@@ -1,54 +1,54 @@
-import { NodeViewWrapper } from '@tiptap/react';
-import { Box, Stack, Typography } from '@mui/material';
-import RedirectButton from '@/components/atoms/RedirectButton';
-import { PortalRoutes } from '@/types/copilotPortal';
-import React, { useMemo, useState } from 'react';
-import { useAppData } from '@/hooks/useAppData';
-import { useAppState } from '@/hooks/useAppState';
-import { DragIndicatorRounded } from '@mui/icons-material';
-import { usePathname } from 'next/navigation';
+import { NodeViewWrapper } from '@tiptap/react'
+import { Box, Stack, Typography } from '@mui/material'
+import RedirectButton from '@/components/atoms/RedirectButton'
+import { PortalRoutes } from '@/types/copilotPortal'
+import React, { useMemo, useState } from 'react'
+import { useAppData } from '@/hooks/useAppData'
+import { useAppState } from '@/hooks/useAppState'
+import { DragIndicatorRounded } from '@mui/icons-material'
+import { usePathname } from 'next/navigation'
 
 export const NotificationWidget = () => {
-  const invoiceCount = useAppData('{{invoice.count}}');
-  const taskCount = useAppData('{{task.count}}');
-  const formCount = useAppData('{{form.count}}');
-  const contractCount = useAppData('{{contract.count}}');
-  const appState = useAppState();
+  const invoiceCount = useAppData('{{invoice.count}}')
+  const taskCount = useAppData('{{task.count}}')
+  const formCount = useAppData('{{form.count}}')
+  const contractCount = useAppData('{{contract.count}}')
+  const appState = useAppState()
 
-  const [hovered, setHovered] = useState(false);
-  const pathname = usePathname();
+  const [hovered, setHovered] = useState(false)
+  const pathname = usePathname()
 
   function isAllNotificationsTurnedOff() {
     if (appState?.appState.settings?.notifications) {
       return !appState?.appState.settings?.notifications?.some(
         (notification) => notification.show
-      );
+      )
     }
   }
 
   const detectDisplay = (value: string) => {
     if (pathname.includes('client-preview')) {
-      return Number(value) > 0;
+      return Number(value) > 0
     } else {
       if (appState?.appState?.readOnly) {
-        return Number(value) > 0;
+        return Number(value) > 0
       } else {
-        return true;
+        return true
       }
     }
-  };
+  }
 
   const show = useMemo(() => {
     if (!appState?.appState.displayTasks || isAllNotificationsTurnedOff()) {
-      return false;
+      return false
     }
 
     if (!appState?.appState.readOnly) {
-      return true;
+      return true
     }
 
-    return Number(taskCount) > 0;
-  }, [appState?.appState.displayTasks, appState?.appState.readOnly, taskCount]);
+    return Number(taskCount) > 0
+  }, [appState?.appState.displayTasks, appState?.appState.readOnly, taskCount])
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
@@ -95,7 +95,7 @@ export const NotificationWidget = () => {
                         route={PortalRoutes.Billing}
                         display={detectDisplay(invoiceCount)}
                       />
-                    );
+                    )
                   }
                   if (notification.key === PortalRoutes.Forms) {
                     return (
@@ -109,7 +109,7 @@ export const NotificationWidget = () => {
                         route={PortalRoutes.Forms}
                         display={detectDisplay(formCount)}
                       />
-                    );
+                    )
                   }
                   if (notification.key === PortalRoutes.Contracts) {
                     return (
@@ -124,7 +124,7 @@ export const NotificationWidget = () => {
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
                       />
-                    );
+                    )
                   }
                 }
               }
@@ -146,19 +146,19 @@ export const NotificationWidget = () => {
         </div>
       )}
     </NodeViewWrapper>
-  );
-};
+  )
+}
 
 const NotificationComponent = ({
   name,
   route,
   display,
 }: {
-  name: string;
-  route: PortalRoutes;
-  display?: boolean;
+  name: string
+  route: PortalRoutes
+  display?: boolean
 }) => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <Stack
@@ -175,5 +175,5 @@ const NotificationComponent = ({
         <Typography variant='body1'>Go to {route}</Typography>
       </RedirectButton>
     </Stack>
-  );
-};
+  )
+}

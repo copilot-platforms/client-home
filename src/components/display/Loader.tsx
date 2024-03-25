@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material'
 
 const LoaderComponent = () => {
   return (
@@ -11,7 +11,7 @@ const LoaderComponent = () => {
       }}
       size={40}
     />
-  );
-};
+  )
+}
 
-export default LoaderComponent;
+export default LoaderComponent

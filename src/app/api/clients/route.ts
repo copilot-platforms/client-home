@@ -1,22 +1,22 @@
-import { errorHandler } from '@/utils/common';
-import { CopilotAPI } from '@/utils/copilotApiUtils';
-import { NextResponse, NextRequest } from 'next/server';
-import { z } from 'zod';
+import { errorHandler } from '@/utils/common'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import { NextResponse, NextRequest } from 'next/server'
+import { z } from 'zod'
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const token = searchParams.get('token');
+  const searchParams = request.nextUrl.searchParams
+  const token = searchParams.get('token')
   if (!token) {
-    return errorHandler('Missing token', 422);
+    return errorHandler('Missing token', 422)
   }
 
-  const copilotClient = new CopilotAPI(z.string().parse(token));
+  const copilotClient = new CopilotAPI(z.string().parse(token))
   try {
-    const clients = await copilotClient.getClients();
+    const clients = await copilotClient.getClients()
 
-    return NextResponse.json(clients);
+    return NextResponse.json(clients)
   } catch (error: unknown) {
-    console.log(`There was an error getting clients: ${error}`);
-    return errorHandler('Clients not found.', 404);
+    console.log(`There was an error getting clients: ${error}`)
+    return errorHandler('Clients not found.', 404)
   }
 }

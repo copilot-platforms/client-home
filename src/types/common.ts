@@ -1,27 +1,27 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const TokenSchema = z.object({
   clientId: z.string().optional(),
   companyId: z.string().optional(),
   internalUserId: z.string().optional(),
   workspaceId: z.string(),
-});
-export type Token = z.infer<typeof TokenSchema>;
+})
+export type Token = z.infer<typeof TokenSchema>
 
 export const ClientTokenSchema = z.object({
   clientId: z.string(),
   companyId: z.string().optional(),
   workspaceId: z.string(),
-});
-export type ClientToken = z.infer<typeof ClientTokenSchema>;
+})
+export type ClientToken = z.infer<typeof ClientTokenSchema>
 
 export const MeResponseSchema = z.object({
   id: z.string(),
   givenName: z.string(),
   familyName: z.string(),
   email: z.string(),
-});
-export type MeResponse = z.infer<typeof MeResponseSchema>;
+})
+export type MeResponse = z.infer<typeof MeResponseSchema>
 
 export const ClientResponseSchema = z.object({
   id: z.string(),
@@ -36,20 +36,20 @@ export const ClientResponseSchema = z.object({
     )
     .nullable(),
   avatarImageUrl: z.string().nullable(),
-});
-export type ClientResponse = z.infer<typeof ClientResponseSchema>;
+})
+export type ClientResponse = z.infer<typeof ClientResponseSchema>
 
 export const ClientsResponseSchema = z.object({
   data: z.array(ClientResponseSchema).nullable(),
-});
-export type ClientsResponse = z.infer<typeof ClientsResponseSchema>;
+})
+export type ClientsResponse = z.infer<typeof ClientsResponseSchema>
 
 export const CompanyResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
   iconImageUrl: z.string(),
-});
-export type CompanyResponse = z.infer<typeof CompanyResponseSchema>;
+})
+export type CompanyResponse = z.infer<typeof CompanyResponseSchema>
 
 export const CustomFieldResponseSchema = z.object({
   data: z
@@ -74,18 +74,18 @@ export const CustomFieldResponseSchema = z.object({
       })
     )
     .nullable(),
-});
-export type CustomFieldResponse = z.infer<typeof CustomFieldResponseSchema>;
+})
+export type CustomFieldResponse = z.infer<typeof CustomFieldResponseSchema>
 
 export const WorkspaceInfoSchema = z.object({
   font: z.string(),
-});
+})
 
-export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>;
+export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>
 
 export const NotificationsSchema = z.array(
   z.object({
     event: z.string(),
   })
-);
-export type Notifications = z.infer<typeof NotificationsSchema>;
+)
+export type Notifications = z.infer<typeof NotificationsSchema>

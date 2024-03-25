@@ -1,69 +1,69 @@
-'use client';
+'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react';
-import { useEffect, useState } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react'
+import { useEffect, useState } from 'react'
 
-import Handlebars from 'handlebars';
-import { Scrollbars } from 'react-custom-scrollbars';
-import CalloutExtension from '@/components/tiptap/callout/CalloutExtension';
-import LinkpdfExtension from '@/components/tiptap/pdf/PdfExtension';
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Heading from '@tiptap/extension-heading';
-import Text from '@tiptap/extension-text';
-import OrderedList from '@tiptap/extension-ordered-list';
-import BulletList from '@tiptap/extension-bullet-list';
-import ListItem from '@tiptap/extension-list-item';
-import Table from '@tiptap/extension-table';
-import { TableCell } from '@/components/tiptap/table/table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
-import Underline from '@tiptap/extension-underline';
-import CodeBlock from '@tiptap/extension-code-block';
-import Code from '@tiptap/extension-code';
-import Link from '@tiptap/extension-link';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
-import Strike from '@tiptap/extension-strike';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import History from '@tiptap/extension-history';
-import Placeholder from '@tiptap/extension-placeholder';
-import Mention from '@tiptap/extension-mention';
-import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension';
-import Hardbreak from '@tiptap/extension-hard-break';
-import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion';
-import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion';
-import { ImageResize } from '@/components/tiptap/image/image';
+import Handlebars from 'handlebars'
+import { Scrollbars } from 'react-custom-scrollbars'
+import CalloutExtension from '@/components/tiptap/callout/CalloutExtension'
+import LinkpdfExtension from '@/components/tiptap/pdf/PdfExtension'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Heading from '@tiptap/extension-heading'
+import Text from '@tiptap/extension-text'
+import OrderedList from '@tiptap/extension-ordered-list'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
+import Table from '@tiptap/extension-table'
+import { TableCell } from '@/components/tiptap/table/table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Underline from '@tiptap/extension-underline'
+import CodeBlock from '@tiptap/extension-code-block'
+import Code from '@tiptap/extension-code'
+import Link from '@tiptap/extension-link'
+import Bold from '@tiptap/extension-bold'
+import Italic from '@tiptap/extension-italic'
+import Strike from '@tiptap/extension-strike'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import History from '@tiptap/extension-history'
+import Placeholder from '@tiptap/extension-placeholder'
+import Mention from '@tiptap/extension-mention'
+import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension'
+import Hardbreak from '@tiptap/extension-hard-break'
+import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion'
+import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion'
+import { ImageResize } from '@/components/tiptap/image/image'
 
-import ControlledBubbleMenu from '@/components/tiptap/bubbleMenu/ControlledBubbleMenu';
-import BubbleMenuContainer from '@/components/tiptap/bubbleMenu/BubbleMenu';
-import NoteDisplay from '@/components/display/NoteDisplay';
-import { When } from '@/components/hoc/When';
+import ControlledBubbleMenu from '@/components/tiptap/bubbleMenu/ControlledBubbleMenu'
+import BubbleMenuContainer from '@/components/tiptap/bubbleMenu/BubbleMenu'
+import NoteDisplay from '@/components/display/NoteDisplay'
+import { When } from '@/components/hoc/When'
 
-import { useAppState } from '@/hooks/useAppState';
-import { IClient, ISettings } from '@/types/interfaces';
-import LoaderComponent from '@/components/display/Loader';
-import { ImagePickerUtils } from '@/utils/imagePickerUtils';
-import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput';
-import { defaultState } from '../../../defaultState';
-import Image from 'next/image';
-import { Box } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import { defaultBannerImagePath } from '@/utils/constants';
-import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill';
-import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget';
-import { useAppDataContext } from '@/hooks/useAppData';
-import { defaultNotificationOptions } from '@/utils/notifications';
+import { useAppState } from '@/hooks/useAppState'
+import { IClient, ISettings } from '@/types/interfaces'
+import LoaderComponent from '@/components/display/Loader'
+import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput'
+import { defaultState } from '../../../defaultState'
+import Image from 'next/image'
+import { Box } from '@mui/material'
+import { Delete } from '@mui/icons-material'
+import { defaultBannerImagePath } from '@/utils/constants'
+import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppDataContext } from '@/hooks/useAppData'
+import { defaultNotificationOptions } from '@/utils/notifications'
 
 interface IEditorInterface {
-  settings: ISettings | null;
-  token: string;
+  settings: ISettings | null
+  token: string
 }
 
 const EditorInterface = ({ settings, token }: IEditorInterface) => {
-  const appState = useAppState();
+  const appState = useAppState()
 
-  const initialEditorContent = 'Type "/" for commands';
+  const initialEditorContent = 'Type "/" for commands'
 
   const editor = useEditor({
     extensions: [
@@ -91,13 +91,13 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             1: 'Heading 1',
             2: 'Heading 2',
             3: 'Heading 3',
-          };
-
-          if (node.type.name === 'heading') {
-            return headingPlaceholders[node.attrs.level];
           }
 
-          return initialEditorContent;
+          if (node.type.name === 'heading') {
+            return headingPlaceholders[node.attrs.level]
+          }
+
+          return initialEditorContent
         },
       }),
       Link.extend({
@@ -130,7 +130,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         },
         suggestion: autofillMenuSuggestion,
         renderLabel({ node }) {
-          return `${node.attrs.label ?? node.attrs.id}`;
+          return `${node.attrs.label ?? node.attrs.id}`
         },
       }),
       TableRow,
@@ -144,44 +144,44 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       Code,
     ],
     content: settings?.content || defaultState,
-  });
+  })
 
-  const [bannerImage, setBannerImage] = useState<string>('');
-  const [bannerImageHovered, setBannerImageHovered] = useState(false);
+  const [bannerImage, setBannerImage] = useState<string>('')
+  const [bannerImageHovered, setBannerImageHovered] = useState(false)
 
   useEffect(() => {
     if (editor) {
-      editor?.setEditable(!appState?.appState.readOnly as boolean);
+      editor?.setEditable(!appState?.appState.readOnly as boolean)
     }
-  }, [appState?.appState.readOnly, editor]);
+  }, [appState?.appState.readOnly, editor])
 
-  const appData = useAppDataContext();
+  const appData = useAppDataContext()
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
         appState?.appState.originalTemplate || ''
-      );
-      const c = template(appData);
+      )
+      const c = template(appData)
       setTimeout(() => {
-        editor?.chain().focus().setContent(c).run();
-        editor?.chain().focus().setTextSelection(0).run();
-      });
+        editor?.chain().focus().setContent(c).run()
+        editor?.chain().focus().setTextSelection(0).run()
+      })
     } else {
       setTimeout(() => {
         editor
           ?.chain()
           .focus()
           .setContent(appState?.appState.originalTemplate as string)
-          .run();
-        editor?.chain().focus().setTextSelection(0).run();
-      });
+          .run()
+        editor?.chain().focus().setTextSelection(0).run()
+      })
     }
   }, [
     appState?.appState.selectedClientCompanyName,
     appState?.appState.selectedClient,
     appState?.appState.notifications,
-  ]);
+  ])
 
   useEffect(() => {
     if (
@@ -196,11 +196,11 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           appState?.appState.displayTasks &&
           appState?.appState.displayTasks !== undefined)
       ) {
-        appState?.toggleChangesCreated(true);
+        appState?.toggleChangesCreated(true)
       } else {
-        appState?.toggleChangesCreated(false);
+        appState?.toggleChangesCreated(false)
       }
-      return;
+      return
     }
     if (
       appState?.appState.settings &&
@@ -217,12 +217,12 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         appState?.appState.settings.displayTasks !==
           appState?.appState.displayTasks
       ) {
-        appState?.toggleChangesCreated(true);
+        appState?.toggleChangesCreated(true)
       } else {
-        appState?.toggleChangesCreated(false);
+        appState?.toggleChangesCreated(false)
       }
     } else {
-      appState?.toggleChangesCreated(false);
+      appState?.toggleChangesCreated(false)
     }
   }, [
     appState?.appState.originalTemplate,
@@ -232,27 +232,27 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     appState?.appState.displayTasks,
     appState?.appState.settings,
     editor,
-  ]);
+  ])
 
   useEffect(() => {
     if (editor) {
-      appState?.setEditor(editor);
+      appState?.setEditor(editor)
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.metaKey && event.key === 'z') {
-          event.preventDefault(); // Prevent the default behavior of Cmd+Z (e.g., browser undo)
-          editor.chain().focus().undo().run(); // Perform undo operation
+          event.preventDefault() // Prevent the default behavior of Cmd+Z (e.g., browser undo)
+          editor.chain().focus().undo().run() // Perform undo operation
         }
-      };
-      document.addEventListener('keydown', handleKeyDown);
+      }
+      document.addEventListener('keydown', handleKeyDown)
       return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
+        document.removeEventListener('keydown', handleKeyDown)
+      }
     }
-  }, [editor]);
+  }, [editor])
 
   useEffect(() => {
-    (async () => {
-      appState?.setLoading(true);
+    ;(async () => {
+      appState?.setLoading(true)
       if (token) {
         const _settings: ISettings = {
           content: defaultState,
@@ -269,8 +269,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
           createdById: '',
           displayTasks: true,
           notifications: defaultNotificationOptions,
-        };
-        appState?.setOriginalTemplate(settings?.content || '');
+        }
+        appState?.setOriginalTemplate(settings?.content || '')
         appState?.setSettings(
           settings
             ? {
@@ -279,55 +279,55 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                   settings?.notifications || defaultNotificationOptions,
               }
             : _settings
-        );
-        appState?.setToken(token);
+        )
+        appState?.setToken(token)
       }
-      appState?.setLoading(false);
-    })();
-  }, [settings, token]);
+      appState?.setLoading(false)
+    })()
+  }, [settings, token])
 
   useEffect(() => {
-    if (!appState?.appState.settings) return;
+    if (!appState?.appState.settings) return
     appState?.setEditorColor(
       (appState?.appState.settings as ISettings).backgroundColor
-    );
+    )
     appState?.setBannerImgUrl(
       (appState?.appState.settings as ISettings).bannerImage?.url || ''
-    );
-  }, [appState?.appState.settings]);
+    )
+  }, [appState?.appState.settings])
 
   useEffect(() => {
-    (async () => {
-      const imagePickerUtils = new ImagePickerUtils();
+    ;(async () => {
+      const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setBannerImage(
           (await imagePickerUtils.convertBlobToUrlString(
             appState?.appState.bannerImgUrl
           )) as string
-        );
+        )
       } else {
-        setBannerImage(appState?.appState.bannerImgUrl as string);
+        setBannerImage(appState?.appState.bannerImgUrl as string)
       }
-    })();
-  }, [appState?.appState.bannerImgUrl]);
+    })()
+  }, [appState?.appState.bannerImgUrl])
 
   useEffect(() => {
-    appState?.toggleShowLinkInput(false);
-  }, [editor?.isFocused]);
+    appState?.toggleShowLinkInput(false)
+  }, [editor?.isFocused])
 
   useEffect(() => {
     if (!appState?.appState.readOnly) {
-      appState?.setOriginalTemplate(editor?.getHTML() as string);
+      appState?.setOriginalTemplate(editor?.getHTML() as string)
     }
     if (
       !editor?.getHTML().includes('notification_widget') &&
       appState?.appState?.displayTasks
     ) {
-      appState?.toggleDisplayTasks({ override: false });
+      appState?.toggleDisplayTasks({ override: false })
     }
-  }, [editor?.getHTML(), appState?.appState.readOnly]);
+  }, [editor?.getHTML(), appState?.appState.readOnly])
 
-  if (!editor) return null;
+  if (!editor) return null
 
   return (
     <>
@@ -381,8 +381,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                   color: '#fff',
                 }}
                 onClick={() => {
-                  appState?.setBannerImgId('');
-                  appState?.setBannerImgUrl('');
+                  appState?.setBannerImgId('')
+                  appState?.setBannerImgUrl('')
                 }}
               />
             </Box>
@@ -404,12 +404,12 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                 <ControlledBubbleMenu
                   editor={editor}
                   open={() => {
-                    const { view, state } = editor;
-                    const { from, to } = view.state.selection;
-                    const text = state.doc.textBetween(from, to, '');
+                    const { view, state } = editor
+                    const { from, to } = view.state.selection
+                    const text = state.doc.textBetween(from, to, '')
                     if (text !== '' && !appState?.appState.showLinkInput)
-                      return true;
-                    return false;
+                      return true
+                    return false
                   }}
                   offset={[0, 10]}
                 >
@@ -439,7 +439,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
         </Scrollbars>
       </When>
     </>
-  );
-};
+  )
+}
 
-export default EditorInterface;
+export default EditorInterface

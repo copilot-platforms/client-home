@@ -2,8 +2,8 @@
 // The config you add here will be used whenever a users loads a page in their browser.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import { SentryConfig } from '@/config';
-import * as Sentry from '@sentry/nextjs';
+import { SentryConfig } from '@/config'
+import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
   dsn: SentryConfig.DSN,
@@ -30,4 +30,4 @@ Sentry.init({
       blockAllMedia: true,
     }),
   ],
-});
+})

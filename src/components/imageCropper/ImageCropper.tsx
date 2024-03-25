@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import getCroppedImg from '@/utils/cropImage';
-import { Dialog, Slider } from '@mui/material';
-import { FC, useState } from 'react';
-import Cropper, { Area, Point } from 'react-easy-crop';
+import getCroppedImg from '@/utils/cropImage'
+import { Dialog, Slider } from '@mui/material'
+import { FC, useState } from 'react'
+import Cropper, { Area, Point } from 'react-easy-crop'
 
 interface IImageCropper {
-  open: boolean;
-  image: string;
-  getImage: (image: Blob) => void;
-  onCancel: () => void;
+  open: boolean
+  image: string
+  getImage: (image: Blob) => void
+  onCancel: () => void
 }
 
 const ImageCropper: FC<IImageCropper> = ({
@@ -18,28 +18,25 @@ const ImageCropper: FC<IImageCropper> = ({
   getImage,
   onCancel,
 }) => {
-  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 
   const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
+    setCroppedAreaPixels(croppedAreaPixels)
+  }
 
   const showCroppedImage = async () => {
     try {
-      const croppedImage = await getCroppedImg(
-        image,
-        croppedAreaPixels as Area
-      );
+      const croppedImage = await getCroppedImg(image, croppedAreaPixels as Area)
       if (!croppedImage) {
-        console.error('Something went wrong while cropping the image!');
+        console.error('Something went wrong while cropping the image!')
       }
-      getImage(croppedImage as Blob);
+      getImage(croppedImage as Blob)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
-  };
+  }
 
   return (
     <Dialog open={open}>
@@ -87,7 +84,7 @@ const ImageCropper: FC<IImageCropper> = ({
         </button>
       </div>
     </Dialog>
-  );
-};
+  )
+}
 
-export default ImageCropper;
+export default ImageCropper

@@ -1,58 +1,58 @@
-'use client';
+'use client'
 
-import { When } from '@/components/hoc/When';
-import { useAppState } from '@/hooks/useAppState';
-import { defaultBannerImagePath } from '@/utils/constants';
-import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload';
-import { ImagePickerUtils } from '@/utils/imagePickerUtils';
-import { useEffect, useState } from 'react';
+import { When } from '@/components/hoc/When'
+import { useAppState } from '@/hooks/useAppState'
+import { defaultBannerImagePath } from '@/utils/constants'
+import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
+import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import { useEffect, useState } from 'react'
 
 export const Footer = () => {
-  const appState = useAppState();
+  const appState = useAppState()
 
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false)
 
   const saveUtility = async (payload: any) => {
     try {
       await fetch(`/api/settings?token=${appState?.appState?.token}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
-      });
+      })
       const res = await fetch(
         `/api/settings?token=${appState?.appState?.token}`
-      );
-      const { data } = await res.json();
+      )
+      const { data } = await res.json()
       if (data) {
-        appState?.setOriginalTemplate(data.content);
-        appState?.setSettings(data);
+        appState?.setOriginalTemplate(data.content)
+        appState?.setSettings(data)
       }
-      setSaving(false);
-      appState?.toggleChangesCreated(false);
+      setSaving(false)
+      appState?.toggleChangesCreated(false)
     } catch (e) {
-      console.error(e);
-      setSaving(false);
+      console.error(e)
+      setSaving(false)
     }
-  };
+  }
 
   const handleSave = async () => {
-    setSaving(true);
+    setSaving(true)
     //get editor content
-    const content = appState?.appState.editor?.getHTML();
+    const content = appState?.appState.editor?.getHTML()
 
-    let payload = {};
+    let payload = {}
 
     if (appState?.appState?.bannerImgUrl === defaultBannerImagePath) {
-      const imagePickerUtils = new ImagePickerUtils();
-      const imageResponse = await fetch(defaultBannerImagePath);
-      const imageBlob = await imageResponse.blob();
+      const imagePickerUtils = new ImagePickerUtils()
+      const imageResponse = await fetch(defaultBannerImagePath)
+      const imageBlob = await imageResponse.blob()
       const imageFile = await imagePickerUtils.blobToFile(
         imageBlob,
         'bannerImg'
-      );
+      )
       const data = await handleBannerImageUpload(
         imageFile as File,
         appState?.appState.token as string
-      );
+      )
       payload = {
         backgroundColor: appState?.appState.editorColor,
         content: content,
@@ -60,9 +60,9 @@ export const Footer = () => {
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
         notifications: appState?.appState.settings?.notifications,
-      };
-      saveUtility(payload);
-      return;
+      }
+      saveUtility(payload)
+      return
     }
 
     if (!appState?.appState.bannerImgUrl) {
@@ -73,16 +73,16 @@ export const Footer = () => {
         bannerImageId: null,
         displayTasks: appState?.appState.displayTasks,
         notifications: appState?.appState.settings?.notifications,
-      };
+      }
       await fetch(`/api/media`, {
         method: 'DELETE',
         body: JSON.stringify({
           url: appState?.appState?.settings?.bannerImage?.url,
           token: appState?.appState?.token,
         }),
-      });
-      saveUtility(payload);
-      return;
+      })
+      saveUtility(payload)
+      return
     }
 
     if (
@@ -90,15 +90,15 @@ export const Footer = () => {
       appState?.appState.settings?.bannerImage?.url
     ) {
       //upload banner image
-      const imagePickerUtils = new ImagePickerUtils();
+      const imagePickerUtils = new ImagePickerUtils()
       const imageFile = await imagePickerUtils.blobToFile(
         appState?.appState.bannerImgUrl as Blob,
         'bannerImg'
-      );
+      )
       const data = await handleBannerImageUpload(
         imageFile as File,
         appState?.appState.token as string
-      );
+      )
       payload = {
         backgroundColor: appState?.appState.editorColor,
         content: content,
@@ -106,7 +106,7 @@ export const Footer = () => {
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
         notifications: appState?.appState.settings?.notifications,
-      };
+      }
     } else {
       payload = {
         backgroundColor: appState?.appState?.editorColor,
@@ -114,41 +114,39 @@ export const Footer = () => {
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
         notifications: appState?.appState.settings?.notifications,
-      };
+      }
     }
-    saveUtility(payload);
-  };
+    saveUtility(payload)
+  }
 
   const handleCancel = async () => {
     if (appState?.appState.editor) {
       appState?.setEditorColor(
         appState.appState.settings?.backgroundColor as string
-      );
+      )
       appState?.appState.editor
         .chain()
         .focus()
         .setContent(appState?.appState?.settings?.content as string)
-        .run();
+        .run()
     }
     appState?.setBannerImgUrl(
       appState?.appState.settings?.bannerImage?.url || ''
-    );
-    appState?.setBannerImgId(
-      appState?.appState.settings?.bannerImage?.id || ''
-    );
-    appState?.toggleChangesCreated(false);
+    )
+    appState?.setBannerImgId(appState?.appState.settings?.bannerImage?.id || '')
+    appState?.toggleChangesCreated(false)
     appState?.toggleDisplayTasks({
       override: appState?.appState.settings?.displayTasks || false,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     const t = setTimeout(() => {
-      appState?.toggleChangesCreated(false);
-    }, 50);
+      appState?.toggleChangesCreated(false)
+    }, 50)
 
-    return () => clearTimeout(t);
-  }, []);
+    return () => clearTimeout(t)
+  }, [])
 
   return (
     <When
@@ -172,5 +170,5 @@ export const Footer = () => {
         </button>
       </div>
     </When>
-  );
-};
+  )
+}

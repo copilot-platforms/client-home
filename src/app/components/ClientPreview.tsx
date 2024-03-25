@@ -1,54 +1,54 @@
-'use client';
+'use client'
 
-import CalloutExtension from '@/components/tiptap/callout/CalloutExtension';
-import LinkpdfExtension from '@/components/tiptap/pdf/PdfExtension';
-import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Heading from '@tiptap/extension-heading';
-import Text from '@tiptap/extension-text';
-import OrderedList from '@tiptap/extension-ordered-list';
-import BulletList from '@tiptap/extension-bullet-list';
-import ListItem from '@tiptap/extension-list-item';
-import Image from '@tiptap/extension-image';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
-import Underline from '@tiptap/extension-underline';
-import CodeBlock from '@tiptap/extension-code-block';
-import Code from '@tiptap/extension-code';
-import Link from '@tiptap/extension-link';
-import Bold from '@tiptap/extension-bold';
-import Italic from '@tiptap/extension-italic';
-import Strike from '@tiptap/extension-strike';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import History from '@tiptap/extension-history';
-import Mention from '@tiptap/extension-mention';
-import Hardbreak from '@tiptap/extension-hard-break';
-import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension';
-import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion';
-import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion';
+import CalloutExtension from '@/components/tiptap/callout/CalloutExtension'
+import LinkpdfExtension from '@/components/tiptap/pdf/PdfExtension'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Heading from '@tiptap/extension-heading'
+import Text from '@tiptap/extension-text'
+import OrderedList from '@tiptap/extension-ordered-list'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
+import Image from '@tiptap/extension-image'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Underline from '@tiptap/extension-underline'
+import CodeBlock from '@tiptap/extension-code-block'
+import Code from '@tiptap/extension-code'
+import Link from '@tiptap/extension-link'
+import Bold from '@tiptap/extension-bold'
+import Italic from '@tiptap/extension-italic'
+import Strike from '@tiptap/extension-strike'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import History from '@tiptap/extension-history'
+import Mention from '@tiptap/extension-mention'
+import Hardbreak from '@tiptap/extension-hard-break'
+import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension'
+import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion'
+import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion'
 
-import { EditorContent, useEditor } from '@tiptap/react';
-import { useEffect } from 'react';
-import { ImageResize } from '@/components/tiptap/image/image';
-import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill';
-import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget';
-import { useAppState } from '@/hooks/useAppState';
-import { INotification, ISettings } from '@/types/interfaces';
-import { defaultBannerImagePath } from '@/utils/constants';
-import { defaultState } from '../../../defaultState';
-import useSWR from 'swr';
-import { fetcher } from '@/utils/fetcher';
+import { EditorContent, useEditor } from '@tiptap/react'
+import { useEffect } from 'react'
+import { ImageResize } from '@/components/tiptap/image/image'
+import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppState } from '@/hooks/useAppState'
+import { INotification, ISettings } from '@/types/interfaces'
+import { defaultBannerImagePath } from '@/utils/constants'
+import { defaultState } from '../../../defaultState'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 const ClientPreview = ({
   content,
   settings,
   token,
 }: {
-  content: string;
-  settings: ISettings;
-  token: string;
+  content: string
+  settings: ISettings
+  token: string
 }) => {
   /**
    * Importing all the editor related imports and settings up this editor
@@ -56,7 +56,7 @@ const ClientPreview = ({
    * a separate route which stays independent to the main route. Main route
    * will never load for client preview and thus editor will never load as well.
    */
-  const appState = useAppState();
+  const appState = useAppState()
 
   const editor = useEditor({
     extensions: [
@@ -83,7 +83,7 @@ const ClientPreview = ({
       Mention.configure({
         suggestion: autofillMenuSuggestion,
         renderLabel({ node }) {
-          return `${node.attrs.label ?? node.attrs.id}`;
+          return `${node.attrs.label ?? node.attrs.id}`
         },
       }),
       Link.extend({
@@ -117,15 +117,15 @@ const ClientPreview = ({
       Code,
     ],
     content: content || defaultState,
-  });
+  })
 
   const { data } = useSWR(`api/notifications?token=${token}`, fetcher, {
     refreshInterval: 5000,
-  });
+  })
 
   useEffect(() => {
     if (editor && content) {
-      appState?.toggleReadOnly(true);
+      appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
         backgroundColor: '#ffffff',
@@ -140,29 +140,29 @@ const ClientPreview = ({
         },
         createdById: '',
         displayTasks: false,
-      };
-      editor.setEditable(false);
-      editor.chain().focus('start').setContent(content).run();
-      if (settings?.displayTasks) {
-        appState?.toggleDisplayTasks();
       }
-      appState?.setSettings(settings || _settings);
+      editor.setEditable(false)
+      editor.chain().focus('start').setContent(content).run()
+      if (settings?.displayTasks) {
+        appState?.toggleDisplayTasks()
+      }
+      appState?.setSettings(settings || _settings)
     }
-  }, [editor, content, settings]);
+  }, [editor, content, settings])
 
   useEffect(() => {
-    if (editor) editor.chain().focus('start').run();
-  }, [editor]);
+    if (editor) editor.chain().focus('start').run()
+  }, [editor])
 
   useEffect(() => {
-    appState?.setNotification(data);
-  }, [data]);
+    appState?.setNotification(data)
+  }, [data])
 
   if (!editor) {
-    return null;
+    return null
   }
 
-  return <EditorContent editor={editor} readOnly={true} content={content} />;
-};
+  return <EditorContent editor={editor} readOnly={true} content={content} />
+}
 
-export default ClientPreview;
+export default ClientPreview
