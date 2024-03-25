@@ -118,6 +118,7 @@ const ClientPreview = ({
   })
 
   useEffect(() => {
+    appState?.toggleReadOnly(true)
     if (editor && content) {
       const _settings = {
         content: defaultState,
@@ -136,7 +137,6 @@ const ClientPreview = ({
       }
       editor.setEditable(false)
       editor.chain().focus('start').setContent(content).run()
-      appState?.toggleReadOnly(true)
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }
