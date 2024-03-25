@@ -59,7 +59,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
         sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
       })()
     }
-  }, [dropdownSelectedClient, sideBarRef])
+  }, [dropdownSelectedClient])
 
   useEffect(() => {
     appState?.toggleDisplayTasks({ override: displayTasks })
