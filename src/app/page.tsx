@@ -1,67 +1,67 @@
-import { apiUrl } from '@/config'
-import EditorInterface from './components/EditorInterface'
-import SideBarInterface from './components/SideBarInterface'
-import { CopilotAPI } from '@/utils/copilotApiUtils'
-import { ClientsResponseSchema } from '@/types/common'
-import { IClient, ICustomField } from '@/types/interfaces'
-import { z } from 'zod'
-import InvalidToken from './components/InvalidToken'
-import NotificationsModal from '@/components/NotificationsModal'
+import { apiUrl } from '@/config';
+import EditorInterface from './components/EditorInterface';
+import SideBarInterface from './components/SideBarInterface';
+import { CopilotAPI } from '@/utils/copilotApiUtils';
+import { ClientsResponseSchema } from '@/types/common';
+import { IClient, ICustomField } from '@/types/interfaces';
+import { z } from 'zod';
+import InvalidToken from './components/InvalidToken';
+import NotificationsModal from '@/components/NotificationsModal';
 
-export const revalidate = 0
+export const revalidate = 0;
 
 async function listClients(token: string) {
-  const copilotClient = new CopilotAPI(token)
+  const copilotClient = new CopilotAPI(token);
   const clientList = ClientsResponseSchema.parse(
-    await copilotClient.getClients(),
-  )
+    await copilotClient.getClients()
+  );
 
   return (clientList.data?.sort((a, b) =>
-    a.givenName.localeCompare(b.givenName),
-  ) || []) as IClient[]
+    a.givenName.localeCompare(b.givenName)
+  ) || []) as IClient[];
 }
 
 async function getCustomFields(token: string) {
-  const copilotClient = new CopilotAPI(token)
-  const customFieldsList = await copilotClient.getCustomFields()
+  const copilotClient = new CopilotAPI(token);
+  const customFieldsList = await copilotClient.getCustomFields();
 
-  return (customFieldsList.data || []) as ICustomField[]
+  return (customFieldsList.data || []) as ICustomField[];
 }
 
 async function getSettings(token: string) {
-  const res = await fetch(`${apiUrl}/api/settings?token=${token}`)
+  const res = await fetch(`${apiUrl}/api/settings?token=${token}`);
 
   if (!res.ok) {
-    throw new Error('Something went wrong while fetching settings!')
+    throw new Error('Something went wrong while fetching settings!');
   }
 
-  const { data } = await res.json()
+  const { data } = await res.json();
 
-  return data
+  return data;
 }
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { token: string }
+  searchParams: { token: string };
 }) {
-  const tokenParsed = z.string().safeParse(searchParams.token)
+  const tokenParsed = z.string().safeParse(searchParams.token);
   if (!tokenParsed.success) {
-    return <InvalidToken />
+    return <InvalidToken />;
   }
 
-  const token = tokenParsed.data
+  const token = tokenParsed.data;
 
-  const copilotClient = new CopilotAPI(token)
+  const copilotClient = new CopilotAPI(token);
 
   const [clientList, settings, workspace, customFields] = await Promise.all([
     listClients(token),
     getSettings(token),
     copilotClient.getWorkspaceInfo(),
     getCustomFields(token),
-  ])
+  ]);
 
-  const font = workspace.font?.replaceAll(' ', '+')
+  const font = workspace.font?.replaceAll(' ', '+');
 
   return (
     <>
@@ -95,5 +95,5 @@ export default async function Page({
         </div>
       </div>
     </>
-  )
+  );
 }

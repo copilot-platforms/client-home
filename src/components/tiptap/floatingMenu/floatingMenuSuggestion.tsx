@@ -1,10 +1,10 @@
-import { Editor, ReactRenderer, Range } from '@tiptap/react'
-import tippy from 'tippy.js'
+import { Editor, ReactRenderer, Range } from '@tiptap/react';
+import tippy from 'tippy.js';
 
-import { FloatingMenu } from './FloatingMenu'
-import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
-import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
+import { FloatingMenu } from './FloatingMenu';
+import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils';
+import { ImagePickerUtils } from '@/utils/imagePickerUtils';
+import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload';
 
 export const floatingMenuSuggestion = {
   items: ({ query }: any) => {
@@ -12,75 +12,75 @@ export const floatingMenuSuggestion = {
       {
         title: 'Heading 1',
         command: ({ editor, range }: any) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.toggleHeading(1)
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.toggleHeading(1);
         },
       },
       {
         title: 'Heading 2',
         command: ({ editor, range }: { editor: Editor; range: Range }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.toggleHeading(2)
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.toggleHeading(2);
         },
       },
       {
         title: 'Heading 3',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.toggleHeading(3)
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.toggleHeading(3);
         },
       },
       {
         title: 'Text',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.setParagraph()
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.setParagraph();
         },
       },
       {
         title: 'Autofill Fields',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.insertContent('{{')
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.insertContent('{{');
         },
       },
       {
         title: 'Bullet List',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.toggleBulletList()
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.toggleBulletList();
         },
       },
       {
         title: 'Numbered List',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.toggleNumberedList()
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.toggleNumberedList();
         },
       },
       {
         title: 'Upload',
         command: async ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          const imagePickerUtils = new ImagePickerUtils()
-          const file = await imagePickerUtils.selectImageFromLocalDrive()
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          const imagePickerUtils = new ImagePickerUtils();
+          const file = await imagePickerUtils.selectImageFromLocalDrive();
           const token = new URLSearchParams(document.location.search).get(
-            'token',
-          )
+            'token'
+          );
           if (file && token) {
-            const data = await handleBannerImageUpload(file, token)
+            const data = await handleBannerImageUpload(file, token);
             if (data.contentType === 'application/pdf') {
-              tiptapEditorUtils.insertPdf(data.filename, data.url)
+              tiptapEditorUtils.insertPdf(data.filename, data.url);
             } else {
-              tiptapEditorUtils.setImage(data.url as string)
+              tiptapEditorUtils.setImage(data.url as string);
             }
           }
         },
@@ -88,17 +88,17 @@ export const floatingMenuSuggestion = {
       {
         title: 'Table',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.insertTable({ rows: 3, cols: 3 })
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.insertTable({ rows: 3, cols: 3 });
         },
       },
       {
         title: 'Callout',
         command: ({ editor, range }: { editor: Editor; range: any }) => {
-          const tiptapEditorUtils = new TiptapEditorUtils(editor)
-          tiptapEditorUtils.deleteRange(range)
-          tiptapEditorUtils.insertCallout('')
+          const tiptapEditorUtils = new TiptapEditorUtils(editor);
+          tiptapEditorUtils.deleteRange(range);
+          tiptapEditorUtils.insertCallout('');
         },
       },
     ]
@@ -106,24 +106,24 @@ export const floatingMenuSuggestion = {
         item.title
           .toLowerCase()
           .replace(' ', '')
-          .startsWith(query.toLowerCase()),
+          .startsWith(query.toLowerCase())
       )
-      .slice(0, 12)
+      .slice(0, 12);
   },
 
   render: () => {
-    let component: any
-    let popup: any
+    let component: any;
+    let popup: any;
 
     return {
       onStart: (props: any) => {
         component = new ReactRenderer(FloatingMenu, {
           props,
           editor: props.editor,
-        })
+        });
 
         if (!props.clientRect) {
-          return
+          return;
         }
 
         popup = tippy('body', {
@@ -147,35 +147,35 @@ export const floatingMenuSuggestion = {
               },
             ],
           },
-        })
+        });
       },
 
       onUpdate(props: any) {
-        component.updateProps(props)
+        component.updateProps(props);
 
         if (!props.clientRect) {
-          return
+          return;
         }
 
         popup[0].setProps({
           getReferenceClientRect: props.clientRect,
-        })
+        });
       },
 
       onKeyDown(props: any) {
         if (props.event.key === 'Escape') {
-          popup[0].hide()
+          popup[0].hide();
 
-          return true
+          return true;
         }
 
-        return component.ref?.onKeyDown(props)
+        return component.ref?.onKeyDown(props);
       },
 
       onExit() {
-        popup[0].destroy()
-        component.destroy()
+        popup[0].destroy();
+        component.destroy();
       },
-    }
+    };
   },
-}
+};

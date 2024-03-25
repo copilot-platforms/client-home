@@ -1,13 +1,13 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 
 const AutofillContainerBtn = ({
   handleClick,
   label,
   focus,
 }: {
-  handleClick: () => void
-  label: string
-  focus: boolean
+  handleClick: () => void;
+  label: string;
+  focus: boolean;
 }) => {
   return (
     <button
@@ -15,65 +15,65 @@ const AutofillContainerBtn = ({
         focus && 'bg-new-white-2'
       } display-block`}
       onClick={() => {
-        handleClick()
+        handleClick();
       }}
     >
       <div>
         <p className='text-sm'>{label}</p>
       </div>
     </button>
-  )
-}
+  );
+};
 
 export const AutofillMenu = forwardRef((props: any, ref: any) => {
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const selectItem = (index: any) => {
-    const item = props.items[index]
+    const item = props.items[index];
 
     if (item) {
-      props.command({ id: item })
+      props.command({ id: item });
     }
-  }
+  };
 
   const upHandler = () => {
     setSelectedIndex(
-      (selectedIndex + props.items.length - 1) % props.items.length,
-    )
-  }
+      (selectedIndex + props.items.length - 1) % props.items.length
+    );
+  };
 
   const downHandler = () => {
-    setSelectedIndex((selectedIndex + 1) % props.items.length)
-  }
+    setSelectedIndex((selectedIndex + 1) % props.items.length);
+  };
 
   const enterHandler = () => {
-    selectItem(selectedIndex)
-  }
+    selectItem(selectedIndex);
+  };
 
-  useEffect(() => setSelectedIndex(0), [props.items])
+  useEffect(() => setSelectedIndex(0), [props.items]);
 
   useImperativeHandle(ref, () => ({
     onKeyDown: ({ event }: any) => {
       if (event.key === 'ArrowUp') {
-        upHandler()
-        return true
+        upHandler();
+        return true;
       }
 
       if (event.key === 'ArrowDown') {
-        downHandler()
-        return true
+        downHandler();
+        return true;
       }
 
       if (event.key === 'Enter') {
-        enterHandler()
-        return true
+        enterHandler();
+        return true;
       }
 
-      return false
+      return false;
     },
-  }))
+  }));
 
-  const { items } = props
+  const { items } = props;
 
   return (
     <div className='flex flex-col gap-0.5 bg-white py-2 border border-new-card-border rounded shadow-vairant-1 w-fit overflow-hidden relative'>
@@ -82,7 +82,7 @@ export const AutofillMenu = forwardRef((props: any, ref: any) => {
           <AutofillContainerBtn
             key={index}
             handleClick={() => {
-              selectItem(index)
+              selectItem(index);
             }}
             label={item}
             focus={index === selectedIndex}
@@ -96,7 +96,7 @@ export const AutofillMenu = forwardRef((props: any, ref: any) => {
         />
       )}
     </div>
-  )
-})
+  );
+});
 
-AutofillMenu.displayName = 'AutofillMenu'
+AutofillMenu.displayName = 'AutofillMenu';

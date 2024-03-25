@@ -1,5 +1,5 @@
-import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import React from 'react'
+import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import React from 'react';
 
 export const Callout = () => {
   return (
@@ -21,5 +21,5 @@ export const Callout = () => {
 
       <NodeViewContent as='div' className='content' />
     </NodeViewWrapper>
-  )
-}
+  );
+};

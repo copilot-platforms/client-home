@@ -1,6 +1,6 @@
-import { PdfIcon } from '@/icons'
-import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import React from 'react'
+import { PdfIcon } from '@/icons';
+import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import React from 'react';
 
 export const Linkpdf = () => {
   return (
@@ -11,5 +11,5 @@ export const Linkpdf = () => {
 
       <NodeViewContent as='div' className='content' />
     </NodeViewWrapper>
-  )
-}
+  );
+};

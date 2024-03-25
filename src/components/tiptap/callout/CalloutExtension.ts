@@ -1,6 +1,6 @@
-import { mergeAttributes, Node } from '@tiptap/core'
-import { ReactNodeViewRenderer } from '@tiptap/react'
-import { Callout } from './Callout'
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
+import { Callout } from './Callout';
 
 export default Node.create({
   name: 'calloutComponent',
@@ -12,16 +12,16 @@ export default Node.create({
       {
         tag: 'callout',
       },
-    ]
+    ];
   },
 
   whitespace: 'normal',
 
   renderHTML({ HTMLAttributes }) {
-    return ['callout', mergeAttributes(HTMLAttributes), 0]
+    return ['callout', mergeAttributes(HTMLAttributes), 0];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Callout)
+    return ReactNodeViewRenderer(Callout);
   },
-})
+});

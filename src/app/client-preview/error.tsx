@@ -1,21 +1,21 @@
-'use client' // Error components must be Client Components
+'use client'; // Error components must be Client Components
 
-import { Stack, Typography } from '@mui/material'
-import { useEffect } from 'react'
-import * as Sentry from '@sentry/nextjs'
+import { Stack, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 export default function Error({
   error,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    const reportId = Sentry.captureException(error)
+    const reportId = Sentry.captureException(error);
 
-    console.info('Error reported:', reportId)
-    console.error(error)
-  }, [error])
+    console.info('Error reported:', reportId);
+    console.error(error);
+  }, [error]);
 
   return (
     <Stack
@@ -38,5 +38,5 @@ export default function Error({
         No client found with the supplied token!
       </Typography>
     </Stack>
-  )
+  );
 }

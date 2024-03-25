@@ -1,48 +1,48 @@
-import { Notification } from './notifications'
+import { Notification } from './notifications';
 
 export interface ISettings {
-  content: string
-  backgroundColor: string
-  id: string
+  content: string;
+  backgroundColor: string;
+  id: string;
   bannerImage: {
-    id: string
-    url: string
-    filename: string
-    contentType: string
-    size: number
-    createdById: string
-  } | null
-  createdById: string
-  displayTasks?: boolean
-  notifications?: Notification
+    id: string;
+    url: string;
+    filename: string;
+    contentType: string;
+    size: number;
+    createdById: string;
+  } | null;
+  createdById: string;
+  displayTasks?: boolean;
+  notifications?: Notification;
 }
 
 export interface IClient {
-  id: string
-  object: string
-  createdAt: string
-  givenName: string
-  familyName: string
-  email: string
-  companyId: string
-  status: string
-  address: string
-  inviteUrl: string
-  firstLoginDate: string
-  lastLoginDate: string
-  lastActiveDate: string
-  customFields: object
-  avatarImageUrl: string | null
+  id: string;
+  object: string;
+  createdAt: string;
+  givenName: string;
+  familyName: string;
+  email: string;
+  companyId: string;
+  status: string;
+  address: string;
+  inviteUrl: string;
+  firstLoginDate: string;
+  lastLoginDate: string;
+  lastActiveDate: string;
+  customFields: object;
+  avatarImageUrl: string | null;
 }
 
 export interface ICustomField {
-  id: string
-  key: string
-  name: string
-  type: string
-  order: number
-  object: string
-  options: any
+  id: string;
+  key: string;
+  name: string;
+  type: string;
+  order: number;
+  object: string;
+  options: any;
 }
 
 export enum Formatter {
@@ -63,7 +63,7 @@ export enum Formatter {
 }
 
 export interface INotification {
-  forms: number
-  billing: number
-  contracts: number
+  forms: number;
+  billing: number;
+  contracts: number;
 }

@@ -6,28 +6,28 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-} from '@mui/material'
-import { FC, ReactNode, useEffect, useState, MouseEvent } from 'react'
+} from '@mui/material';
+import { FC, ReactNode, useEffect, useState, MouseEvent } from 'react';
 
-import { CalloutIcon, H1Icon, H2Icon, H3Icon, TextIcon } from '@/icons'
-import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
-import { Editor } from '@tiptap/react'
-import { useAppState } from '@/hooks/useAppState'
-import { Formatter } from '@/types/interfaces'
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { CalloutIcon, H1Icon, H2Icon, H3Icon, TextIcon } from '@/icons';
+import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils';
+import { Editor } from '@tiptap/react';
+import { useAppState } from '@/hooks/useAppState';
+import { Formatter } from '@/types/interfaces';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 interface IBubbleMenuContainer {
-  editor: Editor
+  editor: Editor;
 }
 
 const DropdownBubbleMenu: FC<IBubbleMenuContainer> = ({ editor }) => {
   const [selectedFormatter, setSelectedFormatter] = useState<Formatter>(
-    Formatter.text,
-  )
+    Formatter.text
+  );
 
-  const tiptapEditorUtils = new TiptapEditorUtils(editor)
+  const tiptapEditorUtils = new TiptapEditorUtils(editor);
 
-  const appState = useAppState()
+  const appState = useAppState();
 
   const formatterIcon = {
     [Formatter.h1]: <H1Icon />,
@@ -35,38 +35,38 @@ const DropdownBubbleMenu: FC<IBubbleMenuContainer> = ({ editor }) => {
     [Formatter.h3]: <H3Icon />,
     [Formatter.text]: <TextIcon />,
     [Formatter.callout]: <CalloutIcon />,
-  }
+  };
 
   useEffect(() => {
-    const parent = editor.state.selection.$anchor.parent
-    const level = parent.attrs.level
-    const name = parent.type.name
+    const parent = editor.state.selection.$anchor.parent;
+    const level = parent.attrs.level;
+    const name = parent.type.name;
 
     if (name === 'heading' && level === 1) {
-      setSelectedFormatter(Formatter.h1)
+      setSelectedFormatter(Formatter.h1);
     }
     if (name === 'heading' && level === 2) {
-      setSelectedFormatter(Formatter.h2)
+      setSelectedFormatter(Formatter.h2);
     }
     if (name === 'heading' && level === 3) {
-      setSelectedFormatter(Formatter.h3)
+      setSelectedFormatter(Formatter.h3);
     }
     if (name === 'paragraph') {
-      setSelectedFormatter(Formatter.text)
+      setSelectedFormatter(Formatter.text);
     }
     if (name === 'calloutComponent') {
-      setSelectedFormatter(Formatter.callout)
+      setSelectedFormatter(Formatter.callout);
     }
-  }, [editor.state.selection.$anchor.parent])
+  }, [editor.state.selection.$anchor.parent]);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget)
-  }
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'simple-popper' : undefined
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
 
   return (
     <Stack
@@ -139,59 +139,59 @@ const DropdownBubbleMenu: FC<IBubbleMenuContainer> = ({ editor }) => {
             icon={formatterIcon[Formatter.h1]}
             label={Formatter.h1}
             handleClick={() => {
-              tiptapEditorUtils.toggleHeading(1)
-              setAnchorEl(null)
+              tiptapEditorUtils.toggleHeading(1);
+              setAnchorEl(null);
             }}
           />
           <BubbleDropdownBtnContainer
             icon={formatterIcon[Formatter.h2]}
             label={Formatter.h2}
             handleClick={() => {
-              tiptapEditorUtils.toggleHeading(2)
-              setAnchorEl(null)
+              tiptapEditorUtils.toggleHeading(2);
+              setAnchorEl(null);
             }}
           />
           <BubbleDropdownBtnContainer
             icon={formatterIcon[Formatter.h3]}
             label={Formatter.h3}
             handleClick={() => {
-              tiptapEditorUtils.toggleHeading(3)
-              setAnchorEl(null)
+              tiptapEditorUtils.toggleHeading(3);
+              setAnchorEl(null);
             }}
           />
           <BubbleDropdownBtnContainer
             icon={formatterIcon[Formatter.text]}
             label={Formatter.text}
             handleClick={() => {
-              tiptapEditorUtils.setParagraph()
-              setAnchorEl(null)
+              tiptapEditorUtils.setParagraph();
+              setAnchorEl(null);
             }}
           />
           <BubbleDropdownBtnContainer
             icon={formatterIcon[Formatter.callout]}
             label={Formatter.callout}
             handleClick={() => {
-              const text = tiptapEditorUtils.getSelectedText()
-              tiptapEditorUtils.insertCallout(text)
-              setAnchorEl(null)
+              const text = tiptapEditorUtils.getSelectedText();
+              tiptapEditorUtils.insertCallout(text);
+              setAnchorEl(null);
             }}
           />
         </Stack>
       </Popper>
     </Stack>
-  )
-}
+  );
+};
 
-export default DropdownBubbleMenu
+export default DropdownBubbleMenu;
 
 const BubbleDropdownBtnContainer = ({
   icon,
   label,
   handleClick,
 }: {
-  icon: ReactNode
-  label: string
-  handleClick: () => void
+  icon: ReactNode;
+  label: string;
+  handleClick: () => void;
 }) => {
   return (
     <button
@@ -203,5 +203,5 @@ const BubbleDropdownBtnContainer = ({
         <p className='text-sm'>{label}</p>
       </div>
     </button>
-  )
-}
+  );
+};

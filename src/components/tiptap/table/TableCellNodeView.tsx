@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
-import { NodeViewContent, NodeViewWrapper, NodeViewProps } from '@tiptap/react'
-import { Editor } from '@tiptap/core'
-import Tippy from '@tippyjs/react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { NodeViewContent, NodeViewWrapper, NodeViewProps } from '@tiptap/react';
+import { Editor } from '@tiptap/core';
+import Tippy from '@tippyjs/react';
 import {
   mdiChevronDown,
   mdiTableBorder,
@@ -16,15 +16,15 @@ import {
   mdiTableRowPlusAfter,
   mdiTableRowPlusBefore,
   mdiTableRowRemove,
-} from '@mdi/js'
-import Icon from '@mdi/react'
+} from '@mdi/js';
+import Icon from '@mdi/react';
 
-import './style.css'
+import './style.css';
 
 interface CellButton {
-  name: string
-  action: (editor: Editor) => boolean
-  icon?: string
+  name: string;
+  action: (editor: Editor) => boolean;
+  icon?: string;
 }
 
 const cellButtonsConfig: CellButton[] = [
@@ -63,7 +63,7 @@ const cellButtonsConfig: CellButton[] = [
     action: (editor) => editor.chain().focus().deleteTable().run(),
     icon: mdiTableRemove,
   },
-]
+];
 
 export const TableCellNodeView: FC<NodeViewProps> = ({
   node,
@@ -71,41 +71,41 @@ export const TableCellNodeView: FC<NodeViewProps> = ({
   selected,
   editor,
 }) => {
-  const [isCurrentCellActive, setIsCurrentCellActive] = useState(false)
+  const [isCurrentCellActive, setIsCurrentCellActive] = useState(false);
 
-  const tableCellOptionsButtonRef = useRef<HTMLLabelElement>(null)
+  const tableCellOptionsButtonRef = useRef<HTMLLabelElement>(null);
 
   const calculateActiveSateOfCurrentCell = () => {
-    const { from, to } = editor.state.selection
+    const { from, to } = editor.state.selection;
 
-    const nodeFrom = getPos()
-    const nodeTo = nodeFrom + node.nodeSize
+    const nodeFrom = getPos();
+    const nodeTo = nodeFrom + node.nodeSize;
 
-    setIsCurrentCellActive(nodeFrom <= from && to <= nodeTo)
-  }
+    setIsCurrentCellActive(nodeFrom <= from && to <= nodeTo);
+  };
 
   useEffect(() => {
-    editor.on('selectionUpdate', calculateActiveSateOfCurrentCell)
+    editor.on('selectionUpdate', calculateActiveSateOfCurrentCell);
 
-    setTimeout(calculateActiveSateOfCurrentCell, 100)
+    setTimeout(calculateActiveSateOfCurrentCell, 100);
 
     return () => {
-      editor.off('selectionUpdate', calculateActiveSateOfCurrentCell)
-    }
-  })
+      editor.off('selectionUpdate', calculateActiveSateOfCurrentCell);
+    };
+  });
 
   const gimmeDropdownStyles = (): React.CSSProperties => {
-    let top = tableCellOptionsButtonRef.current?.clientTop
-    if (top) top += 5
+    let top = tableCellOptionsButtonRef.current?.clientTop;
+    if (top) top += 5;
 
-    let left = tableCellOptionsButtonRef.current?.clientLeft
-    if (left) left += 5
+    let left = tableCellOptionsButtonRef.current?.clientLeft;
+    if (left) left += 5;
 
     return {
       top: `${top}px`,
       left: `${left}px`,
-    }
-  }
+    };
+  };
 
   return (
     <NodeViewWrapper>
@@ -140,7 +140,7 @@ export const TableCellNodeView: FC<NodeViewProps> = ({
                         <span>{btn.name}</span>
                       </button>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </article>
@@ -156,5 +156,5 @@ export const TableCellNodeView: FC<NodeViewProps> = ({
         </Tippy>
       )}
     </NodeViewWrapper>
-  )
-}
+  );
+};

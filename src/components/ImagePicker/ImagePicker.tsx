@@ -1,35 +1,35 @@
-import { PlusIcon, UploadIcon } from '@/icons'
-import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import { FC, useCallback, useState } from 'react'
-import { When } from '@/components/hoc/When'
-import ImageCropper from '@/components/imageCropper/ImageCropper'
-import { useDropzone } from 'react-dropzone'
+import { PlusIcon, UploadIcon } from '@/icons';
+import { ImagePickerUtils } from '@/utils/imagePickerUtils';
+import { FC, useCallback, useState } from 'react';
+import { When } from '@/components/hoc/When';
+import ImageCropper from '@/components/imageCropper/ImageCropper';
+import { useDropzone } from 'react-dropzone';
 
 interface IImagePicker {
-  getImage: (file: Blob | null) => void
-  showImage: string
+  getImage: (file: Blob | null) => void;
+  showImage: string;
 }
 
 const ImagePicker: FC<IImagePicker> = ({ getImage, showImage }) => {
-  const [imgUrl, setImgUrl] = useState('')
-  const [showCropper, setShowCropper] = useState(false)
+  const [imgUrl, setImgUrl] = useState('');
+  const [showCropper, setShowCropper] = useState(false);
 
   const onDrop = useCallback(
     async (acceptedFiles: Array<File>) => {
-      const imagePickerUtils = new ImagePickerUtils()
-      const file = acceptedFiles[0]
+      const imagePickerUtils = new ImagePickerUtils();
+      const file = acceptedFiles[0];
       if (file) {
-        const imgUrl = await imagePickerUtils.imageUrl(file)
-        setImgUrl(imgUrl as string)
-        setShowCropper(true)
+        const imgUrl = await imagePickerUtils.imageUrl(file);
+        setImgUrl(imgUrl as string);
+        setShowCropper(true);
       }
     },
-    [getImage],
-  )
+    [getImage]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-  })
+  });
 
   return (
     <>
@@ -68,14 +68,14 @@ const ImagePicker: FC<IImagePicker> = ({ getImage, showImage }) => {
           open={showCropper}
           image={imgUrl}
           getImage={(image) => {
-            getImage(image)
-            setShowCropper(false)
+            getImage(image);
+            setShowCropper(false);
           }}
           onCancel={() => setShowCropper(false)}
         />
       </When>
     </>
-  )
-}
+  );
+};
 
-export default ImagePicker
+export default ImagePicker;

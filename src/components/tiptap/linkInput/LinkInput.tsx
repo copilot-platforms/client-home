@@ -5,48 +5,48 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react'
-import { Editor } from '@tiptap/react'
+} from 'react';
+import { Editor } from '@tiptap/react';
 
-import { ArrowForward, CloseRounded } from '@mui/icons-material'
-import { Dialog } from '@mui/material'
+import { ArrowForward, CloseRounded } from '@mui/icons-material';
+import { Dialog } from '@mui/material';
 
-import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
-import { useAppState } from '@/hooks/useAppState'
+import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils';
+import { useAppState } from '@/hooks/useAppState';
 
 interface ILinkInput {
-  editor: Editor
+  editor: Editor;
 }
 
 const LinkInput: FC<ILinkInput> = ({ editor }) => {
-  const [url, setUrl] = useState('')
+  const [url, setUrl] = useState('');
 
-  const appState = useAppState()
+  const appState = useAppState();
 
-  const urlInputRef = useRef<HTMLInputElement>(null)
+  const urlInputRef = useRef<HTMLInputElement>(null);
 
-  const tiptapEditorUtils = new TiptapEditorUtils(editor)
+  const tiptapEditorUtils = new TiptapEditorUtils(editor);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    tiptapEditorUtils.insertLink(url)
-    appState?.toggleShowLinkInput(false)
-    setUrl('')
-  }
+    e.preventDefault();
+    tiptapEditorUtils.insertLink(url);
+    appState?.toggleShowLinkInput(false);
+    setUrl('');
+  };
 
   const handleKeyDown = (event: SyntheticEvent<HTMLDivElement>) => {
     //@ts-expect-error event should contain code
     if (event.code === 'Escape') {
-      event.preventDefault()
-      appState?.toggleShowLinkInput(false)
+      event.preventDefault();
+      appState?.toggleShowLinkInput(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (urlInputRef.current) {
-      urlInputRef.current.focus()
+      urlInputRef.current.focus();
     }
-  }, [urlInputRef.current])
+  }, [urlInputRef.current]);
 
   return (
     <Dialog
@@ -59,7 +59,7 @@ const LinkInput: FC<ILinkInput> = ({ editor }) => {
           <CloseRounded
             fontSize='small'
             onClick={() => {
-              appState?.toggleShowLinkInput(false)
+              appState?.toggleShowLinkInput(false);
             }}
             className='cursor-pointer'
           />
@@ -80,7 +80,7 @@ const LinkInput: FC<ILinkInput> = ({ editor }) => {
         </form>
       </div>
     </Dialog>
-  )
-}
+  );
+};
 
-export default LinkInput
+export default LinkInput;

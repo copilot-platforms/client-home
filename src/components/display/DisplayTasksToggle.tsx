@@ -1,10 +1,10 @@
-import { Switch } from '@/components/Forms/Switch'
-import { When } from '@/components/hoc/When'
-import { useAppState } from '@/hooks/useAppState'
-import { useEffect } from 'react'
+import { Switch } from '@/components/Forms/Switch';
+import { When } from '@/components/hoc/When';
+import { useAppState } from '@/hooks/useAppState';
+import { useEffect } from 'react';
 
 const DisplayTasksToggle = () => {
-  const appState = useAppState()
+  const appState = useAppState();
 
   const handleNotificationWidget = () => {
     if (appState?.appState?.displayTasks) {
@@ -15,13 +15,13 @@ const DisplayTasksToggle = () => {
           .setContent(
             appState?.appState.originalTemplate?.includes('notification_widget')
               ? appState?.appState.originalTemplate
-              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`,
+              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`
           )
-          .run()
+          .run();
       }
       appState?.setOriginalTemplate(
-        appState?.appState.editor?.getHTML() as string,
-      )
+        appState?.appState.editor?.getHTML() as string
+      );
     } else {
       if (appState?.appState.editor) {
         appState?.appState?.editor
@@ -30,32 +30,32 @@ const DisplayTasksToggle = () => {
           .setContent(
             appState?.appState.originalTemplate?.replace(
               '<notification_widget></notification_widget>',
-              '',
-            ) || '',
+              ''
+            ) || ''
           )
-          .run()
+          .run();
       }
     }
-  }
+  };
 
   const handleClick = () => {
-    appState?.toggleDisplayTasks()
-    appState?.toggleChangesCreated(true)
-  }
+    appState?.toggleDisplayTasks();
+    appState?.toggleChangesCreated(true);
+  };
 
   useEffect(() => {
     if (appState?.appState.editor) {
-      handleNotificationWidget()
+      handleNotificationWidget();
     }
-  }, [appState?.appState.displayTasks])
+  }, [appState?.appState.displayTasks]);
 
   useEffect(() => {
     if (appState?.appState.settings) {
       if (appState?.appState.settings?.displayTasks) {
-        appState?.toggleDisplayTasks({ override: true })
+        appState?.toggleDisplayTasks({ override: true });
       }
     }
-  }, [appState?.appState.settings?.displayTasks, appState?.appState.settings])
+  }, [appState?.appState.settings?.displayTasks, appState?.appState.settings]);
 
   return (
     <div className='py-600 px-500 border-1 border-b relative flex justify-between p-4 gap-3 z-0 items-center'>
@@ -75,7 +75,7 @@ const DisplayTasksToggle = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DisplayTasksToggle
+export default DisplayTasksToggle;

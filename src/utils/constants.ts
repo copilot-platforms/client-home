@@ -3,6 +3,6 @@ export const staticAutofillValues = [
   '{{client.familyName}}',
   '{{client.email}}',
   '{{client.company}}',
-]
+];
 
-export const defaultBannerImagePath = '/images/default_banner.png'
+export const defaultBannerImagePath = '/images/default_banner.png';

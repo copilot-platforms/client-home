@@ -61,4 +61,4 @@ export const defaultState = `
 <h3>📈&nbsp;Project status</h3>
 <p>Track the projects we’re working on for you.</p>
 
-`
+`;

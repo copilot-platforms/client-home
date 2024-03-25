@@ -1,30 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
-import { ChromePicker } from 'react-color'
-import { When } from '@/components/hoc/When'
-import { useAppState } from '@/hooks/useAppState'
-import './colorpicker.css'
-import { TextField, styled } from '@mui/material'
+import { useEffect, useRef, useState } from 'react';
+import { ChromePicker } from 'react-color';
+import { When } from '@/components/hoc/When';
+import { useAppState } from '@/hooks/useAppState';
+import './colorpicker.css';
+import { TextField, styled } from '@mui/material';
 
 const ColorPicker = () => {
-  const [showPicker, setShowPicker] = useState(false)
+  const [showPicker, setShowPicker] = useState(false);
 
-  const appState = useAppState()
+  const appState = useAppState();
 
-  const pickerRef = useRef(null)
+  const pickerRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event: unknown) => {
       //@ts-expect-error unknown typing
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
-        setShowPicker(false)
+        setShowPicker(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div
@@ -51,8 +51,8 @@ const ColorPicker = () => {
           onChange={(e) => {
             const hexColor = e.target.value.includes('#')
               ? e.target.value
-              : `#${e.target.value}`
-            appState?.setEditorColor(hexColor)
+              : `#${e.target.value}`;
+            appState?.setEditorColor(hexColor);
           }}
         >
           {appState?.appState.editorColor}
@@ -65,14 +65,14 @@ const ColorPicker = () => {
             disableAlpha={true}
             color={appState?.appState.editorColor}
             onChange={(color) => {
-              appState?.setEditorColor(color.hex)
+              appState?.setEditorColor(color.hex);
             }}
           />
         </div>
       </When>
     </div>
-  )
-}
+  );
+};
 
 export const StyledTextInput = styled(TextField, {
   shouldForwardProp: (prop) => prop !== 'padding',
@@ -104,6 +104,6 @@ export const StyledTextInput = styled(TextField, {
       fontSize: '13px',
     },
   },
-}))
+}));
 
-export default ColorPicker
+export default ColorPicker;

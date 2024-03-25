@@ -1,43 +1,43 @@
-import DBClient from '@/lib/db'
+import DBClient from '@/lib/db';
 import {
   SettingRequest,
   SettingResponse,
   SettingResponseSchema,
-} from '@/types/setting'
-import { getCurrentUser } from '@/utils/common'
-import { PrismaClient } from '@prisma/client'
+} from '@/types/setting';
+import { getCurrentUser } from '@/utils/common';
+import { PrismaClient } from '@prisma/client';
 
 export class SettingService {
-  private prismaClient: PrismaClient = DBClient.getInstance()
+  private prismaClient: PrismaClient = DBClient.getInstance();
 
   async findByWorkspaceId(
-    workspaceId: string,
+    workspaceId: string
   ): Promise<SettingResponse | null> {
     const setting = await this.prismaClient.setting.findFirst({
       where: { workspaceId },
       include: {
         bannerImage: true,
       },
-    })
+    });
     if (!setting) {
-      return null
+      return null;
     }
 
-    return SettingResponseSchema.parse(setting)
+    return SettingResponseSchema.parse(setting);
   }
 
   async save(
     requestData: SettingRequest & {
-      workspaceId: string
-    },
+      workspaceId: string;
+    }
   ): Promise<void> {
-    const currentUser = await getCurrentUser(requestData.token)
+    const currentUser = await getCurrentUser(requestData.token);
 
     const settingByWorkspaceId = await this.prismaClient.setting.findFirst({
       where: {
         workspaceId: requestData.workspaceId,
       },
-    })
+    });
 
     if (!settingByWorkspaceId) {
       await this.prismaClient.setting.create({
@@ -51,9 +51,9 @@ export class SettingService {
           // @ts-expect-error Notifications has already been parsed and error handled
           notifications: requestData.notifications,
         },
-      })
+      });
 
-      return
+      return;
     }
 
     await this.prismaClient.setting.update({
@@ -68,6 +68,6 @@ export class SettingService {
         // @ts-expect-error Notifications has already been parsed and error handled
         notifications: requestData.notifications,
       },
-    })
+    });
   }
 }

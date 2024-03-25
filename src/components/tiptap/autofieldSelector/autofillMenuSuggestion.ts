@@ -1,25 +1,25 @@
-import { ReactRenderer } from '@tiptap/react'
-import tippy from 'tippy.js'
-import { AutofillMenu } from './AutofillMenu'
-import { staticAutofillValues } from '@/utils/constants'
-import { ICustomField } from '@/types/interfaces'
-import { z } from 'zod'
+import { ReactRenderer } from '@tiptap/react';
+import tippy from 'tippy.js';
+import { AutofillMenu } from './AutofillMenu';
+import { staticAutofillValues } from '@/utils/constants';
+import { ICustomField } from '@/types/interfaces';
+import { z } from 'zod';
 
 async function getCustomFields(token: string) {
   const res = await fetch(`/api/autofill?token=${token}`, {
     next: { revalidate: 0 },
-  })
-  const { autofillFields } = await res.json()
+  });
+  const { autofillFields } = await res.json();
 
-  return autofillFields
+  return autofillFields;
 }
 
-let customFields: ICustomField[] = []
+let customFields: ICustomField[] = [];
 
-const token = new URLSearchParams(document?.location?.search).get('token')
-;(async () => {
-  customFields = await getCustomFields(z.string().parse(token))
-})()
+const token = new URLSearchParams(document?.location?.search).get('token');
+(async () => {
+  customFields = await getCustomFields(z.string().parse(token));
+})();
 
 export const autofillMenuSuggestion = {
   items: async ({ query }: any) => {
@@ -29,16 +29,16 @@ export const autofillMenuSuggestion = {
     ]
 
       .filter((item: any) =>
-        item.toLowerCase().replaceAll('{{', '').startsWith(query.toLowerCase()),
+        item.toLowerCase().replaceAll('{{', '').startsWith(query.toLowerCase())
       )
-      .slice(0, 10)
+      .slice(0, 10);
   },
 
   char: '{{',
 
   render: () => {
-    let component: any
-    let popup: any
+    let component: any;
+    let popup: any;
 
     return {
       addAttributes() {
@@ -46,17 +46,17 @@ export const autofillMenuSuggestion = {
           customFields: {
             default: [],
           },
-        }
+        };
       },
 
       onStart: (props: any) => {
         component = new ReactRenderer(AutofillMenu, {
           props,
           editor: props.editor,
-        })
+        });
 
         if (!props.clientRect) {
-          return
+          return;
         }
 
         popup = tippy('body', {
@@ -67,35 +67,35 @@ export const autofillMenuSuggestion = {
           interactive: true,
           trigger: 'manual',
           placement: 'bottom-start',
-        })
+        });
       },
 
       onUpdate(props: any) {
-        component.updateProps(props)
+        component.updateProps(props);
 
         if (!props.clientRect) {
-          return
+          return;
         }
 
         popup[0].setProps({
           getReferenceClientRect: props.clientRect,
-        })
+        });
       },
 
       onKeyDown(props: any) {
         if (props.event.key === 'Escape') {
-          popup[0].hide()
+          popup[0].hide();
 
-          return true
+          return true;
         }
 
-        return component?.ref?.onKeyDown(props)
+        return component?.ref?.onKeyDown(props);
       },
 
       onExit() {
-        popup[0].destroy()
-        component.destroy()
+        popup[0].destroy();
+        component.destroy();
       },
-    }
+    };
   },
-}
+};

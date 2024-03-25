@@ -1,6 +1,6 @@
-import { mergeAttributes, Node } from '@tiptap/core'
-import { ReactNodeViewRenderer } from '@tiptap/react'
-import { Linkpdf } from './Linkpdf'
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
+import { Linkpdf } from './Linkpdf';
 
 export default Node.create({
   name: 'linkpdfComponent',
@@ -12,16 +12,16 @@ export default Node.create({
       {
         tag: 'linkpdf',
       },
-    ]
+    ];
   },
 
   whitespace: 'normal',
 
   renderHTML({ HTMLAttributes }) {
-    return ['linkpdf', mergeAttributes(HTMLAttributes), 0]
+    return ['linkpdf', mergeAttributes(HTMLAttributes), 0];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Linkpdf)
+    return ReactNodeViewRenderer(Linkpdf);
   },
-})
+});
