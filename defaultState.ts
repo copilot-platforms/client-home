@@ -1,7 +1,7 @@
 export const defaultState = `
 
 <callout>This page is a sample of what you can include in your Home app. Edit the content and add a banner image to give your clients a personalized experience when they open up the client portal.</callout>
-<h1>Welcome, {{client.givenName}}</h1>
+<h1>Welcome, <span data-type="mention" class="autofill-pill" data-id="{{client.givenName}}" contenteditable="false">{{client.givenName}}</span></h1>
 <p>Welcome to BrandMages, a full-service marketing agency that helps businesses increase their brand awareness, attract new customers, and grow their bottom line. We specialize in crafting unique and effective marketing strategies that align with your business goals and help you stand out in a crowded marketplace.</p>
 <p></p>
 <p>Here are our Working Hours:</p>
