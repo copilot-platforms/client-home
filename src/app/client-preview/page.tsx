@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import InvalidToken from '../components/InvalidToken'
+import { defaultState } from '../../../defaultState'
 
 export const revalidate = 0
 
@@ -59,7 +60,7 @@ export default async function ClientPreviewPage({
   const allCustomFields = await getCustomFields(searchParams.token)
 
   let settings: ISettings = {
-    content: '',
+    content: defaultState,
     backgroundColor: '#ffffff',
     id: '',
     bannerImage: {

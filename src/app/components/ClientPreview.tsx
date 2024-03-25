@@ -124,8 +124,8 @@ const ClientPreview = ({
   })
 
   useEffect(() => {
-    appState?.toggleReadOnly(true)
     if (editor && content) {
+      appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
         backgroundColor: '#ffffff',
@@ -148,7 +148,7 @@ const ClientPreview = ({
       }
       appState?.setSettings(settings || _settings)
     }
-  }, [editor, content])
+  }, [editor, content, settings])
 
   useEffect(() => {
     if (editor) editor.chain().focus('start').run()
