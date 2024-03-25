@@ -30,6 +30,7 @@ export interface IAppState {
   customFields: ICustomField[]
   token: string
   notifications: INotification | undefined
+  showEmbedInput: boolean
 }
 
 export interface IAppContext {
@@ -52,6 +53,7 @@ export interface IAppContext {
   setBannerImgId: (imageId: string) => void
   setToken: (token: string) => void
   setNotification: (notification: INotification) => void
+  setShowEmbedInput: (v: boolean) => void
 }
 
 interface IAppCoreProvider {
@@ -80,6 +82,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     token: '',
     showNotificationsModal: false,
     notifications: undefined,
+    showEmbedInput: false,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -160,6 +163,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, notifications: notification }))
   }
 
+  const setShowEmbedInput = (v: boolean) => {
+    setState((prev) => ({ ...prev, showEmbedInput: v }))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -182,6 +189,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setBannerImgId,
         setToken,
         setNotification,
+        setShowEmbedInput,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>

@@ -101,6 +101,13 @@ export const floatingMenuSuggestion = {
           tiptapEditorUtils.insertCallout('')
         },
       },
+      {
+        title: 'Embed',
+        command: ({ editor, range }: { editor: Editor; range: any }) => {
+          const tiptapEditorUtils = new TiptapEditorUtils(editor)
+          tiptapEditorUtils.deleteRange(range)
+        },
+      },
     ]
       .filter((item) =>
         item.title

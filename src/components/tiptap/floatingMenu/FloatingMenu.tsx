@@ -56,6 +56,8 @@ const FloatingContainerBtn = ({
           <TableIcon />
         ) : label === 'Callout' ? (
           <CalloutIcon />
+        ) : label === 'Embed' ? (
+          <EmbedIcon />
         ) : (
           <></>
         )}
@@ -77,6 +79,9 @@ export const FloatingMenu = forwardRef((props: any, ref: any) => {
 
     if (item) {
       props.command({ id: item })
+      if (item.title === 'Embed') {
+        appState?.setShowEmbedInput(true)
+      }
     }
   }
 
