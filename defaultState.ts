@@ -1,8 +1,8 @@
 export const defaultState = `
 
-<callout>This page is a sample of what you can include in your Home app. Edit the content and add a banner image to give your clients a personalized experience when they open up the client portal.</callout>
+<callout>This page is a sample of what you can include in your Home app. Edit the content and add a banner image to give your clients a personalized experience when they open up the client portal. The Tasks widget will show clients notifications for actions they have to take, if they have any.</callout>
 <h1>Welcome, <span data-type="mention" class="autofill-pill" data-id="{{client.givenName}}" contenteditable="false">{{client.givenName}}</span></h1>
-<p>Welcome to BrandMages, a full-service marketing agency that helps businesses increase their brand awareness, attract new customers, and grow their bottom line. We specialize in crafting unique and effective marketing strategies that align with your business goals and help you stand out in a crowded marketplace.</p>
+<p>Welcome to Copilot, a full-service marketing agency that helps businesses increase their brand awareness, attract new customers, and grow their bottom line. We specialize in crafting unique and effective marketing strategies that align with your business goals and help you stand out in a crowded marketplace.</p>
 <p></p>
 <p>Here are our Working Hours:</p>
 <table>
@@ -41,11 +41,11 @@ export const defaultState = `
       </tr>
    </tbody>
 </table>
-<h1>How to use the BrandMages portal</h1>
+<h1>How to use the Copilot portal</h1>
 <h3>💬&nbsp;Messages</h3>
-<p>Chat with the BrandMages team or ask questions — make sure to check the Helpdesk first for some FAQs!</p>
+<p>Chat with the Copilot team or ask questions — make sure to check the Helpdesk first for some FAQs!</p>
 <h3>📂&nbsp;Files</h3>
-<p>Use this tab to share files with the BrandMages team — you can upload any required documents and assets here. This is where we will store files for reference in the future.</p>
+<p>Use this tab to share files with the Copilot team — you can upload any required documents and assets here. This is where we will store files for reference in the future.</p>
 <h3>📜&nbsp;Contracts</h3>
 <p>View and sign contracts shared by our team.</p>
 <h3>📤&nbsp;Forms</h3>
@@ -57,7 +57,7 @@ export const defaultState = `
 <h3>📊&nbsp;Analytics</h3>
 <p>View custom analytics reports for your business.</p>
 <h3>🌇&nbsp;Media Gallery</h3>
-<p>See any visual and design work that the BrandMages team has completed.</p>
+<p>See any visual and design work that the Copilot team has completed.</p>
 <h3>📈&nbsp;Project status</h3>
 <p>Track the projects we’re working on for you.</p>
 
