@@ -41,7 +41,7 @@ import NoteDisplay from '@/components/display/NoteDisplay'
 import { When } from '@/components/hoc/When'
 
 import { useAppState } from '@/hooks/useAppState'
-import { IClient, ISettings } from '@/types/interfaces'
+import { ISettings } from '@/types/interfaces'
 import LoaderComponent from '@/components/display/Loader'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput'

@@ -1,4 +1,4 @@
-import { BubbleMenu, Editor } from '@tiptap/react'
+import { Editor } from '@tiptap/react'
 import { FC, ReactNode } from 'react'
 
 import {
