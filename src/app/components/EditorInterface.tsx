@@ -54,6 +54,8 @@ import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_aut
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppDataContext } from '@/hooks/useAppData'
 import { defaultNotificationOptions } from '@/utils/notifications'
+import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
+import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -69,6 +71,9 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
     extensions: [
       AutofillExtension,
       NotificationWidgetExtension,
+      IframeExtension.configure({
+        allowFullscreen: true,
+      }),
       Document,
       Paragraph,
       Heading,
@@ -400,6 +405,13 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                   offset={[0, 6]}
                 >
                   <BubbleLinkInput />
+                </ControlledBubbleMenu>
+                <ControlledBubbleMenu
+                  editor={editor}
+                  open={() => appState?.appState.showEmbedInput as boolean}
+                  offset={[0, 6]}
+                >
+                  <BubbleEmbedInput />
                 </ControlledBubbleMenu>
                 <ControlledBubbleMenu
                   editor={editor}

@@ -149,6 +149,10 @@ export class TiptapEditorUtils {
       .run()
   }
 
+  insertEmbed(url: string) {
+    this.editor.chain().focus().setIframe({ src: url }).run()
+  }
+
   getSelectedText() {
     const { view, state } = this.editor
     const { from, to } = view.state.selection

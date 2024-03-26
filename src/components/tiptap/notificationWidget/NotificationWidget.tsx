@@ -58,7 +58,10 @@ export const NotificationWidget = () => {
           datatype='draggable-item'
           onMouseOver={() => setHovered(true)}
           onMouseOut={() => setHovered(false)}
-          style={{ position: 'relative', cursor: 'pointer' }}
+          style={{
+            position: 'relative',
+            cursor: appState?.appState.readOnly ? 'auto' : 'pointer',
+          }}
         >
           <Typography variant='h2' datatype='draggable-item'>
             You have {taskCount} task
