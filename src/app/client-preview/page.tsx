@@ -56,7 +56,6 @@ export default async function ClientPreviewPage({
   const token = tokenParsed.data
 
   const clientId = z.string().uuid().parse(searchParams.clientId)
-  const allCustomFields = await getCustomFields(searchParams.token)
 
   let settings: ISettings = {
     content: '',
@@ -74,15 +73,17 @@ export default async function ClientPreviewPage({
     displayTasks: false,
   }
 
-  const defaultSetting = await getSettings(token)
+  const [defaultSetting, allCustomFields, _client] = await Promise.all([
+    getSettings(token),
+    getCustomFields(searchParams.token),
+    getClient(clientId, token),
+  ])
+
+  const company = await getCompany(_client.companyId, token)
 
   if (defaultSetting) {
     settings = defaultSetting
   }
-
-  const _client = await getClient(clientId, token)
-
-  const company = await getCompany(_client.companyId, token)
 
   const template = Handlebars?.compile(settings?.content)
 
