@@ -9,7 +9,7 @@ export async function getCurrentUser(apiToken: string): Promise<MeResponse> {
 }
 
 export async function getTokenPayload(
-  apiToken: string
+  apiToken: string,
 ): Promise<Token | undefined> {
   const copilotClient = new CopilotAPI(apiToken)
   return await copilotClient.getTokenPayload()
@@ -20,6 +20,6 @@ export function errorHandler(message: string, status: number = 200) {
     { message },
     {
       status,
-    }
+    },
   )
 }

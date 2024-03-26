@@ -8,7 +8,7 @@ export class MediaService {
 
   async save(
     requestData: MediaRequest,
-    blobUrl: string
+    blobUrl: string,
   ): Promise<MediaResponse | null> {
     const currentUser = await getCurrentUser(requestData.token)
     const media = await this.prismaClient.media.create({

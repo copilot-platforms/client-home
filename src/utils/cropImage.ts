@@ -18,7 +18,7 @@ export interface FlipOptions {
 export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
-  flip: FlipOptions = { horizontal: false, vertical: false }
+  flip: FlipOptions = { horizontal: false, vertical: false },
 ): Promise<Blob | null> {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
@@ -47,7 +47,7 @@ export default async function getCroppedImg(
     0,
     0,
     pixelCrop.width,
-    pixelCrop.height
+    pixelCrop.height,
   )
 
   return new Promise<Blob | null>((resolve) => {

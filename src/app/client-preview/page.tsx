@@ -12,14 +12,14 @@ export const revalidate = 0
 
 async function getSettings(token: string) {
   const { data } = await fetch(`${apiUrl}/api/settings?token=${token}`).then(
-    (res) => res.json()
+    (res) => res.json(),
   )
   return data
 }
 
 async function getClient(clientId: string, token: string): Promise<IClient> {
   const res = await fetch(
-    `${apiUrl}/api/client?clientId=${clientId}&token=${token}`
+    `${apiUrl}/api/client?clientId=${clientId}&token=${token}`,
   )
   if (!res.ok) {
     throw new Error(`No client found with '${token}' token`)
@@ -30,7 +30,7 @@ async function getClient(clientId: string, token: string): Promise<IClient> {
 
 async function getCompany(companyId: string, token: string) {
   const res = await fetch(
-    `${apiUrl}/api/companies?companyId=${companyId}&token=${token}`
+    `${apiUrl}/api/companies?companyId=${companyId}&token=${token}`,
   )
 
   const { data } = await res.json()

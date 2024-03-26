@@ -12,15 +12,15 @@ const AutofillFields = () => {
   const [remainingAutofill, setRemainingAutofill] = useState<ICustomField[]>([])
 
   const tiptapEditorUtils = new TiptapEditorUtils(
-    appState?.appState.editor as Editor
+    appState?.appState.editor as Editor,
   )
 
   function getRemainingAutofillFields(
     customFields: ICustomField[],
-    clientCustomField: any
+    clientCustomField: any,
   ) {
     return customFields.filter(
-      (itemA: any) => !Object.keys(clientCustomField).includes(itemA.key)
+      (itemA: any) => !Object.keys(clientCustomField).includes(itemA.key),
     )
   }
 
@@ -32,11 +32,11 @@ const AutofillFields = () => {
       appState?.setLoading(true)
       const output = getRemainingAutofillFields(
         appState?.appState.customFields,
-        appState?.appState.selectedClient?.customFields
+        appState?.appState.selectedClient?.customFields,
       )
       setRemainingAutofill(output)
       const res = await fetch(
-        `/api/companies?companyId=${appState?.appState.selectedClient?.companyId}&token=${appState?.appState?.token}`
+        `/api/companies?companyId=${appState?.appState.selectedClient?.companyId}&token=${appState?.appState?.token}`,
       )
       const { data } = await res.json()
       if (data.name) {
@@ -80,10 +80,10 @@ const AutofillFields = () => {
           />
           {appState?.appState?.selectedClient &&
             Object.keys(
-              (appState?.appState?.selectedClient as IClient)?.customFields
+              (appState?.appState?.selectedClient as IClient)?.customFields,
             ).length > 0 &&
             Object.entries(
-              (appState?.appState?.selectedClient as IClient)?.customFields
+              (appState?.appState?.selectedClient as IClient)?.customFields,
             ).map((value, key) => {
               return (
                 <AutofillTextReadonlyMode
@@ -180,7 +180,7 @@ const AutofillTextReadonlyMode = ({
 }) => {
   const appState = useAppState()
   const name = appState?.appState.customFields.find(
-    (el) => el.key === labelName
+    (el) => el.key === labelName,
   )?.name
   if (Array.isArray(labelValues)) {
     return (

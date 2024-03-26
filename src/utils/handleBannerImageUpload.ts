@@ -1,6 +1,6 @@
 export const handleBannerImageUpload = async (
   imageFile: File,
-  token: string
+  token: string,
 ) => {
   try {
     const formData = new FormData()

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   if (!payload) {
     return NextResponse.json(
       { error: 'Failed to parse token payload' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 
@@ -37,7 +37,7 @@ export async function PUT(request: NextRequest) {
   if (!payload) {
     return NextResponse.json(
       { error: 'Failed to parse token payload' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 

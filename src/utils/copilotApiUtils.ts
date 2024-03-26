@@ -44,7 +44,7 @@ export class CopilotAPI {
 
   async getClient(clientId: string): Promise<ClientResponse> {
     return ClientResponseSchema.parse(
-      await this.copilot.retrieveAClient({ id: clientId })
+      await this.copilot.retrieveAClient({ id: clientId }),
     )
   }
 
@@ -54,7 +54,7 @@ export class CopilotAPI {
 
   async getCompany(companyId: string): Promise<CompanyResponse> {
     return CompanyResponseSchema.parse(
-      await this.copilot.retrieveACompany({ id: companyId })
+      await this.copilot.retrieveACompany({ id: companyId }),
     )
   }
 
@@ -64,7 +64,7 @@ export class CopilotAPI {
 
   async getCustomFields(): Promise<CustomFieldResponse> {
     return CustomFieldResponseSchema.parse(
-      await this.copilot.listCustomFields()
+      await this.copilot.listCustomFields(),
     )
   }
 

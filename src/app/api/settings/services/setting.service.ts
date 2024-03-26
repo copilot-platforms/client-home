@@ -11,7 +11,7 @@ export class SettingService {
   private prismaClient: PrismaClient = DBClient.getInstance()
 
   async findByWorkspaceId(
-    workspaceId: string
+    workspaceId: string,
   ): Promise<SettingResponse | null> {
     const setting = await this.prismaClient.setting.findFirst({
       where: { workspaceId },
@@ -29,7 +29,7 @@ export class SettingService {
   async save(
     requestData: SettingRequest & {
       workspaceId: string
-    }
+    },
   ): Promise<void> {
     const currentUser = await getCurrentUser(requestData.token)
 

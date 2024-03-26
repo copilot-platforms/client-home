@@ -160,7 +160,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
-        appState?.appState.originalTemplate || ''
+        appState?.appState.originalTemplate || '',
       )
       const c = template(appData)
       setTimeout(() => {
@@ -278,7 +278,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
                 notifications:
                   settings?.notifications || defaultNotificationOptions,
               }
-            : _settings
+            : _settings,
         )
         appState?.setToken(token)
       }
@@ -289,10 +289,10 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (!appState?.appState.settings) return
     appState?.setEditorColor(
-      (appState?.appState.settings as ISettings).backgroundColor
+      (appState?.appState.settings as ISettings).backgroundColor,
     )
     appState?.setBannerImgUrl(
-      (appState?.appState.settings as ISettings).bannerImage?.url || ''
+      (appState?.appState.settings as ISettings).bannerImage?.url || '',
     )
   }, [appState?.appState.settings])
 
@@ -302,8 +302,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setBannerImage(
           (await imagePickerUtils.convertBlobToUrlString(
-            appState?.appState.bannerImgUrl
-          )) as string
+            appState?.appState.bannerImgUrl,
+          )) as string,
         )
       } else {
         setBannerImage(appState?.appState.bannerImgUrl as string)

@@ -15,12 +15,12 @@ const DisplayTasksToggle = () => {
           .setContent(
             appState?.appState.originalTemplate?.includes('notification_widget')
               ? appState?.appState.originalTemplate
-              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`
+              : `<notification_widget></notification_widget>${appState?.appState.originalTemplate}`,
           )
           .run()
       }
       appState?.setOriginalTemplate(
-        appState?.appState.editor?.getHTML() as string
+        appState?.appState.editor?.getHTML() as string,
       )
     } else {
       if (appState?.appState.editor) {
@@ -30,8 +30,8 @@ const DisplayTasksToggle = () => {
           .setContent(
             appState?.appState.originalTemplate?.replace(
               '<notification_widget></notification_widget>',
-              ''
-            ) || ''
+              '',
+            ) || '',
           )
           .run()
       }

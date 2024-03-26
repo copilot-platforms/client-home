@@ -6,14 +6,14 @@ import { ApiError } from '@/exceptions/ApiError'
 import httpStatus from 'http-status'
 
 export const parseToken = async (
-  request: NextRequest
+  request: NextRequest,
 ): Promise<{ token: string; payload: Token; copilot: CopilotAPI }> => {
   const searchParams = request.nextUrl.searchParams
   const token = z.string().safeParse(searchParams?.get('token'))
   if (!token.success)
     throw new ApiError(
       httpStatus.UNPROCESSABLE_ENTITY,
-      'Please provide a valid token'
+      'Please provide a valid token',
     )
 
   const copilot = new CopilotAPI(token.data)
@@ -21,7 +21,7 @@ export const parseToken = async (
   if (!payload)
     throw new ApiError(
       httpStatus.UNPROCESSABLE_ENTITY,
-      'Cannot parse authorization data from token'
+      'Cannot parse authorization data from token',
     )
 
   return { token: token.data, payload: payload, copilot }

@@ -14,7 +14,7 @@ const BubbleLinkInput = () => {
   const urlInputRef = useRef<HTMLInputElement>(null)
 
   const tiptapEditorUtils = new TiptapEditorUtils(
-    appState?.appState.editor as Editor
+    appState?.appState.editor as Editor,
   )
 
   const handleKeyDown = (event: SyntheticEvent<HTMLDivElement>) => {

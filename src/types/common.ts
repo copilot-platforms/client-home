@@ -32,7 +32,7 @@ export const ClientResponseSchema = z.object({
   customFields: z
     .record(
       z.string(),
-      z.union([z.string().nullable(), z.array(z.string()).nullable()])
+      z.union([z.string().nullable(), z.array(z.string()).nullable()]),
     )
     .nullable(),
   avatarImageUrl: z.string().nullable(),
@@ -68,10 +68,10 @@ export const CustomFieldResponseSchema = z.object({
               key: z.string(),
               label: z.string(),
               color: z.string(),
-            })
+            }),
           )
           .optional(),
-      })
+      }),
     )
     .nullable(),
 })
@@ -86,6 +86,6 @@ export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>
 export const NotificationsSchema = z.array(
   z.object({
     event: z.string(),
-  })
+  }),
 )
 export type Notifications = z.infer<typeof NotificationsSchema>

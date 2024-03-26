@@ -13,11 +13,11 @@ export const revalidate = 0
 async function listClients(token: string) {
   const copilotClient = new CopilotAPI(token)
   const clientList = ClientsResponseSchema.parse(
-    await copilotClient.getClients()
+    await copilotClient.getClients(),
   )
 
   return (clientList.data?.sort((a, b) =>
-    a.givenName.localeCompare(b.givenName)
+    a.givenName.localeCompare(b.givenName),
   ) || []) as IClient[]
 }
 

@@ -73,7 +73,7 @@ export const floatingMenuSuggestion = {
           const imagePickerUtils = new ImagePickerUtils()
           const file = await imagePickerUtils.selectImageFromLocalDrive()
           const token = new URLSearchParams(document.location.search).get(
-            'token'
+            'token',
           )
           if (file && token) {
             const data = await handleBannerImageUpload(file, token)
@@ -106,7 +106,7 @@ export const floatingMenuSuggestion = {
         item.title
           .toLowerCase()
           .replace(' ', '')
-          .startsWith(query.toLowerCase())
+          .startsWith(query.toLowerCase()),
       )
       .slice(0, 12)
   },

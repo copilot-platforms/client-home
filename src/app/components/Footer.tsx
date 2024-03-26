@@ -19,7 +19,7 @@ export const Footer = () => {
         body: JSON.stringify(payload),
       })
       const res = await fetch(
-        `/api/settings?token=${appState?.appState?.token}`
+        `/api/settings?token=${appState?.appState?.token}`,
       )
       const { data } = await res.json()
       if (data) {
@@ -47,11 +47,11 @@ export const Footer = () => {
       const imageBlob = await imageResponse.blob()
       const imageFile = await imagePickerUtils.blobToFile(
         imageBlob,
-        'bannerImg'
+        'bannerImg',
       )
       const data = await handleBannerImageUpload(
         imageFile as File,
-        appState?.appState.token as string
+        appState?.appState.token as string,
       )
       payload = {
         backgroundColor: appState?.appState.editorColor,
@@ -93,11 +93,11 @@ export const Footer = () => {
       const imagePickerUtils = new ImagePickerUtils()
       const imageFile = await imagePickerUtils.blobToFile(
         appState?.appState.bannerImgUrl as Blob,
-        'bannerImg'
+        'bannerImg',
       )
       const data = await handleBannerImageUpload(
         imageFile as File,
-        appState?.appState.token as string
+        appState?.appState.token as string,
       )
       payload = {
         backgroundColor: appState?.appState.editorColor,
@@ -122,7 +122,7 @@ export const Footer = () => {
   const handleCancel = async () => {
     if (appState?.appState.editor) {
       appState?.setEditorColor(
-        appState.appState.settings?.backgroundColor as string
+        appState.appState.settings?.backgroundColor as string,
       )
       appState?.appState.editor
         .chain()
@@ -131,7 +131,7 @@ export const Footer = () => {
         .run()
     }
     appState?.setBannerImgUrl(
-      appState?.appState.settings?.bannerImage?.url || ''
+      appState?.appState.settings?.bannerImage?.url || '',
     )
     appState?.setBannerImgId(appState?.appState.settings?.bannerImage?.id || '')
     appState?.toggleChangesCreated(false)

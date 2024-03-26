@@ -21,7 +21,7 @@ export const NotificationWidget = () => {
   function isAllNotificationsTurnedOff() {
     if (appState?.appState.settings?.notifications) {
       return !appState?.appState.settings?.notifications?.some(
-        (notification) => notification.show
+        (notification) => notification.show,
       )
     }
   }
@@ -127,7 +127,7 @@ export const NotificationWidget = () => {
                     )
                   }
                 }
-              }
+              },
             )}
           </Stack>
           <Box

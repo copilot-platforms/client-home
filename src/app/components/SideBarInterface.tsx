@@ -47,7 +47,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           }`
     }`,
     fetcher,
-    { refreshInterval: 5000 }
+    { refreshInterval: 5000 },
   )
 
   useMemo(() => {
@@ -77,8 +77,8 @@ const SideBarInterface: FC<IEditorInterface> = ({
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setShowImage(
           (await imagePickerUtils.convertBlobToUrlString(
-            appState?.appState.bannerImgUrl
-          )) as string
+            appState?.appState.bannerImgUrl,
+          )) as string,
         )
       } else {
         setShowImage(appState?.appState.bannerImgUrl || '')

@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 export const ImageResizeComponent = (props: any) => {
   const handler = (mouseDownEvent: React.MouseEvent<HTMLImageElement>) => {
     const parent = (mouseDownEvent.target as HTMLElement).closest(
-      '.image-resizer'
+      '.image-resizer',
     )
     const image = parent?.querySelector('img.postimage') ?? null
     if (image === null) return

@@ -24,7 +24,7 @@ const ImagePicker: FC<IImagePicker> = ({ getImage, showImage }) => {
         setShowCropper(true)
       }
     },
-    [getImage]
+    [getImage],
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

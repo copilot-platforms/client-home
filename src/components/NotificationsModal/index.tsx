@@ -32,7 +32,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const [showError, setShowError] = useState(false)
   const [saving, setSaving] = useState(false)
   const [formState, setFormState] = useState<NonNullable<Notification>>(
-    order(settings?.notifications || defaultNotificationOptions)
+    order(settings?.notifications || defaultNotificationOptions),
   )
 
   useMemo(() => {
@@ -45,8 +45,8 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
     setFormState(
       order(
         appState?.appState?.settings?.notifications ||
-          defaultNotificationOptions
-      )
+          defaultNotificationOptions,
+      ),
     )
     appState?.toggleNotificationsModal()
   }
@@ -102,7 +102,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         delay: 200,
         tolerance: 6,
       },
-    })
+    }),
   )
 
   return (

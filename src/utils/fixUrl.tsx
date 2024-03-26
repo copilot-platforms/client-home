@@ -6,7 +6,7 @@ export const fixUrl = (url: string) => {
       '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
       '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
       '(\\#[-a-z\\d_]*)?$', // fragment locator
-    'i'
+    'i',
   )
 
   // Check if the URL matches the pattern

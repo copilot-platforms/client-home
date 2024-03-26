@@ -22,7 +22,7 @@ interface IBubbleMenuContainer {
 
 const DropdownBubbleMenu: FC<IBubbleMenuContainer> = ({ editor }) => {
   const [selectedFormatter, setSelectedFormatter] = useState<Formatter>(
-    Formatter.text
+    Formatter.text,
   )
 
   const tiptapEditorUtils = new TiptapEditorUtils(editor)

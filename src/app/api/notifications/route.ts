@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     if (!clientId) {
       throw new ApiError(
         httpStatus.UNPROCESSABLE_ENTITY,
-        'Failed to parse clientId'
+        'Failed to parse clientId',
       )
     }
 
