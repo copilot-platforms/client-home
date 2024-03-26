@@ -28,8 +28,9 @@ const ColorPicker = () => {
 
   return (
     <div
-      className='py-600 px-500 border-1 border-b relative flex justify-between p-4 gap-3 z-0 items-center'
+      className='py-600 px-500 border-1 border-b relative flex justify-between p-4 gap-3 items-center'
       ref={pickerRef}
+      style={{ zIndex: 999999 }}
     >
       <p className='font-medium'>Background</p>
       <div className='flex gap-3'>

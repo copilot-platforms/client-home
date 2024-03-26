@@ -35,18 +35,20 @@ import { ImageResize } from '@/components/tiptap/image/image'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppState } from '@/hooks/useAppState'
-import { INotification, ISettings } from '@/types/interfaces'
-import { defaultBannerImagePath } from '@/utils/constants'
+import { ISettings } from '@/types/interfaces'
 import { defaultState } from '../../../defaultState'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
+import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 
 const ClientPreview = ({
   content,
   settings,
-  notifications,
+  token,
 }: {
   content: string
   settings: ISettings
-  notifications: INotification
+  token: string
 }) => {
   /**
    * Importing all the editor related imports and settings up this editor
@@ -60,6 +62,9 @@ const ClientPreview = ({
     extensions: [
       AutofillExtension,
       NotificationWidgetExtension,
+      IframeExtension.configure({
+        allowFullscreen: true,
+      }),
       Document,
       Paragraph,
       Heading,
@@ -117,8 +122,13 @@ const ClientPreview = ({
     content: content || defaultState,
   })
 
+  const { data } = useSWR(`api/notifications?token=${token}`, fetcher, {
+    refreshInterval: 5000,
+  })
+
   useEffect(() => {
     if (editor && content) {
+      appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
         backgroundColor: '#ffffff',
@@ -136,18 +146,20 @@ const ClientPreview = ({
       }
       editor.setEditable(false)
       editor.chain().focus('start').setContent(content).run()
-      appState?.toggleReadOnly(true)
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }
       appState?.setSettings(settings || _settings)
-      appState?.setNotification(notifications)
     }
-  }, [editor, content])
+  }, [editor, content, settings])
 
   useEffect(() => {
     if (editor) editor.chain().focus('start').run()
   }, [editor])
+
+  useEffect(() => {
+    appState?.setNotification(data)
+  }, [data])
 
   if (!editor) {
     return null

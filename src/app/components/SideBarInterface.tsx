@@ -12,6 +12,8 @@ import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
 import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
 import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
 
 interface IEditorInterface {
   displayTasks: boolean
@@ -36,12 +38,17 @@ const SideBarInterface: FC<IEditorInterface> = ({
     IClient | string | null
   >(defaultValue)
 
-  const getNotifications = async (clientId: string) => {
-    const notifications = await fetch(
-      `api/notifications?token=${appState?.appState?.token}&clientId=${clientId}`,
-    )
-    return await notifications.json()
-  }
+  const { data } = useSWR(
+    `${
+      dropdownSelectedClient === defaultValue || dropdownSelectedClient === null
+        ? ''
+        : `api/notifications?token=${appState?.appState?.token}&clientId=${
+            (dropdownSelectedClient as IClient).id
+          }`
+    }`,
+    fetcher,
+    { refreshInterval: 5000 },
+  )
 
   useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {
@@ -49,17 +56,14 @@ const SideBarInterface: FC<IEditorInterface> = ({
       appState?.setSelectedClient(null)
       sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      (async () => {
+      ;(async () => {
         appState?.toggleReadOnly(true)
         appState?.setSelectedClient(dropdownSelectedClient as IClient)
-        const notifications = await getNotifications(
-          (dropdownSelectedClient as IClient).id,
-        )
-        appState?.setNotification(notifications)
+        appState?.setNotification(data)
         sideBarRef?.current?.scrollTo({ top: 0, behavior: 'instant' })
       })()
     }
-  }, [dropdownSelectedClient])
+  }, [dropdownSelectedClient, data])
 
   useEffect(() => {
     appState?.toggleDisplayTasks({ override: displayTasks })
@@ -68,7 +72,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [displayTasks, clientList, customFields])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
         setShowImage(

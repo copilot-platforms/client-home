@@ -21,6 +21,7 @@ const SelectOptions: FC<ISelectOptions> = ({ customOptions }) => {
         boxShadow: '0px 6px 20px 0px rgba(0, 0, 0, 0.12)',
         maxHeight: '250px',
         overflowY: 'auto',
+        zIndex: 9999999,
       }}
     >
       {customOptions}

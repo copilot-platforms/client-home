@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import InvalidToken from '../components/InvalidToken'
+import { defaultState } from '../../../defaultState'
 
 export const revalidate = 0
 
@@ -43,12 +44,6 @@ async function getCustomFields(token: string) {
   return (customFieldsList.data || []) as ICustomField[]
 }
 
-async function getNotification(token: string) {
-  const res = await fetch(`${apiUrl}/api/notifications?token=${token}`)
-
-  return await res.json()
-}
-
 export default async function ClientPreviewPage({
   searchParams,
 }: {
@@ -62,10 +57,9 @@ export default async function ClientPreviewPage({
   const token = tokenParsed.data
 
   const clientId = z.string().uuid().parse(searchParams.clientId)
-  const allCustomFields = await getCustomFields(searchParams.token)
 
   let settings: ISettings = {
-    content: '',
+    content: defaultState,
     backgroundColor: '#ffffff',
     id: '',
     bannerImage: {
@@ -80,17 +74,17 @@ export default async function ClientPreviewPage({
     displayTasks: false,
   }
 
-  const defaultSetting = await getSettings(token)
+  const [defaultSetting, allCustomFields, _client] = await Promise.all([
+    getSettings(token),
+    getCustomFields(searchParams.token),
+    getClient(clientId, token),
+  ])
+
+  const company = await getCompany(_client.companyId, token)
 
   if (defaultSetting) {
     settings = defaultSetting
   }
-
-  const _client = await getClient(clientId, token)
-
-  const company = await getCompany(_client.companyId, token)
-
-  const notifications = await getNotification(token)
 
   const template = Handlebars?.compile(settings?.content)
 
@@ -157,7 +151,7 @@ export default async function ClientPreviewPage({
         <ClientPreview
           content={htmlContent}
           settings={settings}
-          notifications={notifications}
+          token={searchParams.token}
         />
       </div>
     </div>
