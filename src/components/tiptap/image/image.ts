@@ -47,7 +47,7 @@ export const ImageResize = Image.extend<ImageOptions>({
         },
       },
       height: {
-        default: 'auto',
+        default: '0',
         renderHTML: (attributes) => {
           return {
             height: attributes.height,

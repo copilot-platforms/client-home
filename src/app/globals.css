@@ -2,23 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.iframe-wrapper {
-  position: relative;
-  padding-bottom: calc(100 / 16 * 9%);
-  height: 0;
-  overflow: hidden;
-  width: 100%;
-  height: auto;
-}
-
-.iframe-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .editable .pill-extension {
   display: inline-flex;
   flex-wrap: wrap;
@@ -39,6 +22,17 @@
   flex-grow: 0;
   max-width: calc(100% - 12px);
 }
+
+.embed {
+  display: inline-flex;
+  position: relative;
+  flex-grow: 0;
+  max-width: calc(100% - 12px);
+}
+.embed:hover .resize-trigger {
+  opacity: 1;
+}
+
 .resize-trigger {
   position: absolute;
   right: -10px;
