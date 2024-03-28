@@ -46,6 +46,7 @@ const DisplayTasksToggle = () => {
   useEffect(() => {
     if (appState?.appState.editor) {
       handleNotificationWidget()
+      appState?.appState.editor?.chain().focus().setTextSelection(0).run()
     }
   }, [appState?.appState.displayTasks])
 
