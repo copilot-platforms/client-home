@@ -1,27 +1,33 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { Resize } from '../image/resizeIcon'
 import { useAppState } from '@/hooks/useAppState'
 import { usePathname } from 'next/navigation'
+import { debounce } from '@mui/material'
 
 export const EmbedComponent = (props: any) => {
+  const [isResizing, setIsResizing] = useState(false)
+
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       const parent = event.currentTarget.closest('.embed')
       const image = parent?.querySelector('div.iframe_container')
       if (!image) return
 
+      setIsResizing(true)
+
       const startSize = { x: image.clientWidth, y: image.clientHeight }
       const startPosition = { x: event.pageX, y: event.pageY }
 
-      const onMouseMove = (mouseMoveEvent: MouseEvent) => {
+      const onMouseMove = debounce((mouseMoveEvent: MouseEvent) => {
         props.updateAttributes({
           width: startSize.x - startPosition.x + mouseMoveEvent.pageX,
           height: startSize.y - startPosition.y + mouseMoveEvent.pageY,
         })
-      }
+      }, 10)
 
       const onMouseUp = () => {
+        setIsResizing(false)
         document.removeEventListener('mousemove', onMouseMove)
         document.removeEventListener('mouseup', onMouseUp)
       }
@@ -29,7 +35,7 @@ export const EmbedComponent = (props: any) => {
       document.addEventListener('mousemove', onMouseMove)
       document.addEventListener('mouseup', onMouseUp)
     },
-    [props],
+    [],
   )
 
   function extractIframeSrc(inputString: string) {
@@ -48,7 +54,7 @@ export const EmbedComponent = (props: any) => {
   const pathname = usePathname()
 
   return (
-    <NodeViewWrapper className='embed'>
+    <NodeViewWrapper className='embed relative'>
       <div
         className='iframe_container'
         style={{
@@ -63,7 +69,10 @@ export const EmbedComponent = (props: any) => {
         />
       </div>
       {!pathname.includes('client-preview') && !appState?.appState.readOnly && (
-        <div className='resize-trigger' onMouseDown={handleMouseDown}>
+        <div
+          className={`resize-trigger${isResizing ? '' : ' !pointer-events-none'} !hover:pointer-events-auto absolute w-full h-full grid place-items-end`}
+          onMouseDown={handleMouseDown}
+        >
           <Resize />
         </div>
       )}

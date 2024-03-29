@@ -1,4 +1,6 @@
-import { Node } from '@tiptap/core'
+import { Node, mergeAttributes } from '@tiptap/core'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { EmbedComponent } from './EmbedComponent'
 
 export interface IframeOptions {
   allowFullscreen: boolean
@@ -28,14 +30,28 @@ export const IframeExtension = Node.create<IframeOptions>({
   addOptions() {
     return {
       allowFullscreen: true,
-      HTMLAttributes: {
-        class: 'iframe-wrapper',
-      },
+      HTMLAttributes: {},
     }
   },
 
   addAttributes() {
     return {
+      width: {
+        default: 400,
+        renderHTML: (attributes) => {
+          return {
+            width: attributes.width,
+          }
+        },
+      },
+      height: {
+        default: 200,
+        renderHTML: (attributes) => {
+          return {
+            height: attributes.height,
+          }
+        },
+      },
       src: {
         default: null,
       },
@@ -52,13 +68,20 @@ export const IframeExtension = Node.create<IframeOptions>({
   parseHTML() {
     return [
       {
-        tag: 'iframe',
+        tag: 'embed',
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', this.options.HTMLAttributes, ['iframe', HTMLAttributes]]
+    return [
+      'embed',
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+    ]
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(EmbedComponent)
   },
 
   addCommands() {
