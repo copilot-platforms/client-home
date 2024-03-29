@@ -191,7 +191,8 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
   useEffect(() => {
     if (
       editor &&
-      appState?.appState.settings?.content?.includes(defaultState)
+      appState?.appState.settings?.content?.includes(defaultState) &&
+      appState?.appState.originalTemplate
     ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==

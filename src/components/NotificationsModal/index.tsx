@@ -117,6 +117,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
           timeout: 250,
         },
       }}
+      sx={{ zIndex: 999999999 }} //highest in the app
     >
       <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[720px] bg-white rounded-md shadow-lg outline-none font-medium'>
         <Fade in={showError}>
