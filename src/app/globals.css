@@ -173,6 +173,7 @@ table {
   margin-top: 4px;
   margin-bottom: 4px;
   padding: 3px 0px;
+  word-break:break-word;
 }
 
 .callout-container > .callout-icon {
