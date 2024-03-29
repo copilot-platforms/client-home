@@ -24,7 +24,7 @@ export const EmbedComponent = (props: any) => {
           width: startSize.x - startPosition.x + mouseMoveEvent.pageX,
           height: startSize.y - startPosition.y + mouseMoveEvent.pageY,
         })
-      }, 1)
+      }, 10)
 
       const onMouseUp = () => {
         setIsResizing(false)
