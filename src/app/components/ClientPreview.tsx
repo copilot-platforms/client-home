@@ -147,6 +147,7 @@ const ClientPreview = ({
       editor.setEditable(false)
       editor.chain().focus('start').setContent(content).run()
       editor?.chain().focus().setTextSelection(0).run()
+      window.scrollBy({ top: 0, left: 0, behavior: 'instant' })
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }
