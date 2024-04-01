@@ -146,6 +146,7 @@ const ClientPreview = ({
       }
       editor.setEditable(false)
       editor.chain().focus('start').setContent(content).run()
+      editor?.chain().focus().setTextSelection(0).run()
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }
