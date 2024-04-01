@@ -127,7 +127,9 @@ const ClientPreview = ({
   })
 
   useEffect(() => {
+    window.scrollBy({ top: 0, left: 0, behavior: 'smooth' })
     if (editor && content) {
+      editor?.chain().focus().setTextSelection(0).run()
       appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
@@ -145,9 +147,7 @@ const ClientPreview = ({
         displayTasks: false,
       }
       editor.setEditable(false)
-      editor.chain().focus('start').setContent(content).run()
-      editor?.chain().focus().setTextSelection(0).run()
-      window.scrollBy({ top: 0, left: 0, behavior: 'instant' })
+      editor.chain().focus().setContent(content).run()
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }
@@ -158,13 +158,16 @@ const ClientPreview = ({
   useEffect(() => {
     if (editor) {
       editor.chain().focus('start').run()
-      editor?.chain().focus().setTextSelection(0).run()
     }
   }, [editor])
 
   useEffect(() => {
     appState?.setNotification(data)
   }, [data])
+
+  useEffect(() => {
+    window.scrollBy({ top: 0, left: 0, behavior: 'smooth' })
+  }, [])
 
   if (!editor) {
     return null
