@@ -8,7 +8,7 @@ import Cropper, { Area, Point } from 'react-easy-crop'
 interface IImageCropper {
   open: boolean
   image: string
-  getImage: (image: Blob) => void
+  getImage: (_image: Blob) => void
   onCancel: () => void
 }
 
@@ -73,7 +73,7 @@ const ImageCropper: FC<IImageCropper> = ({
         onClick={onCancel}
         className='w-11/12 m-auto flex flex-row justify-end gap-6 py-4'
       >
-        <button className='py-1 px-3 text-new-dark rounded text-[13px] rounded bg-white border border-slate-300'>
+        <button className='py-1 px-3 text-new-dark rounded text-[13px] bg-white border border-slate-300'>
           Cancel
         </button>
         <button

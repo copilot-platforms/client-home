@@ -14,7 +14,7 @@ import { Box, Checkbox, Typography } from '@mui/material'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 
-const notificationIcons: { [key in NotificationOption]: SVGIcon } = {
+const notificationIcons: { [_key in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
   forms: FormsIcon,
   contracts: ContractsIcon,
