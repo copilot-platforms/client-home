@@ -1,5 +1,5 @@
 import { copilotApi } from 'copilot-node-sdk'
-import { DefaultService as Copilot } from 'copilot-node-sdk/codegen/api/services/DefaultService'
+import type { CopilotAPI as SDK } from 'copilot-node-sdk'
 import {
   ClientResponse,
   ClientResponseSchema,
@@ -18,10 +18,6 @@ import {
 import type { Notifications, WorkspaceInfo } from '@/types/common'
 import { copilotAPIKey } from '@/config'
 
-export type SDK = typeof Copilot & {
-  getTokenPayload?: () => Promise<Token>
-}
-
 export class CopilotAPI {
   copilot: SDK
 
@@ -32,9 +28,17 @@ export class CopilotAPI {
     })
   }
 
-  async me(): Promise<MeResponse> {
-    //updated method here
-    return MeResponseSchema.parse(await this.copilot.getUserInfo())
+  async me(): Promise<MeResponse | null> {
+    const tokenPayload = await this.getTokenPayload()
+    const id = tokenPayload?.internalUserId || tokenPayload?.clientId
+    if (!tokenPayload || !id) return null
+
+    const retrieveCurrentUserInfo = tokenPayload.internalUserId
+      ? this.copilot.retrieveInternalUser
+      : this.copilot.retrieveClient
+    const currentUserInfo = await retrieveCurrentUserInfo({ id })
+
+    return MeResponseSchema.parse(currentUserInfo)
   }
 
   // Get parsed payload from token
@@ -44,7 +48,7 @@ export class CopilotAPI {
 
   async getClient(clientId: string): Promise<ClientResponse> {
     return ClientResponseSchema.parse(
-      await this.copilot.retrieveAClient({ id: clientId }),
+      await this.copilot.retrieveClient({ id: clientId }),
     )
   }
 
@@ -54,12 +58,12 @@ export class CopilotAPI {
 
   async getCompany(companyId: string): Promise<CompanyResponse> {
     return CompanyResponseSchema.parse(
-      await this.copilot.retrieveACompany({ id: companyId }),
+      await this.copilot.retrieveCompany({ id: companyId }),
     )
   }
 
   async getWorkspaceInfo(): Promise<WorkspaceInfo> {
-    return WorkspaceInfoSchema.parse(await this.copilot.getWorkspaceInfo())
+    return WorkspaceInfoSchema.parse(await this.copilot.retrieveWorkspace())
   }
 
   async getCustomFields(): Promise<CustomFieldResponse> {
