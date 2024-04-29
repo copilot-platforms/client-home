@@ -6,7 +6,7 @@ import ImageCropper from '@/components/imageCropper/ImageCropper'
 import { useDropzone } from 'react-dropzone'
 
 interface IImagePicker {
-  getImage: (file: Blob | null) => void
+  getImage: (_file: Blob | null) => void
   showImage: string
 }
 

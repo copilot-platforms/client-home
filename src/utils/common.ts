@@ -5,7 +5,12 @@ import { MeResponse, Token } from '@/types/common'
 export async function getCurrentUser(apiToken: string): Promise<MeResponse> {
   const copilotClient = new CopilotAPI(apiToken)
 
-  return await copilotClient.me()
+  const me = await copilotClient.me()
+  if (!me) {
+    throw new Error('You are not logged in')
+  }
+
+  return me
 }
 
 export async function getTokenPayload(

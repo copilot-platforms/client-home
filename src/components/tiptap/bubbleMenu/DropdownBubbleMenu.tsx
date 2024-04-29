@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  MenuItem,
-  Popper,
-  Select,
-  SelectChangeEvent,
-  Stack,
-} from '@mui/material'
+import { Button, Popper, Stack } from '@mui/material'
 import { FC, ReactNode, useEffect, useState, MouseEvent } from 'react'
 
 import { CalloutIcon, H1Icon, H2Icon, H3Icon, TextIcon } from '@/icons'
