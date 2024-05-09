@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 
+import { Toaster } from 'react-hot-toast'
 import Handlebars from 'handlebars'
 import { Scrollbars } from 'react-custom-scrollbars'
 import CalloutExtension from '@/components/tiptap/callout/CalloutExtension'
@@ -337,6 +338,7 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
 
   return (
     <>
+      <Toaster position='top-center' toastOptions={{ duration: 5000 }} />
       <When condition={appState?.appState.loading as boolean}>
         <LoaderComponent />
       </When>
