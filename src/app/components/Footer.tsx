@@ -2,10 +2,12 @@
 
 import { When } from '@/components/hoc/When'
 import { useAppState } from '@/hooks/useAppState'
+import { calculateFileSize } from '@/utils/calculateFileSize'
 import { defaultBannerImagePath } from '@/utils/constants'
 import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export const Footer = () => {
   const appState = useAppState()
@@ -49,6 +51,14 @@ export const Footer = () => {
         imageBlob,
         'bannerImg',
       )
+      if (imageFile) {
+        const size = calculateFileSize(imageFile)
+        if (size > 4.5) {
+          toast.error('File size is too large!')
+          setSaving(false)
+          return
+        }
+      }
       const data = await handleBannerImageUpload(
         imageFile as File,
         appState?.appState.token as string,
@@ -95,6 +105,14 @@ export const Footer = () => {
         appState?.appState.bannerImgUrl as Blob,
         'bannerImg',
       )
+      if (imageFile) {
+        const size = calculateFileSize(imageFile)
+        if (size > 4.5) {
+          toast.error('Image size is too large!')
+          setSaving(false)
+          return
+        }
+      }
       const data = await handleBannerImageUpload(
         imageFile as File,
         appState?.appState.token as string,
