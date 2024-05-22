@@ -15,7 +15,7 @@ model Setting {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   bannerImageId   String?  @unique @db.Uuid
   bannerImage     Media?   @relation(fields: [bannerImageId], references: [id], onDelete: SetNull)
-  backgroundColor String?
+  backgroundColor String   @default("#ffffff")
   displayTasks    Boolean  @default(false)
   content         String?
   notifications   Json?
@@ -23,18 +23,18 @@ model Setting {
   createdById     String   @db.Uuid
   createdAt       DateTime @default(now()) @db.Timestamptz()
   updatedAt       DateTime @updatedAt @ignore @db.Timestamptz()
- 
+
   @@index([bannerImageId], name: "bannerImageId")
 }
 
 model Media {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  url             String
-  filename        String
-  contentType     String
-  size            Int
-  createdById     String   @db.Uuid
-  createdAt       DateTime @default(now()) @db.Timestamptz()
-  updatedAt       DateTime @updatedAt @ignore @db.Timestamptz()
-  setting         Setting?
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  url         String
+  filename    String
+  contentType String
+  size        Int
+  createdById String   @db.Uuid
+  createdAt   DateTime @default(now()) @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @ignore @db.Timestamptz()
+  setting     Setting?
 }
