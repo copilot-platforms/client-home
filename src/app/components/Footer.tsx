@@ -64,7 +64,7 @@ export const Footer = () => {
         appState?.appState.token as string,
       )
       payload = {
-        backgroundColor: appState?.appState.editorColor,
+        backgroundColor: appState?.appState.editorColor || '#ffffff',
         content: content,
         bannerImageId: data?.id,
         token: appState?.appState.token,
@@ -77,7 +77,7 @@ export const Footer = () => {
 
     if (!appState?.appState.bannerImgUrl) {
       payload = {
-        backgroundColor: appState?.appState?.editorColor,
+        backgroundColor: appState?.appState.editorColor || '#ffffff',
         content: content,
         token: appState?.appState.token,
         bannerImageId: null,
@@ -118,7 +118,7 @@ export const Footer = () => {
         appState?.appState.token as string,
       )
       payload = {
-        backgroundColor: appState?.appState.editorColor,
+        backgroundColor: appState?.appState.editorColor || '#ffffff',
         content: content,
         bannerImageId: data?.id,
         token: appState?.appState.token,
@@ -127,7 +127,7 @@ export const Footer = () => {
       }
     } else {
       payload = {
-        backgroundColor: appState?.appState?.editorColor,
+        backgroundColor: appState?.appState.editorColor || '#ffffff',
         content: content,
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
