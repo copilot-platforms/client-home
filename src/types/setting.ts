@@ -4,7 +4,7 @@ import { NotificationsSchema } from './notifications'
 
 export const SettingRequestSchema = z.object({
   bannerImageId: z.string().nullable().optional(),
-  backgroundColor: z.string().nullable().optional(),
+  backgroundColor: z.string().optional(),
   notifications: NotificationsSchema,
   displayTasks: z.boolean(),
   content: z.string().nullable().optional(),
@@ -14,7 +14,7 @@ export type SettingRequest = z.infer<typeof SettingRequestSchema>
 
 export const SettingResponseSchema = z.object({
   id: z.string(),
-  backgroundColor: z.string().nullable(),
+  backgroundColor: z.string(),
   displayTasks: z.boolean(),
   notifications: NotificationsSchema,
   content: z.string().nullable(),
