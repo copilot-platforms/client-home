@@ -83,7 +83,10 @@ export default async function ClientPreviewPage({
   const company = await getCompany(_client.companyId, token)
 
   if (defaultSetting) {
-    settings = defaultSetting
+    settings = {
+      ...defaultSetting,
+      content: defaultSetting?.content || defaultState,
+    }
   }
 
   const template = Handlebars?.compile(settings?.content)
