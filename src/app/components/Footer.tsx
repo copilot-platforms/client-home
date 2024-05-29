@@ -39,7 +39,7 @@ export const Footer = () => {
   const handleSave = async () => {
     setSaving(true)
     //get editor content
-    const content = appState?.appState.editor?.getHTML()
+    const content = appState?.appState.editor?.getHTML() || ''
 
     let payload = {}
     const bgColor = appState?.appState.editorColor || '#ffffff'
