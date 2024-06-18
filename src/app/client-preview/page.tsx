@@ -167,6 +167,7 @@ export default async function ClientPreviewPage({
             content={htmlContent}
             settings={settings}
             token={searchParams.token}
+            font={workspace.font}
           />
         </div>
       </div>
