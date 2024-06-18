@@ -13,6 +13,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { Box, Checkbox, Typography } from '@mui/material'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { CSS } from '@dnd-kit/utilities'
+import { useAppState } from '@/hooks/useAppState'
 
 const notificationIcons: { [_key in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
@@ -33,6 +34,7 @@ const ModalCheckbox = ({
   setFormState,
   setShowError,
 }: ModalCheckboxProps) => {
+  const appState = useAppState()
   const Icon: SVGIcon = notificationIcons[identifier]
 
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -91,6 +93,7 @@ const ModalCheckbox = ({
             variant='body1'
             id='modal-modal-description'
             className='flex items-center font-medium mt-4 '
+            sx={{ fontFamily: appState?.appState.font.replaceAll('+', ' ') }}
           >
             {capitalizeFirstLetter(identifier as string)}
           </Typography>

@@ -74,11 +74,15 @@ export default async function ClientPreviewPage({
     displayTasks: false,
   }
 
-  const [defaultSetting, allCustomFields, _client] = await Promise.all([
-    getSettings(token),
-    getCustomFields(searchParams.token),
-    getClient(clientId, token),
-  ])
+  const copilotClient = new CopilotAPI(token)
+
+  const [defaultSetting, allCustomFields, _client, workspace] =
+    await Promise.all([
+      getSettings(token),
+      getCustomFields(searchParams.token),
+      getClient(clientId, token),
+      copilotClient.getWorkspaceInfo(),
+    ])
 
   const company = await getCompany(_client.companyId, token)
 
@@ -123,40 +127,50 @@ export default async function ClientPreviewPage({
     : settings?.bannerImage?.url
 
   return (
-    <div
-      className={`overflow-y-auto overflow-x-hidden max-h-screen w-full`}
-      style={{
-        background: `${settings.backgroundColor}`,
-      }}
-    >
-      {bannerImgUrl && (
-        <Image
-          className='w-full'
-          src={bannerImgUrl}
-          alt='banner image'
-          width={0}
-          height={0}
-          sizes='100vw'
-          style={{
-            width: '100%',
-            height: '25vh',
-            objectFit: 'cover',
-          }}
+    <>
+      <head>
+        <link
+          href={`https://fonts.googleapis.com/css2?family=${workspace.font}&display=swap`}
+          rel='stylesheet'
         />
-      )}
+      </head>
       <div
-        className='px-14 py-350 max-w-xl'
+        className={`overflow-y-auto overflow-x-hidden max-h-screen w-full`}
         style={{
+          fontFamily: workspace.font.replaceAll('+', ' '),
           background: `${settings.backgroundColor}`,
-          margin: '0 auto',
         }}
       >
-        <ClientPreview
-          content={htmlContent}
-          settings={settings}
-          token={searchParams.token}
-        />
+        {bannerImgUrl && (
+          <Image
+            className='w-full'
+            src={bannerImgUrl}
+            alt='banner image'
+            width={0}
+            height={0}
+            sizes='100vw'
+            style={{
+              width: '100%',
+              height: '25vh',
+              objectFit: 'cover',
+            }}
+          />
+        )}
+        <div
+          className='px-14 py-350 max-w-xl'
+          style={{
+            background: `${settings.backgroundColor}`,
+            margin: '0 auto',
+          }}
+        >
+          <ClientPreview
+            content={htmlContent}
+            settings={settings}
+            token={searchParams.token}
+            font={workspace.font}
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

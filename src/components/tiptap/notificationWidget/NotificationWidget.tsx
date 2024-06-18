@@ -60,10 +60,15 @@ export const NotificationWidget = () => {
           onMouseOut={() => setHovered(false)}
           style={{
             position: 'relative',
-            cursor: appState?.appState.readOnly ? 'auto' : 'pointer',
           }}
         >
-          <Typography variant='h2' datatype='draggable-item'>
+          <Typography
+            variant='h2'
+            datatype='draggable-item'
+            sx={{
+              fontFamily: appState?.appState.font.replaceAll('+', ' '),
+            }}
+          >
             You have {taskCount} task
             {!appState?.appState?.readOnly || Number(taskCount) > 1
               ? 's'
@@ -162,6 +167,7 @@ const NotificationComponent = ({
   display?: boolean
 }) => {
   const pathname = usePathname()
+  const appState = useAppState()
 
   return (
     <Stack
@@ -170,12 +176,26 @@ const NotificationComponent = ({
       display={display ? 'flex' : 'none'}
       alignItems='center'
     >
-      <Typography variant='body1'>{name}</Typography>
+      <Typography
+        variant='body1'
+        sx={{
+          fontFamily: appState?.appState.font.replaceAll('+', ' '),
+        }}
+      >
+        {name}
+      </Typography>
       <RedirectButton
         route={route}
         execute={pathname.includes('client-preview')}
       >
-        <Typography variant='body1'>Go to {route}</Typography>
+        <Typography
+          variant='body1'
+          sx={{
+            fontFamily: appState?.appState.font.replaceAll('+', ' '),
+          }}
+        >
+          Go to {route}
+        </Typography>
       </RedirectButton>
     </Stack>
   )

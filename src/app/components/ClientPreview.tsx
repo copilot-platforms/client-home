@@ -44,10 +44,12 @@ const ClientPreview = ({
   content,
   settings,
   token,
+  font,
 }: {
   content: string
   settings: ISettings
   token: string
+  font: string
 }) => {
   /**
    * Importing all the editor related imports and settings up this editor
@@ -151,8 +153,9 @@ const ClientPreview = ({
         appState?.toggleDisplayTasks()
       }
       appState?.setSettings(settings || _settings)
+      appState?.setFont(font)
     }
-  }, [editor, content, settings])
+  }, [editor, content, settings, font])
 
   useEffect(() => {
     if (editor) {

@@ -131,7 +131,11 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
             <Alert severity='error'>At least 1 app should be selected.</Alert>
           </Box>
         </Fade>
-        <Typography variant='h6' className='px-6 pt-6 pb-4 font-medium'>
+        <Typography
+          variant='h6'
+          className='px-6 pt-6 pb-4 font-medium'
+          sx={{ fontFamily: appState?.appState.font.replaceAll('+', ' ') }}
+        >
           Customize notifications widget
         </Typography>
         <hr />
@@ -142,10 +146,22 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
               color: '#6B6F76',
             }}
           >
-            <Typography variant='body2' id='modal-modal-description'>
+            <Typography
+              variant='body2'
+              id='modal-modal-description'
+              sx={{
+                fontFamily: appState?.appState.font.replaceAll('+', ' '),
+              }}
+            >
               App name
             </Typography>
-            <Typography variant='body2' id='modal-modal-description'>
+            <Typography
+              variant='body2'
+              id='modal-modal-description'
+              sx={{
+                fontFamily: appState?.appState.font.replaceAll('+', ' '),
+              }}
+            >
               Enable
             </Typography>
           </Box>
@@ -172,7 +188,12 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
           </DndContext>
         </div>
         <hr />
-        <div className='flex justify-end gap-4 py-6 px-8'>
+        <div
+          className='flex justify-end gap-4 py-6 px-8'
+          style={{
+            fontFamily: appState?.appState.font.replaceAll('+', ' '),
+          }}
+        >
           <button
             className='py-1 px-3 text-new-dark text-[13px] rounded bg-white border border-slate-300'
             onClick={handleCancel}

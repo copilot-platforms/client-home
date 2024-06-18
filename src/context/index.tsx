@@ -31,6 +31,7 @@ export interface IAppState {
   token: string
   notifications: INotification | undefined
   showEmbedInput: boolean
+  font: string
 }
 
 export interface IAppContext {
@@ -54,6 +55,7 @@ export interface IAppContext {
   setToken: (token: string) => void
   setNotification: (notification: INotification) => void
   setShowEmbedInput: (v: boolean) => void
+  setFont: (font: string) => void
 }
 
 interface IAppCoreProvider {
@@ -83,6 +85,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     showNotificationsModal: false,
     notifications: undefined,
     showEmbedInput: false,
+    font: 'Inter', //default font
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -167,6 +170,8 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, showEmbedInput: v }))
   }
 
+  const setFont = (font: string) => setState((prev) => ({ ...prev, font }))
+
   return (
     <AppContext.Provider
       value={{
@@ -190,6 +195,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setToken,
         setNotification,
         setShowEmbedInput,
+        setFont,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>

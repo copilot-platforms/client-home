@@ -61,9 +61,10 @@ import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
 interface IEditorInterface {
   settings: ISettings | null
   token: string
+  font: string
 }
 
-const EditorInterface = ({ settings, token }: IEditorInterface) => {
+const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
   const appState = useAppState()
 
   const initialEditorContent = 'Type "/" for commands'
@@ -288,10 +289,11 @@ const EditorInterface = ({ settings, token }: IEditorInterface) => {
             : _settings,
         )
         appState?.setToken(token)
+        appState?.setFont(font)
       }
       appState?.setLoading(false)
     })()
-  }, [settings, token])
+  }, [settings, token, font])
 
   useEffect(() => {
     if (!appState?.appState.settings) return
