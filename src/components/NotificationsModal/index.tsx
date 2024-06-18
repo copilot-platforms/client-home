@@ -119,7 +119,10 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
       }}
       sx={{ zIndex: 999999999 }} //highest in the app
     >
-      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[720px] bg-white rounded-md shadow-lg outline-none font-medium'>
+      <div
+        className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[720px] bg-white rounded-md shadow-lg outline-none font-medium'
+        style={{ fontFamily: appState?.appState.font.replaceAll('+', ' ') }}
+      >
         <Fade in={showError}>
           <Box
             sx={{

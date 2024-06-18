@@ -61,6 +61,7 @@ export const NotificationWidget = () => {
           style={{
             position: 'relative',
             cursor: appState?.appState.readOnly ? 'auto' : 'pointer',
+            fontFamily: appState?.appState.font.replaceAll('+', ' '),
           }}
         >
           <Typography variant='h2' datatype='draggable-item'>
