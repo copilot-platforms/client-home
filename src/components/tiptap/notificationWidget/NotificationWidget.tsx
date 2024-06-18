@@ -50,8 +50,6 @@ export const NotificationWidget = () => {
     return Number(taskCount) > 0
   }, [appState?.appState.displayTasks, appState?.appState.readOnly, taskCount])
 
-  console.log('from notif widget', appState?.appState.font.replaceAll('+', ' '))
-
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
       {show && (
