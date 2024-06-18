@@ -61,17 +61,15 @@ export default async function Page({
     getCustomFields(token),
   ])
 
-  const font = workspace.font?.replaceAll(' ', '+')
-
   return (
     <>
       <head>
         <link
-          href={`https://fonts.googleapis.com/css2?family=${font}&display=swap`}
+          href={`https://fonts.googleapis.com/css2?family=${workspace.font}&display=swap`}
           rel='stylesheet'
         />
       </head>
-      <div style={{ fontFamily: workspace.font }}>
+      <div style={{ fontFamily: workspace.font.replaceAll('+', ' ') }}>
         <div className='flex flex-row'>
           <div className='relative w-full'>
             <EditorInterface settings={settings} token={token} />
