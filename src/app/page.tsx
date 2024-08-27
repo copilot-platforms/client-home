@@ -49,9 +49,7 @@ export default async function Page({
   if (!tokenParsed.success) {
     return <InvalidToken />
   }
-
   const token = tokenParsed.data
-
   const copilotClient = new CopilotAPI(token)
 
   const [clientList, settings, workspace, customFields] = await Promise.all([
@@ -60,6 +58,19 @@ export default async function Page({
     copilotClient.getWorkspaceInfo(),
     getCustomFields(token),
   ])
+
+  const getPaginatedClientList = async () => {
+    'use server'
+    const copilotClient = new CopilotAPI(token)
+    const clientList = ClientsResponseSchema.parse(
+      await copilotClient.getClientsPaginated(),
+    )
+
+    const sortedClients =
+      clientList.data?.sort((a, b) => a.givenName.localeCompare(b.givenName)) ??
+      []
+    return { data: sortedClients }
+  }
 
   return (
     <>
@@ -91,6 +102,7 @@ export default async function Page({
               displayTasks={settings?.displayTasks}
               clientList={clientList}
               customFields={customFields}
+              getClientsPaginated={getPaginatedClientList}
             />
           </div>
           <NotificationsModal settings={settings} />

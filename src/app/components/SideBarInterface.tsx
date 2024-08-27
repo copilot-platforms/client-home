@@ -14,18 +14,25 @@ import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
 import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { ClientsResponseSchema } from '@/types/common'
+import { z } from 'zod'
 
 interface IEditorInterface {
   displayTasks: boolean
   clientList: IClient[]
   customFields: ICustomField[]
+  getClientsPaginated: () => Promise<z.infer<
+    typeof ClientsResponseSchema
+  > | null>
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
   displayTasks,
   clientList,
   customFields,
+  getClientsPaginated,
 }) => {
+  const [hasAllClients, setHasAllClients] = useState(false)
   const sideBarRef = useRef<HTMLDivElement | null>(null)
 
   const appState = useAppState()
@@ -67,7 +74,9 @@ const SideBarInterface: FC<IEditorInterface> = ({
 
   useEffect(() => {
     appState?.toggleDisplayTasks({ override: displayTasks })
-    appState?.setClientList(clientList)
+    if (!hasAllClients) {
+      appState?.setClientList(clientList)
+    }
     appState?.setCustomFields(customFields)
   }, [displayTasks, clientList, customFields])
 
@@ -86,6 +95,27 @@ const SideBarInterface: FC<IEditorInterface> = ({
     })()
   }, [appState?.appState.bannerImgUrl])
 
+  useEffect(() => {
+    ;(async () => {
+      if (hasAllClients) {
+        return
+      }
+      const res = await getClientsPaginated()
+      if (res?.data?.length === 0) {
+        setHasAllClients(true)
+        appState?.setClientList(res?.data as IClient[])
+      }
+    })()
+  }, [getClientsPaginated])
+
+  useEffect(() => {
+    ;(async () => {
+      const res = await getClientsPaginated()
+      if (res?.data?.length === 0) {
+        setHasAllClients(true)
+      }
+    })()
+  }, [getClientsPaginated])
   return (
     <div
       style={{

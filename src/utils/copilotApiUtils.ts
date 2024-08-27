@@ -17,6 +17,7 @@ import {
 } from '@/types/common'
 import type { Notifications, WorkspaceInfo } from '@/types/common'
 import { copilotAPIKey } from '@/config'
+import { z } from 'zod'
 
 export class CopilotAPI {
   copilot: SDK
@@ -54,6 +55,28 @@ export class CopilotAPI {
 
   async getClients() {
     return ClientsResponseSchema.parse(await this.copilot.listClients({}))
+  }
+
+  async getClientsPaginated() {
+    const getClientsPaginated = async (
+      nextToken?: string,
+    ): Promise<z.infer<typeof ClientsResponseSchema> | null> => {
+      const initialRes = await this.copilot.listClients({ nextToken })
+      const { data } = ClientsResponseSchema.parse(initialRes)
+
+      if (initialRes.nextToken && data?.length) {
+        const nextRes = await getClientsPaginated(initialRes.nextToken)
+        const nextPageClients = ClientsResponseSchema.parse(nextRes)
+        if (nextPageClients.data?.length) {
+          data.push(...nextPageClients.data)
+        }
+      }
+
+      return { data }
+    }
+
+    const clients = await getClientsPaginated()
+    return clients
   }
 
   async getCompany(companyId: string): Promise<CompanyResponse> {
