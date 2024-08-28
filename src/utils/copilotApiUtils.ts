@@ -52,8 +52,10 @@ export class CopilotAPI {
     )
   }
 
-  async getClients() {
-    return ClientsResponseSchema.parse(await this.copilot.listClients({}))
+  async getClients(limit: number = 100, nextToken?: string) {
+    return ClientsResponseSchema.parse(
+      await this.copilot.listClients({ limit, nextToken }),
+    )
   }
 
   async getCompany(companyId: string): Promise<CompanyResponse> {

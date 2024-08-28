@@ -41,6 +41,7 @@ export type ClientResponse = z.infer<typeof ClientResponseSchema>
 
 export const ClientsResponseSchema = z.object({
   data: z.array(ClientResponseSchema).nullable(),
+  nextToken: z.string().optional(),
 })
 export type ClientsResponse = z.infer<typeof ClientsResponseSchema>
 

@@ -7,18 +7,23 @@ import { IClient, ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
 import InvalidToken from './components/InvalidToken'
 import NotificationsModal from '@/components/NotificationsModal'
+import { LazyClientFetcher } from '@/components/_fetchers/LazyClientFetcher'
+import { Suspense } from 'react'
 
 export const revalidate = 0
 
 async function listClients(token: string) {
   const copilotClient = new CopilotAPI(token)
   const clientList = ClientsResponseSchema.parse(
-    await copilotClient.getClients(),
+    await copilotClient.getClients(1),
   )
 
-  return (clientList.data?.sort((a, b) =>
-    a.givenName.localeCompare(b.givenName),
-  ) || []) as IClient[]
+  return {
+    data: (clientList.data?.sort((a, b) =>
+      a.givenName.localeCompare(b.givenName),
+    ) || []) as IClient[],
+    nextToken: clientList.nextToken,
+  }
 }
 
 async function getCustomFields(token: string) {
@@ -54,12 +59,13 @@ export default async function Page({
 
   const copilotClient = new CopilotAPI(token)
 
-  const [clientList, settings, workspace, customFields] = await Promise.all([
-    listClients(token),
-    getSettings(token),
-    copilotClient.getWorkspaceInfo(),
-    getCustomFields(token),
-  ])
+  const [{ data: clientList, nextToken }, settings, workspace, customFields] =
+    await Promise.all([
+      listClients(token),
+      getSettings(token),
+      copilotClient.getWorkspaceInfo(),
+      getCustomFields(token),
+    ])
 
   return (
     <>
@@ -87,6 +93,10 @@ export default async function Page({
               height: '100vh',
             }}
           >
+            <Suspense>
+              <LazyClientFetcher token={token} nextToken={nextToken} />
+            </Suspense>
+
             <SideBarInterface
               displayTasks={settings?.displayTasks}
               clientList={clientList}
