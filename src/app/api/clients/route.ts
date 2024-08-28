@@ -7,14 +7,16 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const token = searchParams.get('token')
   const nextToken = searchParams.get('nextToken') || undefined
-  const limit = searchParams.get('limit') || '100'
+  const limit = searchParams.get('limit')
+    ? parseInt(searchParams.get('limit') as string)
+    : undefined
   if (!token) {
     return errorHandler('Missing token', 422)
   }
 
   const copilotClient = new CopilotAPI(z.string().parse(token))
   try {
-    const clients = await copilotClient.getClients(+limit, nextToken)
+    const clients = await copilotClient.getClients(limit, nextToken)
 
     return NextResponse.json(clients)
   } catch (error: unknown) {
