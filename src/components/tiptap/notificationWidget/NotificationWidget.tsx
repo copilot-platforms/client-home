@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation'
 
 export const NotificationWidget = () => {
   const invoiceCount = useAppData('{{invoice.count}}')
-  const taskCount = useAppData('{{task.count}}')
+  const actionCount = useAppData('{{action.count}}')
   const formCount = useAppData('{{form.count}}')
   const contractCount = useAppData('{{contract.count}}')
   const appState = useAppState()
@@ -47,8 +47,12 @@ export const NotificationWidget = () => {
       return true
     }
 
-    return Number(taskCount) > 0
-  }, [appState?.appState.displayTasks, appState?.appState.readOnly, taskCount])
+    return Number(actionCount) > 0
+  }, [
+    appState?.appState.displayTasks,
+    appState?.appState.readOnly,
+    actionCount,
+  ])
 
   return (
     <NodeViewWrapper data-drag-handle contentEditable={false}>
@@ -69,8 +73,8 @@ export const NotificationWidget = () => {
               fontFamily: appState?.appState.font.replaceAll('+', ' '),
             }}
           >
-            You have {taskCount} task
-            {!appState?.appState?.readOnly || Number(taskCount) > 1
+            You have {actionCount} action
+            {!appState?.appState?.readOnly || Number(actionCount) > 1
               ? 's'
               : ''}{' '}
             left to complete

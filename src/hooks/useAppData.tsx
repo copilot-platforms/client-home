@@ -59,7 +59,7 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       }
     })
 
-    const task = { count }
+    const action = { count }
 
     const invoice = {
       count: appState?.appState.notifications?.billing,
@@ -82,7 +82,7 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
     return {
       client,
       invoice,
-      task,
+      action,
       form,
       contract,
     }
