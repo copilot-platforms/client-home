@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import InvalidToken from '../components/InvalidToken'
 import { defaultState } from '../../../defaultState'
-import { defaultBannerImagePath } from '@/utils/constants'
+import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
 
 export const revalidate = 0
 
@@ -61,7 +61,7 @@ export default async function ClientPreviewPage({
 
   let settings: ISettings = {
     content: defaultState,
-    backgroundColor: '#f7f8fa',
+    backgroundColor: defaultBgColor,
     id: '',
     bannerImage: {
       id: '',
