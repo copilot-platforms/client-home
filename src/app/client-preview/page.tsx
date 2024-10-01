@@ -61,7 +61,7 @@ export default async function ClientPreviewPage({
 
   let settings: ISettings = {
     content: defaultState,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f7f8fa',
     id: '',
     bannerImage: {
       id: '',

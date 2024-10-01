@@ -134,7 +134,7 @@ const ClientPreview = ({
       appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f7f8fa',
         id: '',
         bannerImage: {
           id: '',
