@@ -5,4 +5,6 @@ export const staticAutofillValues = [
   '{{client.company}}',
 ]
 
-export const defaultBannerImagePath = '/images/default_banner.png'
+export const defaultBannerImagePath = '/images/default_bg.jpg'
+
+export const defaultBgColor = '#f7f8fa'

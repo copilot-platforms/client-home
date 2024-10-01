@@ -39,6 +39,7 @@ import { defaultState } from '../../../defaultState'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
+import { defaultBgColor } from '@/utils/constants'
 
 const ClientPreview = ({
   content,
@@ -134,7 +135,7 @@ const ClientPreview = ({
       appState?.toggleReadOnly(true)
       const _settings = {
         content: defaultState,
-        backgroundColor: '#ffffff',
+        backgroundColor: defaultBgColor,
         id: '',
         bannerImage: {
           id: '',

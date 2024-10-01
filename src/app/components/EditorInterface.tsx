@@ -50,7 +50,7 @@ import { defaultState } from '../../../defaultState'
 import Image from 'next/image'
 import { Box } from '@mui/material'
 import { Delete } from '@mui/icons-material'
-import { defaultBannerImagePath } from '@/utils/constants'
+import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppDataContext } from '@/hooks/useAppData'
@@ -264,7 +264,7 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
       if (token) {
         const _settings: ISettings = {
           content: defaultState,
-          backgroundColor: '#ffffff',
+          backgroundColor: defaultBgColor,
           id: '',
           bannerImage: {
             id: '',
