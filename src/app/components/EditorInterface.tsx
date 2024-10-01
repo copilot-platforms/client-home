@@ -264,7 +264,7 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
       if (token) {
         const _settings: ISettings = {
           content: defaultState,
-          backgroundColor: '#ffffff',
+          backgroundColor: '#f7f8fa',
           id: '',
           bannerImage: {
             id: '',

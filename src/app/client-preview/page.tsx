@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import InvalidToken from '../components/InvalidToken'
 import { defaultState } from '../../../defaultState'
+import { defaultBannerImagePath } from '@/utils/constants'
 
 export const revalidate = 0
 
@@ -123,7 +124,7 @@ export default async function ClientPreviewPage({
   const htmlContent = template({ client })
 
   const bannerImgUrl = !defaultSetting
-    ? '/images/default_banner.png'
+    ? defaultBannerImagePath
     : settings?.bannerImage?.url
 
   return (
