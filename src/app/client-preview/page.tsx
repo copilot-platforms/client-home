@@ -8,6 +8,8 @@ import { CopilotAPI } from '@/utils/copilotApiUtils'
 import InvalidToken from '../components/InvalidToken'
 import { defaultState } from '../../../defaultState'
 import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
+import { getPreviewMode } from '@/utils/previewMode'
+import { NoPreviewSupport } from './NoPreviewSupport'
 
 export const revalidate = 0
 
@@ -56,6 +58,14 @@ export default async function ClientPreviewPage({
   }
 
   const token = tokenParsed.data
+  const copilotClient = new CopilotAPI(token)
+  const tokenPayload = await copilotClient.getTokenPayload()
+  if (!tokenPayload) {
+    throw new Error('Failed to parse token payload')
+  }
+  if (getPreviewMode(tokenPayload)) {
+    return <NoPreviewSupport />
+  }
 
   const clientId = z.string().uuid().parse(searchParams.clientId)
 
@@ -74,8 +84,6 @@ export default async function ClientPreviewPage({
     createdById: '',
     displayTasks: false,
   }
-
-  const copilotClient = new CopilotAPI(token)
 
   const [defaultSetting, allCustomFields, _client, workspace] =
     await Promise.all([
