@@ -32,7 +32,11 @@ export const ClientResponseSchema = z.object({
   customFields: z
     .record(
       z.string(),
-      z.union([z.string().nullable(), z.array(z.string()).nullable()]),
+      z.union([
+        z.string().nullable(),
+        z.array(z.string()).nullable(),
+        z.object({}).nullable(),
+      ]),
     )
     .nullable(),
   avatarImageUrl: z.string().nullable(),
