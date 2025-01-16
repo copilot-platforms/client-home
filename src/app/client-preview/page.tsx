@@ -43,7 +43,6 @@ async function getCompany(companyId: string, token: string) {
 async function getCustomFields(token: string) {
   const copilotClient = new CopilotAPI(token)
   const customFieldsList = await copilotClient.getCustomFields()
-
   return (customFieldsList.data || []) as ICustomField[]
 }
 
@@ -120,6 +119,12 @@ export default async function ClientPreviewPage({
           .options.find((opt: any) => opt.key === value)
         return option ? ' ' + option.label : ' ' + value
       })
+    }
+  }
+
+  for (const key of Object.keys(customFields)) {
+    if (customFields[key]?.fullAddress) {
+      customFields[key] = customFields[key].fullAddress
     }
   }
 
