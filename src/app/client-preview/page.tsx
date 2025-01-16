@@ -122,9 +122,11 @@ export default async function ClientPreviewPage({
     }
   }
 
-  for (const key of Object.keys(customFields)) {
-    if (customFields[key]?.fullAddress) {
-      customFields[key] = customFields[key].fullAddress
+  if (customFields) {
+    for (const key of Object.keys(customFields)) {
+      if (customFields[key]?.fullAddress) {
+        customFields[key] = customFields[key].fullAddress
+      }
     }
   }
 
