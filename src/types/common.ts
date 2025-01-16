@@ -35,7 +35,7 @@ export const ClientResponseSchema = z.object({
       z.union([
         z.string().nullable(),
         z.array(z.string()).nullable(),
-        z.object({}).nullable(),
+        z.record(z.string(), z.any()).nullable(),
       ]),
     )
     .nullable(),
