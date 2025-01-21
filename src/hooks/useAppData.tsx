@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { useAppState } from '@/hooks/useAppState'
 import { IClient, INotification } from '@/types/interfaces'
 import Handlebars from 'handlebars'
+import { CustomField, CustomFieldsSchema } from '@/types/common'
 
 const AppDataContext = createContext<null | Record<string, unknown>>({})
 
@@ -30,7 +31,9 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       (el) => el.id === (appState.appState.selectedClient as IClient)?.id,
     )
     //add comma separator for custom fields
-    const customFields: any = _client?.customFields
+    const customFields: CustomField | undefined = _client?.customFields as
+      | CustomField
+      | undefined
 
     // Iterate through each key in customFields
     for (const key in customFields) {
@@ -40,12 +43,14 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
         appState?.appState.customFields.some((field) => field.key === key)
       ) {
         // Map the values to their corresponding labels
-        customFields[key] = customFields[key].map((value: string[]) => {
-          const option: any = (appState?.appState?.customFields as any)
-            .find((field: any) => field.key === key)
-            .options.find((opt: any) => opt.key === value)
-          return option ? ' ' + option.label : ' ' + value
-        })
+        customFields[key] = (customFields[key] as string[][]).map(
+          (value: string[]) => {
+            const option: any = (appState?.appState?.customFields as any)
+              .find((field: any) => field.key === key)
+              .options.find((opt: any) => opt.key === value)
+            return option ? ' ' + option.label : ' ' + value
+          },
+        )
       }
     }
 

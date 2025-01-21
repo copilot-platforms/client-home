@@ -93,3 +93,15 @@ export const NotificationsSchema = z.array(
   }),
 )
 export type Notifications = z.infer<typeof NotificationsSchema>
+
+export const CustomFieldsSchema = z.record(
+  z.string(),
+  z.union([
+    //
+    z.number(),
+    z.string(),
+    z.record(z.string(), z.any()),
+    z.array(z.union([z.number(), z.string(), z.record(z.string(), z.any())])),
+  ]),
+)
+export type CustomField = z.infer<typeof CustomFieldsSchema>
