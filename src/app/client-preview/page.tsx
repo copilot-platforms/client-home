@@ -49,7 +49,7 @@ async function getCustomFields(token: string) {
 export default async function ClientPreviewPage({
   searchParams,
 }: {
-  searchParams: { token: string; clientId: string }
+  searchParams: { token: string }
 }) {
   const tokenParsed = z.string().safeParse(searchParams.token)
   if (!tokenParsed.success) {
@@ -66,7 +66,7 @@ export default async function ClientPreviewPage({
     return <NoPreviewSupport />
   }
 
-  const clientId = z.string().uuid().parse(searchParams.clientId)
+  const clientId = z.string().uuid().parse(tokenPayload.clientId)
 
   let settings: ISettings = {
     content: defaultState,
