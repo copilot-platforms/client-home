@@ -10,6 +10,7 @@ import { defaultState } from '../../../defaultState'
 import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
 import { getPreviewMode } from '@/utils/previewMode'
 import { NoPreviewSupport } from './NoPreviewSupport'
+import { preprocessTemplate } from '@/utils/string'
 
 export const revalidate = 0
 
@@ -101,7 +102,7 @@ export default async function ClientPreviewPage({
     }
   }
 
-  const template = Handlebars?.compile(settings?.content)
+  const template = Handlebars?.compile(preprocessTemplate(settings?.content))
 
   //add comma separator for custom fields
   const customFields: any = _client?.customFields
