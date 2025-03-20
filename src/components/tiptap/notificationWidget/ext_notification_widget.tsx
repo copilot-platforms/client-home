@@ -9,7 +9,7 @@ export const NotificationWidgetExtension = Node.create({
 
   content: 'block*',
 
-  draggable: true,
+  draggable: false,
 
   parseHTML() {
     return [
