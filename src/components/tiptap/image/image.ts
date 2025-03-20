@@ -55,7 +55,7 @@ export const ImageResize = Image.extend<ImageOptions>({
         },
       },
       isDraggable: {
-        default: true,
+        default: false,
         renderHTML: (attributes) => {
           return {}
         },

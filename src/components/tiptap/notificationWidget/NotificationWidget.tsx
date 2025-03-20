@@ -58,7 +58,7 @@ export const NotificationWidget = () => {
     <NodeViewWrapper data-drag-handle contentEditable={false}>
       {show && (
         <div
-          draggable='true'
+          draggable='false'
           datatype='draggable-item'
           onMouseOver={() => setHovered(true)}
           onMouseOut={() => setHovered(false)}
