@@ -16,9 +16,27 @@ async function getCustomFields(token: string) {
 
 let customFields: ICustomField[] = []
 
-const token = new URLSearchParams(document?.location?.search).get('token')
+async function getTokenWithRetry(
+  maxRetries = 3,
+  delayMs = 250,
+): Promise<string | null> {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const token = new URLSearchParams(document?.location?.search).get('token')
+    if (token) {
+      return token
+    }
+    await new Promise((resolve) => setTimeout(resolve, delayMs))
+  }
+  return null
+}
+
 ;(async () => {
-  customFields = await getCustomFields(z.string().parse(token))
+  const token = await getTokenWithRetry()
+  if (token) {
+    customFields = await getCustomFields(z.string().parse(token))
+  } else {
+    console.error('Token not found')
+  }
 })()
 
 export const autofillMenuSuggestion = {
