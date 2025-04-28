@@ -1,9 +1,10 @@
+import { ICustomField } from '@/types/interfaces'
+import { staticAutofillValues } from '@/utils/constants'
+import { getTokenWithRetry } from '@/utils/token'
 import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
-import { AutofillMenu } from './AutofillMenu'
-import { staticAutofillValues } from '@/utils/constants'
-import { ICustomField } from '@/types/interfaces'
 import { z } from 'zod'
+import { AutofillMenu } from './AutofillMenu'
 
 async function getCustomFields(token: string) {
   const res = await fetch(`/api/autofill?token=${token}`, {
@@ -15,20 +16,6 @@ async function getCustomFields(token: string) {
 }
 
 let customFields: ICustomField[] = []
-
-async function getTokenWithRetry(
-  maxRetries = 3,
-  delayMs = 250,
-): Promise<string | null> {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const token = new URLSearchParams(document?.location?.search).get('token')
-    if (token) {
-      return token
-    }
-    await new Promise((resolve) => setTimeout(resolve, delayMs))
-  }
-  return null
-}
 
 ;(async () => {
   const token = await getTokenWithRetry()
