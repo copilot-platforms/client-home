@@ -55,11 +55,9 @@ export const NotificationWidget = () => {
   ])
 
   return (
-    <NodeViewWrapper data-drag-handle contentEditable={false}>
+    <NodeViewWrapper contentEditable={false}>
       {show && (
         <div
-          draggable='false'
-          datatype='draggable-item'
           onMouseOver={() => setHovered(true)}
           onMouseOut={() => setHovered(false)}
           style={{
@@ -68,7 +66,6 @@ export const NotificationWidget = () => {
         >
           <Typography
             variant='h2'
-            datatype='draggable-item'
             sx={{
               fontFamily: appState?.appState.font.replaceAll('+', ' '),
             }}
