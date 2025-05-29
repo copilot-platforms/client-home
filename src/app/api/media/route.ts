@@ -24,7 +24,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ data: media })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return errorHandler('Could not upload file.', 500)
   }
 }
@@ -52,7 +52,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({})
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return errorHandler('Could not delete file.', 500)
   }
 }

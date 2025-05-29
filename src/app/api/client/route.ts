@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: client })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return errorHandler('Client not found.', 404)
   }
 }
