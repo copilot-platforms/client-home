@@ -8,6 +8,7 @@ export enum PortalRoutes {
   Profile = 'profile',
   Settings = 'settings',
   Notifications = 'notifications',
+  Tasks = 'tasks',
 }
 
 export type AvailablePortalRoutes = `${PortalRoutes}` // NOTE: this creates string union of enum values
