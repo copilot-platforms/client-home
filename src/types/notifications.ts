@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export type NotificationOption = 'billing' | 'forms' | 'contracts'
+export type NotificationOption = 'billing' | 'forms' | 'contracts' | 'tasks'
 
 export const NotificationOptionSchema = z.object({
   key: z.string(),

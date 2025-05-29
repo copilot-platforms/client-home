@@ -66,4 +66,5 @@ export interface INotification {
   forms: number
   billing: number
   contracts: number
+  tasks: number
 }
