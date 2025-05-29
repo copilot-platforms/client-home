@@ -44,11 +44,15 @@ const SideBarInterface: FC<IEditorInterface> = ({
         ? ''
         : `api/notifications?token=${appState?.appState?.token}&clientId=${
             (dropdownSelectedClient as IClient).id
-          }`
+          }&companyId=${(dropdownSelectedClient as IClient)?.companyId}`
     }`,
     fetcher,
     { refreshInterval: 5000 },
   )
+
+  useEffect(() => {
+    console.log('yyy notifications', appState?.appState.notifications)
+  }, [appState?.appState.notifications])
 
   useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {

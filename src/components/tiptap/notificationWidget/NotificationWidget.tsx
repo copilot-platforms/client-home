@@ -13,6 +13,7 @@ export const NotificationWidget = () => {
   const actionCount = useAppData('{{action.count}}')
   const formCount = useAppData('{{form.count}}')
   const contractCount = useAppData('{{contract.count}}')
+  const taskCount = useAppData('{{task.count}}')
   const appState = useAppState()
 
   const [hovered, setHovered] = useState(false)
@@ -27,15 +28,10 @@ export const NotificationWidget = () => {
   }
 
   const detectDisplay = (value: string) => {
-    if (pathname.includes('client-preview')) {
+    if (pathname.includes('client-preview') || appState?.appState?.readOnly) {
       return Number(value) > 0
-    } else {
-      if (appState?.appState?.readOnly) {
-        return Number(value) > 0
-      } else {
-        return true
-      }
     }
+    return true
   }
 
   const show = useMemo(() => {
@@ -109,6 +105,7 @@ export const NotificationWidget = () => {
                       />
                     )
                   }
+
                   if (notification.key === PortalRoutes.Forms) {
                     return (
                       <NotificationComponent
@@ -123,6 +120,7 @@ export const NotificationWidget = () => {
                       />
                     )
                   }
+
                   if (notification.key === PortalRoutes.Contracts) {
                     return (
                       <NotificationComponent
@@ -135,6 +133,21 @@ export const NotificationWidget = () => {
                         }`}
                         route={PortalRoutes.Contracts}
                         display={detectDisplay(contractCount)}
+                      />
+                    )
+                  }
+
+                  if (notification.key === PortalRoutes.Tasks) {
+                    return (
+                      <NotificationComponent
+                        key={key}
+                        name={`Complete ${taskCount} task${
+                          !appState?.appState?.readOnly || Number(taskCount) > 1
+                            ? 's'
+                            : ''
+                        }`}
+                        route={PortalRoutes.Tasks}
+                        display={detectDisplay(taskCount)}
                       />
                     )
                   }

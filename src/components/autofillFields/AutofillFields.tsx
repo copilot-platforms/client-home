@@ -212,7 +212,6 @@ THIS CODE MOVES THE CURSOR TO THE searchText TEXT
 //     if (pos !== -1) {
 //       const { state } = editor;
 //       const resolvedPos = state.doc.resolve(pos + searchText.length); // Move to the end of the matched text
-//       console.log(resolvedPos)
 //       const selection = TextSelection.create(state.doc, resolvedPos.pos);
 //       editor.chain().focus().setTextSelection({ to: selection.to, from: selection.from }).run()
 

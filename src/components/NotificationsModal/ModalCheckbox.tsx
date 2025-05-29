@@ -1,24 +1,26 @@
 'use client'
 
+import { useAppState } from '@/hooks/useAppState'
 import {
   BillingIcon,
   ContractsIcon,
   DragHandleIcon,
   FormsIcon,
   SVGIcon,
+  TasksIcon,
 } from '@/icons'
 import { Notification, NotificationOption } from '@/types/notifications'
 import { capitalizeFirstLetter } from '@/utils/string'
 import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { Box, Checkbox, Typography } from '@mui/material'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { CSS } from '@dnd-kit/utilities'
-import { useAppState } from '@/hooks/useAppState'
 
 const notificationIcons: { [_key in NotificationOption]: SVGIcon } = {
   billing: BillingIcon,
   forms: FormsIcon,
   contracts: ContractsIcon,
+  tasks: TasksIcon,
 }
 
 interface ModalCheckboxProps {
