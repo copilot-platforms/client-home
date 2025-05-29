@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: company })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return errorHandler('Company not found.', 404)
   }
 }
