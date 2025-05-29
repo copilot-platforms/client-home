@@ -1,5 +1,5 @@
-import { copilotApi } from 'copilot-node-sdk'
-import type { CopilotAPI as SDK } from 'copilot-node-sdk'
+import { copilotAPIKey, tasksAppApiKey } from '@/config'
+import type { Notifications, WorkspaceInfo } from '@/types/common'
 import {
   ClientResponse,
   ClientResponseSchema,
@@ -10,22 +10,21 @@ import {
   CustomFieldResponseSchema,
   MeResponse,
   MeResponseSchema,
-  WorkspaceInfoSchema,
+  NotificationsSchema,
   Token,
   TokenSchema,
-  NotificationsSchema,
+  WorkspaceInfoSchema,
 } from '@/types/common'
-import type { Notifications, WorkspaceInfo } from '@/types/common'
-import { copilotAPIKey } from '@/config'
+import { TASKS_APP_URL } from '@/utils/constants'
+import { encodePayload } from '@/utils/crypto'
+import type { CopilotAPI as SDK } from 'copilot-node-sdk'
+import { copilotApi } from 'copilot-node-sdk'
 
 export class CopilotAPI {
   copilot: SDK
 
-  constructor(apiToken: string) {
-    this.copilot = copilotApi({
-      apiKey: copilotAPIKey,
-      token: apiToken,
-    })
+  constructor(private readonly token: string) {
+    this.copilot = copilotApi({ apiKey: copilotAPIKey, token })
   }
 
   async me(): Promise<MeResponse | null> {
@@ -79,5 +78,36 @@ export class CopilotAPI {
       recipientId,
     })
     return NotificationsSchema.parse(notifications.data)
+  }
+
+  async getIncompleteTaskCounts(): Promise<number> {
+    const tokenPayload = await this.getTokenPayload()
+    if (!tokenPayload || !tokenPayload.workspaceId) {
+      throw new Error('Could not parse token')
+    }
+
+    const baseUrl = new URL('/api/tasks/public', TASKS_APP_URL)
+    baseUrl.searchParams.set(
+      'token',
+      encodePayload(tasksAppApiKey, tokenPayload),
+    )
+    baseUrl.searchParams.set('limit', '1000000')
+
+    const todoUrl = new URL(baseUrl)
+    todoUrl.searchParams.set('status', 'todo')
+
+    const inProgressUrl = new URL(baseUrl)
+    inProgressUrl.searchParams.set('status', 'inProgress')
+
+    const processTaskResponse = async (
+      res: Promise<Response>,
+    ): Promise<number> =>
+      res.then((res) => res.json()).then(({ data }) => data.length)
+
+    const [todo, inProgress] = await Promise.all([
+      processTaskResponse(fetch(todoUrl.toString())),
+      processTaskResponse(fetch(inProgressUrl.toString())),
+    ])
+    return todo + inProgress
   }
 }

@@ -18,11 +18,15 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const notifications = await copilot.getNotifications(clientId)
+    const [notifications, taskCounts] = await Promise.all([
+      copilot.getNotifications(clientId),
+      copilot.getIncompleteTaskCounts(),
+    ])
     const counts = {
       forms: 0,
       billing: 0,
       contracts: 0,
+      tasks: taskCounts,
     }
 
     notifications.forEach(({ event }) => {
