@@ -82,7 +82,7 @@ export class CopilotAPI {
 
   async getIncompleteTaskCounts(
     clientId: string,
-    companyId: string,
+    companyId?: string,
   ): Promise<number> {
     const tokenPayload = await this.getTokenPayload()
     if (!tokenPayload || !tokenPayload.workspaceId) {
