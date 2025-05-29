@@ -50,10 +50,6 @@ const SideBarInterface: FC<IEditorInterface> = ({
     { refreshInterval: 5000 },
   )
 
-  useEffect(() => {
-    console.log('yyy notifications', appState?.appState.notifications)
-  }, [appState?.appState.notifications])
-
   useMemo(() => {
     if (dropdownSelectedClient === defaultValue) {
       appState?.toggleReadOnly(false)
