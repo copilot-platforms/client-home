@@ -23,6 +23,20 @@ export async function GET(request: NextRequest) {
   const settingService = new SettingService()
   const setting = await settingService.findByWorkspaceId(payload.workspaceId)
 
+  // Simple way to mimick backfilling of tasks notifications until action items settings is updated
+  if (
+    setting &&
+    setting.notifications &&
+    !setting?.notifications?.some(
+      (notificationSetting) => notificationSetting.key === 'tasks',
+    )
+  ) {
+    setting.notifications.push({
+      key: 'tasks',
+      show: false,
+      order: 3,
+    })
+  }
   return NextResponse.json({ data: setting || null })
 }
 
