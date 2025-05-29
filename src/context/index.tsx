@@ -32,10 +32,12 @@ export interface IAppState {
   notifications: INotification | undefined
   showEmbedInput: boolean
   font: string
+  tasks?: number
 }
 
 export interface IAppContext {
   appState: IAppState
+  /* eslint-disable no-unused-vars */
   toggleShowLinkInput: (v: boolean) => void
   toggleReadOnly: (v: boolean) => void
   setSelectedClient: (client: IClient | null) => void
@@ -56,6 +58,8 @@ export interface IAppContext {
   setNotification: (notification: INotification) => void
   setShowEmbedInput: (v: boolean) => void
   setFont: (font: string) => void
+  setTasks: (tasks: number) => void
+  /* eslint-enable no-unused-vars */
 }
 
 interface IAppCoreProvider {
@@ -86,6 +90,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     notifications: undefined,
     showEmbedInput: false,
     font: 'Inter', //default font
+    tasks: undefined,
   })
 
   const toggleShowLinkInput = (v: boolean) => {
@@ -172,6 +177,8 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
 
   const setFont = (font: string) => setState((prev) => ({ ...prev, font }))
 
+  const setTasks = (tasks: number) => setState((prev) => ({ ...prev, tasks }))
+
   return (
     <AppContext.Provider
       value={{
@@ -196,6 +203,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setNotification,
         setShowEmbedInput,
         setFont,
+        setTasks,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>

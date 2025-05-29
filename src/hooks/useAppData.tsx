@@ -78,6 +78,10 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       count: appState?.appState.notifications?.contracts,
     }
 
+    const tasks = {
+      count: appState?.appState.notifications?.tasks,
+    }
+
     const client = {
       ..._client,
       ...customFields,
@@ -90,6 +94,7 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       action,
       form,
       contract,
+      tasks,
     }
   }, [
     appState?.appState.selectedClient,
