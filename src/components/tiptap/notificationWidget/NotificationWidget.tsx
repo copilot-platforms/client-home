@@ -1,19 +1,19 @@
-import { NodeViewWrapper } from '@tiptap/react'
-import { Box, Stack, Typography } from '@mui/material'
 import RedirectButton from '@/components/atoms/RedirectButton'
-import { PortalRoutes } from '@/types/copilotPortal'
-import React, { useMemo, useState } from 'react'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
+import { PortalRoutes } from '@/types/copilotPortal'
 import { DragIndicatorRounded } from '@mui/icons-material'
+import { Box, Stack, Typography } from '@mui/material'
+import { NodeViewWrapper } from '@tiptap/react'
 import { usePathname } from 'next/navigation'
+import { useMemo, useState } from 'react'
 
 export const NotificationWidget = () => {
   const invoiceCount = useAppData('{{invoice.count}}')
   const actionCount = useAppData('{{action.count}}')
   const formCount = useAppData('{{form.count}}')
   const contractCount = useAppData('{{contract.count}}')
-  const taskCount = useAppData('{{task.count}}')
+  const taskCount = useAppData('{{tasks.count}}')
   const appState = useAppState()
 
   const [hovered, setHovered] = useState(false)
