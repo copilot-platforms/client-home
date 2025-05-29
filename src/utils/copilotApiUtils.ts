@@ -80,16 +80,25 @@ export class CopilotAPI {
     return NotificationsSchema.parse(notifications.data)
   }
 
-  async getIncompleteTaskCounts(): Promise<number> {
+  async getIncompleteTaskCounts(
+    clientId: string,
+    companyId: string,
+  ): Promise<number> {
     const tokenPayload = await this.getTokenPayload()
     if (!tokenPayload || !tokenPayload.workspaceId) {
       throw new Error('Could not parse token')
     }
 
+    const clientPayload = {
+      workspaceId: tokenPayload.workspaceId,
+      clientId,
+      companyId,
+    }
+
     const baseUrl = new URL('/api/tasks/public', TASKS_APP_URL)
     baseUrl.searchParams.set(
       'token',
-      encodePayload(tasksAppApiKey, tokenPayload),
+      encodePayload(tasksAppApiKey, clientPayload),
     )
     baseUrl.searchParams.set('limit', '1000000')
 

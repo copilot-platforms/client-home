@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
     const { copilot, payload } = await parseToken(request)
     const clientId =
       request.nextUrl.searchParams?.get('clientId') || payload.clientId
+    const companyId =
+      request.nextUrl.searchParams?.get('companyId') || payload.companyId
 
     if (!clientId) {
       throw new ApiError(
@@ -20,7 +22,7 @@ export async function GET(request: NextRequest) {
 
     const [notifications, taskCounts] = await Promise.all([
       copilot.getNotifications(clientId),
-      copilot.getIncompleteTaskCounts(),
+      copilot.getIncompleteTaskCounts(clientId, companyId),
     ])
     const counts = {
       forms: 0,
