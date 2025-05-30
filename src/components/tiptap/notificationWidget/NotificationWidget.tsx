@@ -185,7 +185,7 @@ const NotificationComponent = ({
 }) => {
   const pathname = usePathname()
   const appState = useAppState()
-  const [appRoute, setAppRoute] = useState<string | undefined>(undefined)
+  const [appId, setAppId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (route === PortalRoutes.Tasks) {
@@ -194,7 +194,7 @@ const NotificationComponent = ({
           `api/tasks-app-id?token=${appState?.appState?.token}`,
         )
         const data = await res.json()
-        setAppRoute(data.appId)
+        setAppId(data.appId)
       }
       appRouteSetter()
     }
@@ -216,8 +216,8 @@ const NotificationComponent = ({
         {name}
       </Typography>
       <RedirectButton
-        route={appRoute ? undefined : route}
-        appId={appRoute}
+        route={appId ? undefined : route}
+        appId={appId}
         execute={pathname.includes('client-preview')}
       >
         <Typography
