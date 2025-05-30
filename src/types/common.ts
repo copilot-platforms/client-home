@@ -105,3 +105,13 @@ export const CustomFieldsSchema = z.record(
   ]),
 )
 export type CustomField = z.infer<typeof CustomFieldsSchema>
+
+export const AppInstallsDataSchema = z.object({
+  appId: z.string().optional(),
+  displayName: z.string().optional(),
+  id: z.string().optional(),
+  type: z.string().optional(),
+  object: z.string().optional(),
+})
+export const AppInstallsResponseSchema = z.array(AppInstallsDataSchema)
+export type AppInstallsResponse = z.infer<typeof AppInstallsResponseSchema>
