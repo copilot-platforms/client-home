@@ -18,12 +18,6 @@ const RedirectButton = ({
   appId,
 }: RedirectButtonProps) => {
   const handleClick = () => {
-    console.log('postMessage', {
-      type: 'history.push',
-      id: appId,
-      route: 'apps',
-    })
-
     if (execute) {
       if (appId) {
         window.parent.postMessage(

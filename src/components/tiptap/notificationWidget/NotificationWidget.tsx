@@ -188,7 +188,6 @@ const NotificationComponent = ({
   const [appId, setAppId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    console.log('state', appState?.appState)
     if (route === PortalRoutes.Tasks) {
       const appRouteSetter = async () => {
         const res = await fetch(
