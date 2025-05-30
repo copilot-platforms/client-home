@@ -59,8 +59,12 @@ const ClientPreview = ({
    * will never load for client preview and thus editor will never load as well.
    */
   const appState = useAppState()
+  const [isTokenSet, setIsTokenSet] = useState(false)
   useEffect(() => {
-    appState?.setToken(token)
+    if (!isTokenSet && appState) {
+      appState?.setToken(token)
+      setIsTokenSet(true)
+    }
   }, [appState])
 
   const editor = useEditor({
