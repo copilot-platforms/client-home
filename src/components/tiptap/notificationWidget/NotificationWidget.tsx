@@ -1,12 +1,12 @@
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
-import { PortalRoutes } from '@/types/copilotPortal'
+import { AvailablePortalRoutes, PortalRoutes } from '@/types/copilotPortal'
 import { DragIndicatorRounded } from '@mui/icons-material'
 import { Box, Stack, Typography } from '@mui/material'
 import { NodeViewWrapper } from '@tiptap/react'
 import { usePathname } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export const NotificationWidget = () => {
   const invoiceCount = useAppData('{{invoice.count}}')
@@ -185,6 +185,20 @@ const NotificationComponent = ({
 }) => {
   const pathname = usePathname()
   const appState = useAppState()
+  const [appRoute, setAppRoute] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (route === PortalRoutes.Tasks) {
+      const appRouteSetter = async () => {
+        const res = await fetch(
+          `api/tasks-app-id?token=${appState?.appState?.token}`,
+        )
+        const data = await res.json()
+        setAppRoute(data.appId)
+      }
+      appRouteSetter()
+    }
+  }, [route])
 
   return (
     <Stack
@@ -202,7 +216,8 @@ const NotificationComponent = ({
         {name}
       </Typography>
       <RedirectButton
-        route={route}
+        route={appRoute ? undefined : route}
+        appId={appRoute}
         execute={pathname.includes('client-preview')}
       >
         <Typography
