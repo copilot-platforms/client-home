@@ -1,6 +1,11 @@
 import { copilotAPIKey, tasksAppApiKey } from '@/config'
-import type { Notifications, WorkspaceInfo } from '@/types/common'
+import type {
+  AppInstallsResponse,
+  Notifications,
+  WorkspaceInfo,
+} from '@/types/common'
 import {
+  AppInstallsResponseSchema,
   ClientResponse,
   ClientResponseSchema,
   ClientsResponseSchema,
@@ -118,5 +123,14 @@ export class CopilotAPI {
       processTaskResponse(fetch(inProgressUrl.toString())),
     ])
     return todo + inProgress
+  }
+
+  async getAppId(appDeploymentId: string): Promise<string | null> {
+    const installedApps = AppInstallsResponseSchema.parse(
+      await this.copilot.listAppInstalls(),
+    )
+    return (
+      installedApps.find((app) => app.appId === appDeploymentId)?.id || null
+    )
   }
 }
