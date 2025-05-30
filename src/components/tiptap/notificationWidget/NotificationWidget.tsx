@@ -189,7 +189,7 @@ const NotificationComponent = ({
 
   useEffect(() => {
     if (route === PortalRoutes.Tasks) {
-      console.log('token', appState?.appState?.token)
+      console.log('token', appState?.appState)
       const appRouteSetter = async () => {
         const res = await fetch(
           `api/tasks-app-id?token=${appState?.appState?.token}`,
