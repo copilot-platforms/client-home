@@ -5,15 +5,28 @@ import Button from './Button'
 import { AvailablePortalRoutes } from '@/types/copilotPortal'
 
 interface RedirectButtonProps {
-  route: AvailablePortalRoutes
+  route?: AvailablePortalRoutes
   children: string | ReactNode
   execute: boolean
+  appId?: string
 }
 
-const RedirectButton = ({ route, children, execute }: RedirectButtonProps) => {
+const RedirectButton = ({
+  route,
+  children,
+  execute,
+  appId,
+}: RedirectButtonProps) => {
   const handleClick = () => {
     if (execute) {
-      window.parent.postMessage({ type: 'history.push', route }, '*')
+      if (appId) {
+        window.parent.postMessage(
+          { type: 'history.push', id: appId, route: 'apps' },
+          '*',
+        )
+      } else {
+        window.parent.postMessage({ type: 'history.push', route }, '*')
+      }
     }
   }
 
