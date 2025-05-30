@@ -29,7 +29,7 @@ import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatin
 import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion'
 
 import { EditorContent, useEditor } from '@tiptap/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ImageResize } from '@/components/tiptap/image/image'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
@@ -59,6 +59,13 @@ const ClientPreview = ({
    * will never load for client preview and thus editor will never load as well.
    */
   const appState = useAppState()
+  const [isTokenSet, setIsTokenSet] = useState(false)
+  useEffect(() => {
+    if (!isTokenSet && appState) {
+      appState.setToken(token)
+      setIsTokenSet(true)
+    }
+  }, [appState])
 
   const editor = useEditor({
     extensions: [

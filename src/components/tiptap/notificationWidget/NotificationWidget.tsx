@@ -1,7 +1,7 @@
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
-import { AvailablePortalRoutes, PortalRoutes } from '@/types/copilotPortal'
+import { PortalRoutes } from '@/types/copilotPortal'
 import { DragIndicatorRounded } from '@mui/icons-material'
 import { Box, Stack, Typography } from '@mui/material'
 import { NodeViewWrapper } from '@tiptap/react'
@@ -189,7 +189,6 @@ const NotificationComponent = ({
 
   useEffect(() => {
     if (route === PortalRoutes.Tasks) {
-      console.log('token', appState?.appState)
       const appRouteSetter = async () => {
         const res = await fetch(
           `api/tasks-app-id?token=${appState?.appState?.token}`,
