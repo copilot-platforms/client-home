@@ -106,6 +106,7 @@ export class CopilotAPI {
       encodePayload(tasksAppApiKey, clientPayload),
     )
     baseUrl.searchParams.set('limit', '1000000')
+    baseUrl.searchParams.set('parentTaskId', 'null')
 
     const todoUrl = new URL(baseUrl)
     todoUrl.searchParams.set('status', 'todo')
