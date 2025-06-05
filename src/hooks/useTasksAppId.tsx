@@ -9,6 +9,11 @@ export const useTasksAppId = () => {
   const { data, error, isLoading } = useSWR(
     token ? `/api/tasks-app-id?token=${token}` : null,
     fetcher,
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 60 * 1000,
+      dedupingInterval: 5 * 1000,
+    },
   )
 
   return {
