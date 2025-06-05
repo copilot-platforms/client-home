@@ -1,12 +1,13 @@
 import RedirectButton from '@/components/atoms/RedirectButton'
 import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
+import { useTasksAppId } from '@/hooks/useTasksAppId'
 import { PortalRoutes } from '@/types/copilotPortal'
 import { DragIndicatorRounded } from '@mui/icons-material'
 import { Box, Stack, Typography } from '@mui/material'
 import { NodeViewWrapper } from '@tiptap/react'
 import { usePathname } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export const NotificationWidget = () => {
   const invoiceCount = useAppData('{{invoice.count}}')
@@ -18,6 +19,8 @@ export const NotificationWidget = () => {
 
   const [hovered, setHovered] = useState(false)
   const pathname = usePathname()
+
+  const { appId } = useTasksAppId()
 
   function isAllNotificationsTurnedOff() {
     if (appState?.appState.settings?.notifications) {
@@ -137,9 +140,10 @@ export const NotificationWidget = () => {
                     )
                   }
 
-                  if (notification.key === PortalRoutes.Tasks) {
+                  if (notification.key === PortalRoutes.Tasks && appId) {
                     return (
                       <NotificationComponent
+                        appId={appId}
                         key={key}
                         name={`Complete ${taskCount} task${
                           !appState?.appState?.readOnly || Number(taskCount) > 1
@@ -178,27 +182,15 @@ const NotificationComponent = ({
   name,
   route,
   display,
+  appId,
 }: {
   name: string
   route: PortalRoutes
   display?: boolean
+  appId?: string
 }) => {
   const pathname = usePathname()
   const appState = useAppState()
-  const [appId, setAppId] = useState<string | undefined>(undefined)
-
-  useEffect(() => {
-    if (route === PortalRoutes.Tasks) {
-      const appRouteSetter = async () => {
-        const res = await fetch(
-          `api/tasks-app-id?token=${appState?.appState?.token}`,
-        )
-        const data = await res.json()
-        setAppId(data.appId)
-      }
-      appRouteSetter()
-    }
-  }, [route, appState?.appState?.token])
 
   return (
     <Stack

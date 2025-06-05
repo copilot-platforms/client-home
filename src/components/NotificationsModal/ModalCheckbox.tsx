@@ -28,6 +28,7 @@ interface ModalCheckboxProps {
   formState: NonNullable<Notification>
   setFormState: Dispatch<SetStateAction<NonNullable<Notification>>>
   setShowError: Dispatch<SetStateAction<NonNullable<boolean>>>
+  show: boolean
 }
 
 const ModalCheckbox = ({
@@ -35,6 +36,7 @@ const ModalCheckbox = ({
   formState,
   setFormState,
   setShowError,
+  show,
 }: ModalCheckboxProps) => {
   const appState = useAppState()
   const Icon: SVGIcon = notificationIcons[identifier]
@@ -67,6 +69,10 @@ const ModalCheckbox = ({
         return newState
       }
     })
+  }
+
+  if (!show) {
+    return <></>
   }
 
   return (
