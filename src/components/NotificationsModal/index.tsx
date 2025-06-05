@@ -22,6 +22,9 @@ import {
   arrayMove,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+import { fetcher } from '@/utils/fetcher'
+import useSWR from 'swr'
+import { useTasksAppId } from '@/hooks/useTasksAppId'
 
 interface NotificationsModalProps {
   settings: ISettings | null
@@ -34,6 +37,8 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
   const [formState, setFormState] = useState<NonNullable<Notification>>(
     order(settings?.notifications || defaultNotificationOptions),
   )
+
+  const { appId } = useTasksAppId()
 
   useMemo(() => {
     if (showError) {
@@ -182,6 +187,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
                     formState={formState}
                     setFormState={setFormState}
                     setShowError={setShowError}
+                    show={key === 'tasks' ? !!appId : true}
                   />
                 ))}
             </SortableContext>
