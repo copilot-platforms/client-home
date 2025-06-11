@@ -26,6 +26,7 @@ interface IEditorInterface {
 const SideBarInterface: FC<IEditorInterface> = ({
   displayTasks,
   clientList,
+  companies,
   customFields,
 }) => {
   const sideBarRef = useRef<HTMLDivElement | null>(null)
@@ -71,8 +72,9 @@ const SideBarInterface: FC<IEditorInterface> = ({
   useEffect(() => {
     appState?.toggleDisplayTasks({ override: displayTasks })
     appState?.setClientList(clientList)
+    appState?.setCompanies(companies)
     appState?.setCustomFields(customFields)
-  }, [displayTasks, clientList, customFields])
+  }, [displayTasks, clientList, companies, customFields])
 
   useEffect(() => {
     ;(async () => {

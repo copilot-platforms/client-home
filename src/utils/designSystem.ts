@@ -1,3 +1,4 @@
+import { CompanyResponse } from '@/types/common'
 import { IClient } from '@/types/interfaces'
 
 export const clientToSelectorOption = (clients: IClient[]) => {
@@ -8,5 +9,14 @@ export const clientToSelectorOption = (clients: IClient[]) => {
     avatarFallbackColor: '#60606a',
     companyId: client.companyId,
     type: 'client',
+  }))
+}
+
+export const companyToSelectorOption = (companies: CompanyResponse[]) => {
+  return companies.map((company) => ({
+    value: company.id,
+    label: company.name,
+    companyId: company.id,
+    type: 'company',
   }))
 }
