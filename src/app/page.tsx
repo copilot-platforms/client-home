@@ -97,6 +97,7 @@ export default async function Page({
             <SideBarInterface
               displayTasks={settings?.displayTasks}
               clientList={clientList}
+              companies={companies}
               customFields={customFields}
             />
           </div>
