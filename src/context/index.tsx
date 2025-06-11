@@ -9,6 +9,7 @@ import {
 import { Editor } from '@tiptap/react'
 import { FC, ReactNode, useState, createContext } from 'react'
 import { AppDataProvider } from '@/hooks/useAppData'
+import { CompanyResponse } from '@/types/common'
 
 export interface IAppState {
   editor: Editor | null
@@ -27,6 +28,7 @@ export interface IAppState {
   showNotificationsModal: boolean
   //this data should be fetched from API in the future
   clientList: IClient[]
+  companies: CompanyResponse[]
   customFields: ICustomField[]
   token: string
   notifications: INotification | undefined
@@ -50,6 +52,7 @@ export interface IAppContext {
   toggleNotificationsModal: () => void
   setLoading: (v: boolean) => void
   setClientList: (clientList: IClient[]) => void
+  setCompanies: (companies: CompanyResponse[]) => void
   setCustomFields: (customFields: ICustomField[]) => void
   setClientCompanyName: (companyName: string) => void
   setBannerImgUrl: (imageUrl: string | Blob | null) => void
@@ -84,6 +87,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     displayTasks: false,
     loading: false,
     clientList: [],
+    companies: [],
     customFields: [],
     token: '',
     showNotificationsModal: false,
@@ -147,6 +151,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, clientList: clientList }))
   }
 
+  const setCompanies = (companies: CompanyResponse[]) => {
+    setState((prev) => ({ ...prev, companies }))
+  }
+
   const setCustomFields = (customFields: ICustomField[]) => {
     setState((prev) => ({ ...prev, customFields: customFields }))
   }
@@ -195,6 +203,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         toggleNotificationsModal,
         setLoading,
         setClientList,
+        setCompanies,
         setCustomFields,
         setClientCompanyName,
         setBannerImgUrl,
