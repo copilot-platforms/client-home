@@ -40,6 +40,7 @@ export const ClientResponseSchema = z.object({
     )
     .nullable(),
   avatarImageUrl: z.string().nullable(),
+  companyIds: z.array(z.string()).optional(),
 })
 export type ClientResponse = z.infer<typeof ClientResponseSchema>
 

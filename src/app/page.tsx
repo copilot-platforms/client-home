@@ -15,10 +15,17 @@ async function listClients(token: string) {
   const clientList = ClientsResponseSchema.parse(
     await copilotClient.getClients(),
   )
-
-  return (clientList.data?.sort((a, b) =>
-    a.givenName.localeCompare(b.givenName),
-  ) || []) as IClient[]
+  return (clientList.data
+    ?.sort((a, b) => a.givenName.localeCompare(b.givenName))
+    ?.map(
+      (client) =>
+        ({
+          ...client,
+          companyIds: client.companyIds?.length
+            ? client.companyIds
+            : [client.companyId],
+        }) as unknown as IClient,
+    ) || []) as IClient[]
 }
 
 async function listCompanies(token: string): Promise<CompanyResponse[]> {
