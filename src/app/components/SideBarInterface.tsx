@@ -37,9 +37,11 @@ const SideBarInterface: FC<IEditorInterface> = ({
 
   const defaultValue = null
 
-  const [dropdownSelectedClient, setDropdownSelectedClient] =
-    useState<IClient | null>(defaultValue)
   const [previewClientId, setPreviewClientId] = useState<string | null>(null)
+
+  const dropdownSelectedClient =
+    appState?.appState.clientList?.find(({ id }) => id === previewClientId) ||
+    null
 
   const { data } = useSWR(
     `${
@@ -91,6 +93,10 @@ const SideBarInterface: FC<IEditorInterface> = ({
     })()
   }, [appState?.appState.bannerImgUrl])
 
+  useEffect(() => {
+    console.log('previewClientId', previewClientId)
+  }, [previewClientId])
+
   return (
     <div
       style={{
@@ -105,17 +111,18 @@ const SideBarInterface: FC<IEditorInterface> = ({
         <p className='font-medium'>Preview mode</p>
 
         <CopilotSelector
+          openMenuOnFocus
           name='previewClientId'
+          autoFocus
           placeholder={'Preview mode off'}
           grouped={false}
           limitSelectedOptions={1}
-          onChange={(input) => setPreviewClientId(input[0].id)}
+          onChange={(input) => setPreviewClientId(input[0]?.id || null)}
           clientUsers={clientToSelectorOption(
             appState?.appState.clientList || [],
           )}
           companies={[]}
           internalUsers={[]}
-          value={previewClientId}
         />
 
         {/* <Select */}
