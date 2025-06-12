@@ -38,10 +38,27 @@ const SideBarInterface: FC<IEditorInterface> = ({
   const defaultValue = null
 
   const [previewClientId, setPreviewClientId] = useState<string | null>(null)
+  const [previewClientCompanyId, setPreviewClientCompanyId] = useState<
+    string | null
+  >(null)
 
-  const dropdownSelectedClient =
-    appState?.appState.clientList?.find(({ id }) => id === previewClientId) ||
-    null
+  const dropdownSelectedClient = useMemo(() => {
+    const client = appState?.appState.clientList?.find(
+      ({ id }) => id === previewClientId,
+    )
+    if (!client) return null
+    // This is used to handle multiple companies. By overriding the companyId of client for the selected company among its list of multiple companies,
+    // we can ensure that the correct client for correct company is selected in the preview mode.
+    return { ...client, companyId: previewClientCompanyId }
+  }, [appState?.appState.clientList, previewClientId, previewClientCompanyId])
+
+  const handlePreviewSelectorChange = (
+    input?: { id: string; companyId: string }[],
+  ) => {
+    const selectedOption = input?.[0]
+    setPreviewClientId(selectedOption?.id || null)
+    setPreviewClientCompanyId(selectedOption?.companyId || null)
+  }
 
   const { data } = useSWR(
     `${
@@ -93,10 +110,6 @@ const SideBarInterface: FC<IEditorInterface> = ({
     })()
   }, [appState?.appState.bannerImgUrl])
 
-  useEffect(() => {
-    console.log('previewClientId', previewClientId)
-  }, [previewClientId])
-
   return (
     <div
       style={{
@@ -113,11 +126,10 @@ const SideBarInterface: FC<IEditorInterface> = ({
         <CopilotSelector
           openMenuOnFocus
           name='previewClientId'
-          autoFocus
           placeholder={'Preview mode off'}
           grouped={false}
           limitSelectedOptions={1}
-          onChange={(input) => setPreviewClientId(input[0]?.id || null)}
+          onChange={handlePreviewSelectorChange}
           clientUsers={clientToSelectorOption(
             appState?.appState.clientList || [],
           )}

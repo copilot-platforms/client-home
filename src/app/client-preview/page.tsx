@@ -93,7 +93,10 @@ export default async function ClientPreviewPage({
       copilotClient.getWorkspaceInfo(),
     ])
 
-  const company = await getCompany(_client.companyId, token)
+  const company = await getCompany(
+    z.string().uuid().parse(tokenPayload.companyId),
+    token,
+  )
 
   if (defaultSetting) {
     settings = {
@@ -134,7 +137,7 @@ export default async function ClientPreviewPage({
   const client = {
     ..._client,
     ...customFields,
-    company: company.name,
+    company: company?.name,
   }
 
   const htmlContent = template({ client })
