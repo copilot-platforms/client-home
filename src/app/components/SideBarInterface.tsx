@@ -140,6 +140,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           )}
           companies={companyToSelectorOption(companies)}
           internalUsers={[]}
+          ignoreCompanies={true}
         />
 
         {/* <Select */}
