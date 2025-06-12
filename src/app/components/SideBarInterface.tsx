@@ -7,7 +7,10 @@ import ColorPicker from '@/components/colorPicker/ColorPicker'
 import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import { useAppState } from '@/hooks/useAppState'
 import { IClient, ICustomField } from '@/types/interfaces'
-import { clientToSelectorOption } from '@/utils/designSystem'
+import {
+  clientToSelectorOption,
+  companyToSelectorOption,
+} from '@/utils/designSystem'
 import { fetcher } from '@/utils/fetcher'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
@@ -69,7 +72,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           }&companyId=${(dropdownSelectedClient as IClient)?.companyId}`
     }`,
     fetcher,
-    { refreshInterval: 5000 },
+    { refreshInterval: 10 * 1000 },
   )
 
   useMemo(() => {
@@ -124,16 +127,15 @@ const SideBarInterface: FC<IEditorInterface> = ({
         <p className='font-medium'>Preview mode</p>
 
         <CopilotSelector
+          isSearchable={false}
           openMenuOnFocus
           name='previewClientId'
           placeholder={'Preview mode off'}
           grouped={false}
           limitSelectedOptions={1}
           onChange={handlePreviewSelectorChange}
-          clientUsers={clientToSelectorOption(
-            appState?.appState.clientList || [],
-          )}
-          companies={[]}
+          clientUsers={clientToSelectorOption(appState?.appState.clientList)}
+          companies={companyToSelectorOption(companies)}
           internalUsers={[]}
         />
 
