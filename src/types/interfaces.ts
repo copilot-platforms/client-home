@@ -33,6 +33,7 @@ export interface IClient {
   lastActiveDate: string
   customFields: object
   avatarImageUrl: string | null
+  fallbackColor: string
 }
 
 export interface ICustomField {

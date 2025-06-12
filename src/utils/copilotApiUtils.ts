@@ -1,9 +1,5 @@
 import { copilotAPIKey, tasksAppApiKey } from '@/config'
-import type {
-  AppInstallsResponse,
-  Notifications,
-  WorkspaceInfo,
-} from '@/types/common'
+import type { Notifications, WorkspaceInfo } from '@/types/common'
 import {
   AppInstallsResponseSchema,
   ClientResponse,
@@ -24,6 +20,7 @@ import { TASKS_APP_URL } from '@/utils/constants'
 import { encodePayload } from '@/utils/crypto'
 import type { CopilotAPI as SDK } from 'copilot-node-sdk'
 import { copilotApi } from 'copilot-node-sdk'
+import { z } from 'zod'
 
 export class CopilotAPI {
   copilot: SDK
@@ -66,6 +63,12 @@ export class CopilotAPI {
     return CompanyResponseSchema.parse(
       await this.copilot.retrieveCompany({ id: companyId }),
     )
+  }
+
+  async getCompanies(): Promise<CompanyResponse[]> {
+    return z
+      .array(CompanyResponseSchema)
+      .parse((await this.copilot.listCompanies({ limit: 100_000 })).data)
   }
 
   async getWorkspaceInfo(): Promise<WorkspaceInfo> {

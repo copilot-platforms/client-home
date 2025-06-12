@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
   const copilotClient = new CopilotAPI(z.string().parse(token))
   try {
     const client = await copilotClient.getClient(z.string().parse(clientId))
-
     return NextResponse.json({ data: client })
   } catch (error) {
     console.error(error)
