@@ -134,7 +134,10 @@ const SideBarInterface: FC<IEditorInterface> = ({
           grouped={false}
           limitSelectedOptions={1}
           onChange={handlePreviewSelectorChange}
-          clientUsers={clientToSelectorOption(appState?.appState.clientList)}
+          clientUsers={clientToSelectorOption(
+            appState?.appState.clientList,
+            appState?.appState.companies,
+          )}
           companies={companyToSelectorOption(companies)}
           internalUsers={[]}
         />
