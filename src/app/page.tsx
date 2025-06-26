@@ -23,7 +23,7 @@ async function listClients(token: string) {
           ...client,
           companyIds: client.companyIds?.length
             ? client.companyIds
-            : [client.companyId],
+            : [client.companyId], // companyId is soon to be deprecated
         }) as unknown as IClient,
     ) || []) as IClient[]
 }

@@ -5,7 +5,6 @@ export const clientToSelectorOption = (
   clients?: IClient[],
   companies?: CompanyResponse[],
 ) => {
-  console.log('companies', companies)
   return (
     clients?.map((client) => ({
       value: client.id,
