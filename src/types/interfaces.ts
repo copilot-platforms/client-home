@@ -25,6 +25,7 @@ export interface IClient {
   familyName: string
   email: string
   companyId: string
+  companyIds: string[]
   status: string
   address: string
   inviteUrl: string

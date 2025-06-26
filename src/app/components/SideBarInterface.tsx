@@ -16,8 +16,9 @@ import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 
-import 'copilot-design-system/dist/styles/main.css'
 import { CompanyResponse } from '@/types/common'
+import { flattenClients } from '@/utils/api'
+import 'copilot-design-system/dist/styles/main.css'
 
 interface IEditorInterface {
   displayTasks: boolean
@@ -127,7 +128,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
         <p className='font-medium'>Preview mode</p>
 
         <CopilotSelector
-          isSearchable={false}
+          isSearchable={true}
           openMenuOnFocus
           name='previewClientId'
           placeholder={'Preview mode off'}
@@ -135,7 +136,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           limitSelectedOptions={1}
           onChange={handlePreviewSelectorChange}
           clientUsers={clientToSelectorOption(
-            appState?.appState.clientList,
+            flattenClients(appState?.appState.clientList),
             appState?.appState.companies,
           )}
           companies={companyToSelectorOption(companies)}
