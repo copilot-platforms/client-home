@@ -60,7 +60,8 @@ export default async function ClientPreviewPage({
   const token = tokenParsed.data
   const copilotClient = new CopilotAPI(token)
   const tokenPayload = await copilotClient.getTokenPayload()
-  if (!tokenPayload) {
+  if (!tokenPayload || !tokenPayload.clientId || !tokenPayload.companyId) {
+    console.info('Failing token payload', tokenPayload)
     throw new Error('Failed to parse token payload')
   }
   if (getPreviewMode(tokenPayload)) {
