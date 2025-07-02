@@ -1,9 +1,10 @@
+import { ApiError } from '@/exceptions/ApiError'
+import { Token } from '@/types/common'
+import { IClient } from '@/types/interfaces'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import httpStatus from 'http-status'
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { CopilotAPI } from '@/utils/copilotApiUtils'
-import { Token } from '@/types/common'
-import { ApiError } from '@/exceptions/ApiError'
-import httpStatus from 'http-status'
 
 export const parseToken = async (
   request: NextRequest,
@@ -25,4 +26,18 @@ export const parseToken = async (
     )
 
   return { token: token.data, payload: payload, copilot }
+}
+
+export const flattenClients = (clients?: IClient[]): IClient[] => {
+  if (!clients) return []
+
+  const flattenedClients: IClient[] = []
+  for (const client of clients) {
+    if (client.companyIds && client.companyIds.length > 0) {
+      for (const companyId of client.companyIds) {
+        flattenedClients.push({ ...client, companyId })
+      }
+    }
+  }
+  return flattenedClients
 }

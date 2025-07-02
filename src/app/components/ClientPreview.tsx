@@ -132,7 +132,7 @@ const ClientPreview = ({
   })
 
   const { data } = useSWR(`api/notifications?token=${token}`, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 10 * 1000,
   })
 
   useEffect(() => {
