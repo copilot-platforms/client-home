@@ -8,7 +8,7 @@ export class ImagePickerUtils implements IImagePickerUtils {
   image: HTMLInputElement
 
   constructor() {
-    this.image = document.createElement('input')
+    this.image = document?.createElement('input')
     this.image.type = 'file'
     this.image.accept = 'image/png, image/jpg, image/jpeg, application/pdf'
   }
