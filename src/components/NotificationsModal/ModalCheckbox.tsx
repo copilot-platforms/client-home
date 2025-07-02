@@ -10,6 +10,7 @@ import {
   TasksIcon,
 } from '@/icons'
 import { Notification, NotificationOption } from '@/types/notifications'
+import { getFont } from '@/utils/font'
 import { capitalizeFirstLetter } from '@/utils/string'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -101,7 +102,7 @@ const ModalCheckbox = ({
             variant='body1'
             id='modal-modal-description'
             className='flex items-center font-medium mt-4 '
-            sx={{ fontFamily: appState?.appState.font.replaceAll('+', ' ') }}
+            sx={{ fontFamily: getFont(appState) }}
           >
             {capitalizeFirstLetter(identifier as string)}
           </Typography>

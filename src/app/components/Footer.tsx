@@ -4,6 +4,7 @@ import { When } from '@/components/hoc/When'
 import { useAppState } from '@/hooks/useAppState'
 import { calculateFileSize } from '@/utils/calculateFileSize'
 import { defaultBannerImagePath } from '@/utils/constants'
+import { getFont } from '@/utils/font'
 import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { useEffect, useState } from 'react'
@@ -177,7 +178,7 @@ export const Footer = () => {
       <div
         className='w-full flex flex-row justify-end gap-6 py-4 px-6 fixed bottom-0 bg-white border-t border-slate-300'
         style={{
-          fontFamily: appState?.appState.font.replaceAll('+', ' '),
+          fontFamily: getFont(appState),
         }}
       >
         <button
