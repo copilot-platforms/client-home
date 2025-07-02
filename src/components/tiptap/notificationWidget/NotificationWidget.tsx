@@ -3,6 +3,7 @@ import { useAppData } from '@/hooks/useAppData'
 import { useAppState } from '@/hooks/useAppState'
 import { useTasksAppId } from '@/hooks/useTasksAppId'
 import { PortalRoutes } from '@/types/copilotPortal'
+import { getFont } from '@/utils/font'
 import { DragIndicatorRounded } from '@mui/icons-material'
 import { Box, Stack, Typography } from '@mui/material'
 import { NodeViewWrapper } from '@tiptap/react'
@@ -69,7 +70,7 @@ export const NotificationWidget = () => {
             variant='h2'
             datatype='draggable-item'
             sx={{
-              fontFamily: appState?.appState.font.replaceAll('+', ' '),
+              fontFamily: getFont(appState),
             }}
           >
             You have {actionCount} action
@@ -202,7 +203,7 @@ const NotificationComponent = ({
       <Typography
         variant='body1'
         sx={{
-          fontFamily: appState?.appState.font.replaceAll('+', ' '),
+          fontFamily: getFont(appState),
         }}
       >
         {name}
@@ -215,7 +216,7 @@ const NotificationComponent = ({
         <Typography
           variant='body1'
           sx={{
-            fontFamily: appState?.appState.font.replaceAll('+', ' '),
+            fontFamily: getFont(appState),
           }}
         >
           Go to {route}

@@ -25,6 +25,7 @@ import {
 import { fetcher } from '@/utils/fetcher'
 import useSWR from 'swr'
 import { useTasksAppId } from '@/hooks/useTasksAppId'
+import { getFont } from '@/utils/font'
 
 interface NotificationsModalProps {
   settings: ISettings | null
@@ -139,7 +140,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         <Typography
           variant='h6'
           className='px-6 pt-6 pb-4 font-medium'
-          sx={{ fontFamily: appState?.appState.font.replaceAll('+', ' ') }}
+          sx={{ fontFamily: getFont(appState) }}
         >
           Customize notifications widget
         </Typography>
@@ -155,7 +156,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
               variant='body2'
               id='modal-modal-description'
               sx={{
-                fontFamily: appState?.appState.font.replaceAll('+', ' '),
+                fontFamily: getFont(appState),
               }}
             >
               App name
@@ -164,7 +165,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
               variant='body2'
               id='modal-modal-description'
               sx={{
-                fontFamily: appState?.appState.font.replaceAll('+', ' '),
+                fontFamily: getFont(appState),
               }}
             >
               Enable
@@ -197,7 +198,7 @@ const NotificationsModal = ({ settings }: NotificationsModalProps) => {
         <div
           className='flex justify-end gap-4 py-6 px-8'
           style={{
-            fontFamily: appState?.appState.font.replaceAll('+', ' '),
+            fontFamily: getFont(appState),
           }}
         >
           <button
