@@ -19,7 +19,6 @@ declare module '@tiptap/core' {
         title?: string
         width?: string | number
         height?: string | number
-        isDraggable?: boolean
       }) => ReturnType
     }
   }
@@ -54,12 +53,7 @@ export const ImageResize = Image.extend<ImageOptions>({
           }
         },
       },
-      isDraggable: {
-        default: false,
-        renderHTML: (attributes) => {
-          return {}
-        },
-      },
+      isDraggable: false,
       src: {
         default: '',
         renderHTML: (attributes) => {
@@ -94,8 +88,8 @@ export const ImageResize = Image.extend<ImageOptions>({
         find: inputRegex,
         type: this.type,
         getAttributes: (match) => {
-          const [, , alt, src, title, height, width, isDraggable] = match
-          return { src, alt, title, height, width, isDraggable }
+          const [, , alt, src, title, height, width] = match
+          return { src, alt, title, height, width }
         },
       }),
     ]
