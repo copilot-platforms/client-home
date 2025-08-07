@@ -40,6 +40,7 @@ export const ClientResponseSchema = z.object({
     )
     .nullable(),
   avatarImageUrl: z.string().nullable(),
+  companyIds: z.array(z.string()).optional(),
 })
 export type ClientResponse = z.infer<typeof ClientResponseSchema>
 
@@ -52,6 +53,7 @@ export const CompanyResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
   iconImageUrl: z.string(),
+  fallbackColor: z.string().optional(),
 })
 export type CompanyResponse = z.infer<typeof CompanyResponseSchema>
 

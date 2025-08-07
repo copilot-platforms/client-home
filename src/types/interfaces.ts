@@ -25,6 +25,7 @@ export interface IClient {
   familyName: string
   email: string
   companyId: string
+  companyIds: string[]
   status: string
   address: string
   inviteUrl: string
@@ -33,6 +34,7 @@ export interface IClient {
   lastActiveDate: string
   customFields: object
   avatarImageUrl: string | null
+  fallbackColor: string
 }
 
 export interface ICustomField {

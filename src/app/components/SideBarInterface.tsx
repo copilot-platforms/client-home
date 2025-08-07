@@ -1,29 +1,36 @@
 'use client'
 
+import { CopilotSelector } from '@/components/CopilotSelector'
 import ImagePicker from '@/components/ImagePicker/ImagePicker'
-import ColorPicker from '@/components/colorPicker/ColorPicker'
 import AutofillFields from '@/components/autofillFields/AutofillFields'
-import Select from '@/components/select/Select'
+import ColorPicker from '@/components/colorPicker/ColorPicker'
+import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import { useAppState } from '@/hooks/useAppState'
+import { IClient, ICustomField } from '@/types/interfaces'
+import {
+  clientToSelectorOption,
+  companyToSelectorOption,
+} from '@/utils/designSystem'
+import { fetcher } from '@/utils/fetcher'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
-import { IClient, ICustomField } from '@/types/interfaces'
-import { Box, Stack } from '@mui/material'
-import Image from 'next/image'
-import { generateRandomHexColor } from '@/utils/generateRandomHexColor'
-import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+
+import { CompanyResponse } from '@/types/common'
+import { flattenClients } from '@/utils/api'
+import 'copilot-design-system/dist/styles/main.css'
 
 interface IEditorInterface {
   displayTasks: boolean
   clientList: IClient[]
+  companies: CompanyResponse[]
   customFields: ICustomField[]
 }
 
 const SideBarInterface: FC<IEditorInterface> = ({
   displayTasks,
   clientList,
+  companies,
   customFields,
 }) => {
   const sideBarRef = useRef<HTMLDivElement | null>(null)
@@ -32,11 +39,30 @@ const SideBarInterface: FC<IEditorInterface> = ({
 
   const [showImage, setShowImage] = useState('')
 
-  const defaultValue = 'Preview mode off'
+  const defaultValue = null
 
-  const [dropdownSelectedClient, setDropdownSelectedClient] = useState<
-    IClient | string | null
-  >(defaultValue)
+  const [previewClientId, setPreviewClientId] = useState<string | null>(null)
+  const [previewClientCompanyId, setPreviewClientCompanyId] = useState<
+    string | null
+  >(null)
+
+  const dropdownSelectedClient = useMemo(() => {
+    const client = appState?.appState.clientList?.find(
+      ({ id }) => id === previewClientId,
+    )
+    if (!client) return null
+    // This is used to handle multiple companies. By overriding the companyId of client for the selected company among its list of multiple companies,
+    // we can ensure that the correct client for correct company is selected in the preview mode.
+    return { ...client, companyId: previewClientCompanyId }
+  }, [appState?.appState.clientList, previewClientId, previewClientCompanyId])
+
+  const handlePreviewSelectorChange = (
+    input?: { id: string; companyId: string }[],
+  ) => {
+    const selectedOption = input?.[0]
+    setPreviewClientId(selectedOption?.id || null)
+    setPreviewClientCompanyId(selectedOption?.companyId || null)
+  }
 
   const { data } = useSWR(
     `${
@@ -47,7 +73,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
           }&companyId=${(dropdownSelectedClient as IClient)?.companyId}`
     }`,
     fetcher,
-    { refreshInterval: 5000 },
+    { refreshInterval: 10 * 1000 },
   )
 
   useMemo(() => {
@@ -65,11 +91,13 @@ const SideBarInterface: FC<IEditorInterface> = ({
     }
   }, [dropdownSelectedClient, data])
 
+  // Set data in appState
   useEffect(() => {
     appState?.toggleDisplayTasks({ override: displayTasks })
     appState?.setClientList(clientList)
+    appState?.setCompanies(companies)
     appState?.setCustomFields(customFields)
-  }, [displayTasks, clientList, customFields])
+  }, [displayTasks, clientList, companies, customFields])
 
   useEffect(() => {
     ;(async () => {
@@ -98,80 +126,98 @@ const SideBarInterface: FC<IEditorInterface> = ({
     >
       <div className='py-600 px-500 flex border-1 border-y items-center justify-between'>
         <p className='font-medium'>Preview mode</p>
-        <Select
-          name='Preview mode'
-          customOptions={
-            <>
-              <div
-                className={`hover:bg-slate-50 py-2 px-3 ${
-                  dropdownSelectedClient === defaultValue ? 'bg-slate-50' : ''
-                }`}
-                onClick={() => setDropdownSelectedClient(defaultValue)}
-              >
-                {defaultValue}
-              </div>
-              {appState?.appState.clientList &&
-                appState?.appState.clientList.map((val, key) => {
-                  return (
-                    <Stack
-                      key={val.id ?? key}
-                      direction='row'
-                      alignItems='flex-start'
-                      columnGap={0.5}
-                      className='py-2 px-3'
-                    >
-                      {val.avatarImageUrl ? (
-                        <Box key={key}>
-                          <Image
-                            src={val.avatarImageUrl}
-                            alt={val.givenName}
-                            width={20}
-                            height={10}
-                            style={{ borderRadius: '50%', marginTop: '2px' }}
-                          />
-                        </Box>
-                      ) : (
-                        <Stack
-                          key={key}
-                          sx={{
-                            width: 20,
-                            height: 20,
-                            borderRadius: '50%',
-                            background: `${generateRandomHexColor()}`,
-                            opacity: 0.8,
-                            alignItems: 'center',
-                            padding: '10px',
-                            justifyContent: 'center',
-                            marginTop: '2px',
-                          }}
-                        >
-                          <p style={{ fontSize: '14px' }}>
-                            {val.givenName.charAt(0)}
-                          </p>
-                        </Stack>
-                      )}
-                      <div
-                        key={key}
-                        className={`hover:bg-slate-50 ${
-                          dropdownSelectedClient === val.givenName
-                            ? 'bg-slate-50'
-                            : ''
-                        }`}
-                        onClick={() => setDropdownSelectedClient(val)}
-                      >
-                        {val.givenName} {val.familyName}
-                      </div>
-                    </Stack>
-                  )
-                })}
-            </>
-          }
-          selected={
-            dropdownSelectedClient === defaultValue
-              ? defaultValue
-              : (dropdownSelectedClient as IClient).givenName
-          }
+
+        <CopilotSelector
+          isSearchable={true}
+          openMenuOnFocus
+          name='previewClientId'
+          placeholder={'Preview mode off'}
+          grouped={false}
+          limitSelectedOptions={1}
+          onChange={handlePreviewSelectorChange}
+          clientUsers={clientToSelectorOption(
+            flattenClients(appState?.appState.clientList),
+            appState?.appState.companies,
+          )}
+          companies={companyToSelectorOption(companies)}
+          internalUsers={[]}
+          ignoreCompanies={true}
         />
+
+        {/* <Select */}
+        {/*   name='Preview mode' */}
+        {/*   customOptions={ */}
+        {/*     <> */}
+        {/*       <div */}
+        {/*         className={`hover:bg-slate-50 py-2 px-3 ${ */}
+        {/*           dropdownSelectedClient === defaultValue ? 'bg-slate-50' : '' */}
+        {/*         }`} */}
+        {/*         onClick={() => setDropdownSelectedClient(defaultValue)} */}
+        {/*       > */}
+        {/*         {defaultValue} */}
+        {/*       </div> */}
+        {/*       {appState?.appState.clientList && */}
+        {/*         appState?.appState.clientList.map((val, key) => { */}
+        {/*           return ( */}
+        {/*             <Stack */}
+        {/*               key={val.id ?? key} */}
+        {/*               direction='row' */}
+        {/*               alignItems='flex-start' */}
+        {/*               columnGap={0.5} */}
+        {/*               className='py-2 px-3' */}
+        {/*             > */}
+        {/*               {val.avatarImageUrl ? ( */}
+        {/*                 <Box key={key}> */}
+        {/*                   <Image */}
+        {/*                     src={val.avatarImageUrl} */}
+        {/*                     alt={val.givenName} */}
+        {/*                     width={20} */}
+        {/*                     height={10} */}
+        {/*                     style={{ borderRadius: '50%', marginTop: '2px' }} */}
+        {/*                   /> */}
+        {/*                 </Box> */}
+        {/*               ) : ( */}
+        {/*                 <Stack */}
+        {/*                   key={key} */}
+        {/*                   sx={{ */}
+        {/*                     width: 20, */}
+        {/*                     height: 20, */}
+        {/*                     borderRadius: '50%', */}
+        {/*                     background: `${generateRandomHexColor()}`, */}
+        {/*                     opacity: 0.8, */}
+        {/*                     alignItems: 'center', */}
+        {/*                     padding: '10px', */}
+        {/*                     justifyContent: 'center', */}
+        {/*                     marginTop: '2px', */}
+        {/*                   }} */}
+        {/*                 > */}
+        {/*                   <p style={{ fontSize: '14px' }}> */}
+        {/*                     {val.givenName.charAt(0)} */}
+        {/*                   </p> */}
+        {/*                 </Stack> */}
+        {/*               )} */}
+        {/*               <div */}
+        {/*                 key={key} */}
+        {/*                 className={`hover:bg-slate-50 ${ */}
+        {/*                   dropdownSelectedClient === val.givenName */}
+        {/*                     ? 'bg-slate-50' */}
+        {/*                     : '' */}
+        {/*                 }`} */}
+        {/*                 onClick={() => setDropdownSelectedClient(val)} */}
+        {/*               > */}
+        {/*                 {val.givenName} {val.familyName} */}
+        {/*               </div> */}
+        {/*             </Stack> */}
+        {/*           ) */}
+        {/*         })} */}
+        {/*     </> */}
+        {/*   } */}
+        {/*   selected={ */}
+        {/*     dropdownSelectedClient === defaultValue */}
+        {/*       ? defaultValue */}
+        {/*       : (dropdownSelectedClient as IClient).givenName */}
+        {/*   } */}
+        {/* /> */}
       </div>
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}

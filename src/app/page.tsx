@@ -1,12 +1,12 @@
-import { apiUrl } from '@/config'
-import EditorInterface from './components/EditorInterface'
-import SideBarInterface from './components/SideBarInterface'
-import { CopilotAPI } from '@/utils/copilotApiUtils'
-import { ClientsResponseSchema } from '@/types/common'
-import { IClient, ICustomField } from '@/types/interfaces'
-import { z } from 'zod'
-import InvalidToken from './components/InvalidToken'
+import EditorInterface from '@/app/components/EditorInterface'
+import InvalidToken from '@/app/components/InvalidToken'
+import SideBarInterface from '@/app/components/SideBarInterface'
 import NotificationsModal from '@/components/NotificationsModal'
+import { apiUrl } from '@/config'
+import { ClientsResponseSchema, CompanyResponse } from '@/types/common'
+import { IClient, ICustomField } from '@/types/interfaces'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import { z } from 'zod'
 
 export const revalidate = 0
 
@@ -15,10 +15,22 @@ async function listClients(token: string) {
   const clientList = ClientsResponseSchema.parse(
     await copilotClient.getClients(),
   )
+  return (clientList.data
+    ?.sort((a, b) => a.givenName.localeCompare(b.givenName))
+    ?.map(
+      (client) =>
+        ({
+          ...client,
+          companyIds: client.companyIds?.length
+            ? client.companyIds
+            : [client.companyId], // companyId is soon to be deprecated
+        }) as unknown as IClient,
+    ) || []) as IClient[]
+}
 
-  return (clientList.data?.sort((a, b) =>
-    a.givenName.localeCompare(b.givenName),
-  ) || []) as IClient[]
+async function listCompanies(token: string): Promise<CompanyResponse[]> {
+  const copilot = new CopilotAPI(token)
+  return await copilot.getCompanies()
 }
 
 async function getCustomFields(token: string) {
@@ -54,12 +66,14 @@ export default async function Page({
 
   const copilotClient = new CopilotAPI(token)
 
-  const [clientList, settings, workspace, customFields] = await Promise.all([
-    listClients(token),
-    getSettings(token),
-    copilotClient.getWorkspaceInfo(),
-    getCustomFields(token),
-  ])
+  const [clientList, companies, settings, workspace, customFields] =
+    await Promise.all([
+      listClients(token),
+      listCompanies(token),
+      getSettings(token),
+      copilotClient.getWorkspaceInfo(),
+      getCustomFields(token),
+    ])
 
   return (
     <>
@@ -90,6 +104,7 @@ export default async function Page({
             <SideBarInterface
               displayTasks={settings?.displayTasks}
               clientList={clientList}
+              companies={companies}
               customFields={customFields}
             />
           </div>
