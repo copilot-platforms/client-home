@@ -66,6 +66,10 @@ export const EmbedComponent = (props: any) => {
           src={extractIframeSrc(props.node.attrs.src)}
           width='100%'
           height='100%'
+          onError={(e) => {
+            e.stopPropagation()
+            console.log('[iframe error]:', e)
+          }}
         />
       </div>
       {!pathname.includes('client-preview') && !appState?.appState.readOnly && (
