@@ -60,19 +60,18 @@ export default async function ClientPreviewPage({
   const token = tokenParsed.data
   const copilotClient = new CopilotAPI(token)
   const tokenPayload = await copilotClient.getTokenPayload()
-  if (!tokenPayload) {
-    console.info('Failing token payload', tokenPayload)
-    throw new Error('Failed to parse token payload')
+  if (!tokenPayload || !tokenPayload.clientId || !tokenPayload.companyId) {
+    return <InvalidToken />
   }
+
   if (getPreviewMode(tokenPayload)) {
     return <NoPreviewSupport />
   }
-  if (!tokenPayload.clientId || !tokenPayload.companyId) {
-    console.info('Missing clientId or companyId in token payload', tokenPayload)
-    throw new Error('Failed to parse token payload')
-  }
 
-  const clientId = z.string().uuid().parse(tokenPayload.clientId)
+  const clientId = z.string().uuid().safeParse(tokenPayload.clientId)
+  if (!clientId.success) {
+    return <InvalidToken />
+  }
 
   let settings: ISettings = {
     content: defaultState,
@@ -94,7 +93,7 @@ export default async function ClientPreviewPage({
     await Promise.all([
       getSettings(token),
       getCustomFields(searchParams.token),
-      getClient(clientId, token),
+      getClient(clientId.data, token),
       copilotClient.getWorkspaceInfo(),
     ])
 
