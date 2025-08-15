@@ -57,14 +57,10 @@ export default async function ClientPreviewPage({
     return <InvalidToken />
   }
 
-  console.log('aaa raw token', searchParams.token)
   const token = tokenParsed.data
-  console.log('aaa token parsed', token)
   const copilotClient = new CopilotAPI(token)
-  console.log('aaa copilotClient', copilotClient)
   const tokenPayload = await copilotClient.getTokenPayload()
-  console.log('aaa tokenPayload', tokenPayload)
-  if (!tokenPayload || !tokenPayload.clientId || !tokenPayload.companyId) {
+  if (!tokenPayload) {
     return <InvalidToken />
   }
 
@@ -73,7 +69,7 @@ export default async function ClientPreviewPage({
   }
 
   const clientId = z.string().uuid().safeParse(tokenPayload.clientId)
-  if (!clientId.success) {
+  if (!clientId.success || !tokenPayload.companyId) {
     return <InvalidToken />
   }
 
