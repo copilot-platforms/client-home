@@ -18,10 +18,10 @@ import {
 } from '@/types/common'
 import { TASKS_APP_URL } from '@/utils/constants'
 import { encodePayload } from '@/utils/crypto'
+import { withRetry } from '@/utils/withRetry'
 import type { CopilotAPI as SDK } from 'copilot-node-sdk'
 import { copilotApi } from 'copilot-node-sdk'
 import { z } from 'zod'
-import { withRetry } from './withRetry'
 
 export class CopilotAPI {
   copilot: SDK
