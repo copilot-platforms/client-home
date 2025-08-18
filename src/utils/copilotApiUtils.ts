@@ -21,6 +21,7 @@ import { encodePayload } from '@/utils/crypto'
 import type { CopilotAPI as SDK } from 'copilot-node-sdk'
 import { copilotApi } from 'copilot-node-sdk'
 import { z } from 'zod'
+import { withRetry } from './withRetry'
 
 export class CopilotAPI {
   copilot: SDK
@@ -29,7 +30,7 @@ export class CopilotAPI {
     this.copilot = copilotApi({ apiKey: copilotAPIKey, token })
   }
 
-  async me(): Promise<MeResponse | null> {
+  async _me(): Promise<MeResponse | null> {
     const tokenPayload = await this.getTokenPayload()
     const id = tokenPayload?.internalUserId || tokenPayload?.clientId
     if (!tokenPayload || !id) return null
@@ -43,45 +44,45 @@ export class CopilotAPI {
   }
 
   // Get parsed payload from token
-  async getTokenPayload(): Promise<Token | undefined> {
+  async _getTokenPayload(): Promise<Token | undefined> {
     return TokenSchema.parse(await this.copilot.getTokenPayload?.())
   }
 
-  async getClient(clientId: string): Promise<ClientResponse> {
+  async _getClient(clientId: string): Promise<ClientResponse> {
     return ClientResponseSchema.parse(
       await this.copilot.retrieveClient({ id: clientId }),
     )
   }
 
-  async getClients() {
+  async _getClients() {
     return ClientsResponseSchema.parse(
       await this.copilot.listClients({ limit: 5000 }),
     )
   }
 
-  async getCompany(companyId: string): Promise<CompanyResponse> {
+  async _getCompany(companyId: string): Promise<CompanyResponse> {
     return CompanyResponseSchema.parse(
       await this.copilot.retrieveCompany({ id: companyId }),
     )
   }
 
-  async getCompanies(): Promise<CompanyResponse[]> {
+  async _getCompanies(): Promise<CompanyResponse[]> {
     return z
       .array(CompanyResponseSchema)
       .parse((await this.copilot.listCompanies({ limit: 100_000 })).data)
   }
 
-  async getWorkspaceInfo(): Promise<WorkspaceInfo> {
+  async _getWorkspaceInfo(): Promise<WorkspaceInfo> {
     return WorkspaceInfoSchema.parse(await this.copilot.retrieveWorkspace())
   }
 
-  async getCustomFields(): Promise<CustomFieldResponse> {
+  async _getCustomFields(): Promise<CustomFieldResponse> {
     return CustomFieldResponseSchema.parse(
       await this.copilot.listCustomFields(),
     )
   }
 
-  async getNotifications(recipientId: string): Promise<Notifications> {
+  async _getNotifications(recipientId: string): Promise<Notifications> {
     const notifications = await this.copilot.listNotifications({
       recipientId,
     })
@@ -129,7 +130,7 @@ export class CopilotAPI {
     return todo + inProgress
   }
 
-  async getAppId(appDeploymentId: string): Promise<string | null> {
+  async _getAppId(appDeploymentId: string): Promise<string | null> {
     const installedApps = AppInstallsResponseSchema.parse(
       await this.copilot.listAppInstalls(),
     )
@@ -137,4 +138,21 @@ export class CopilotAPI {
       installedApps.find((app) => app.appId === appDeploymentId)?.id || null
     )
   }
+
+  private wrapWithRetry<Args extends unknown[], R>(
+    fn: (...args: Args) => Promise<R>,
+  ): (...args: Args) => Promise<R> {
+    return (...args: Args): Promise<R> => withRetry(fn.bind(this), args)
+  }
+
+  me = this.wrapWithRetry(this._me)
+  getTokenPayload = this.wrapWithRetry(this._getTokenPayload)
+  getClient = this.wrapWithRetry(this._getClient)
+  getClients = this.wrapWithRetry(this._getClients)
+  getCompany = this.wrapWithRetry(this._getCompany)
+  getCompanies = this.wrapWithRetry(this._getCompanies)
+  getWorkspaceInfo = this.wrapWithRetry(this._getWorkspaceInfo)
+  getCustomFields = this.wrapWithRetry(this._getCustomFields)
+  getNotifications = this.wrapWithRetry(this._getNotifications)
+  getAppId = this.wrapWithRetry(this._getAppId)
 }
