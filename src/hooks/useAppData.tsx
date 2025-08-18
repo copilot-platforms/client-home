@@ -52,6 +52,18 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
           },
         )
       }
+
+      // Handle both new and old address schemas
+      const addressableCustomField = customFields[key] as {
+        fullAddress?: string
+      }
+      if (
+        addressableCustomField &&
+        typeof addressableCustomField == 'object' &&
+        'fullAddress' in addressableCustomField
+      ) {
+        customFields[key] = addressableCustomField.fullAddress!
+      }
     }
 
     let count = 0
