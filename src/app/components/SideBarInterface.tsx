@@ -6,19 +6,18 @@ import AutofillFields from '@/components/autofillFields/AutofillFields'
 import ColorPicker from '@/components/colorPicker/ColorPicker'
 import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import { useAppState } from '@/hooks/useAppState'
+import { CompanyResponse } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
+import { flattenClients } from '@/utils/api'
 import {
   clientToSelectorOption,
   companyToSelectorOption,
 } from '@/utils/designSystem'
 import { fetcher } from '@/utils/fetcher'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import 'copilot-design-system/dist/styles/main.css'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
-
-import { CompanyResponse } from '@/types/common'
-import { flattenClients } from '@/utils/api'
-import 'copilot-design-system/dist/styles/main.css'
 
 interface IEditorInterface {
   displayTasks: boolean
@@ -143,81 +142,6 @@ const SideBarInterface: FC<IEditorInterface> = ({
           internalUsers={[]}
           ignoreCompanies={true}
         />
-
-        {/* <Select */}
-        {/*   name='Preview mode' */}
-        {/*   customOptions={ */}
-        {/*     <> */}
-        {/*       <div */}
-        {/*         className={`hover:bg-slate-50 py-2 px-3 ${ */}
-        {/*           dropdownSelectedClient === defaultValue ? 'bg-slate-50' : '' */}
-        {/*         }`} */}
-        {/*         onClick={() => setDropdownSelectedClient(defaultValue)} */}
-        {/*       > */}
-        {/*         {defaultValue} */}
-        {/*       </div> */}
-        {/*       {appState?.appState.clientList && */}
-        {/*         appState?.appState.clientList.map((val, key) => { */}
-        {/*           return ( */}
-        {/*             <Stack */}
-        {/*               key={val.id ?? key} */}
-        {/*               direction='row' */}
-        {/*               alignItems='flex-start' */}
-        {/*               columnGap={0.5} */}
-        {/*               className='py-2 px-3' */}
-        {/*             > */}
-        {/*               {val.avatarImageUrl ? ( */}
-        {/*                 <Box key={key}> */}
-        {/*                   <Image */}
-        {/*                     src={val.avatarImageUrl} */}
-        {/*                     alt={val.givenName} */}
-        {/*                     width={20} */}
-        {/*                     height={10} */}
-        {/*                     style={{ borderRadius: '50%', marginTop: '2px' }} */}
-        {/*                   /> */}
-        {/*                 </Box> */}
-        {/*               ) : ( */}
-        {/*                 <Stack */}
-        {/*                   key={key} */}
-        {/*                   sx={{ */}
-        {/*                     width: 20, */}
-        {/*                     height: 20, */}
-        {/*                     borderRadius: '50%', */}
-        {/*                     background: `${generateRandomHexColor()}`, */}
-        {/*                     opacity: 0.8, */}
-        {/*                     alignItems: 'center', */}
-        {/*                     padding: '10px', */}
-        {/*                     justifyContent: 'center', */}
-        {/*                     marginTop: '2px', */}
-        {/*                   }} */}
-        {/*                 > */}
-        {/*                   <p style={{ fontSize: '14px' }}> */}
-        {/*                     {val.givenName.charAt(0)} */}
-        {/*                   </p> */}
-        {/*                 </Stack> */}
-        {/*               )} */}
-        {/*               <div */}
-        {/*                 key={key} */}
-        {/*                 className={`hover:bg-slate-50 ${ */}
-        {/*                   dropdownSelectedClient === val.givenName */}
-        {/*                     ? 'bg-slate-50' */}
-        {/*                     : '' */}
-        {/*                 }`} */}
-        {/*                 onClick={() => setDropdownSelectedClient(val)} */}
-        {/*               > */}
-        {/*                 {val.givenName} {val.familyName} */}
-        {/*               </div> */}
-        {/*             </Stack> */}
-        {/*           ) */}
-        {/*         })} */}
-        {/*     </> */}
-        {/*   } */}
-        {/*   selected={ */}
-        {/*     dropdownSelectedClient === defaultValue */}
-        {/*       ? defaultValue */}
-        {/*       : (dropdownSelectedClient as IClient).givenName */}
-        {/*   } */}
-        {/* /> */}
       </div>
 
       {/* <hr className='bg-slate-300' style={{ padding: 0.1 }} /> */}
