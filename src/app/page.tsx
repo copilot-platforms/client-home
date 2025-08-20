@@ -90,6 +90,7 @@ export default async function Page({
               settings={settings}
               token={token}
               font={workspace.font}
+              customLabels={workspace.labels}
             />
           </div>
           <div
