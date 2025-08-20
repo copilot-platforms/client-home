@@ -57,14 +57,22 @@ import { useAppDataContext } from '@/hooks/useAppData'
 import { defaultNotificationOptions } from '@/utils/notifications'
 import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
+import { CustomLabels } from '@/types/common'
+import { prepareCustomLabel } from '@/utils/customLabels'
 
 interface IEditorInterface {
   settings: ISettings | null
   token: string
   font: string
+  customLabels?: CustomLabels
 }
 
-const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
+const EditorInterface = ({
+  settings,
+  token,
+  font,
+  customLabels,
+}: IEditorInterface) => {
   const appState = useAppState()
 
   const initialEditorContent = 'Type "/" for commands'
@@ -150,16 +158,17 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
       CodeBlock,
       Code,
     ],
-    content: settings?.content || defaultState,
+    content: prepareCustomLabel(
+      settings?.content || defaultState,
+      customLabels,
+    ),
   })
 
   const [bannerImage, setBannerImage] = useState<string>('')
   const [bannerImageHovered, setBannerImageHovered] = useState(false)
 
   useEffect(() => {
-    if (editor) {
-      editor?.setEditable(!appState?.appState.readOnly as boolean)
-    }
+    editor?.setEditable(!appState?.appState.readOnly as boolean)
   }, [appState?.appState.readOnly, editor])
 
   const appData = useAppDataContext()
@@ -290,10 +299,11 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
         )
         appState?.setToken(token)
         appState?.setFont(font)
+        appState?.setCustomLabels(customLabels)
       }
       appState?.setLoading(false)
     })()
-  }, [settings, token, font])
+  }, [settings, token, font, customLabels])
 
   useEffect(() => {
     if (!appState?.appState.settings) return
