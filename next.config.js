@@ -60,5 +60,10 @@ module.exports = withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
+
+    // maps errors to exact release. Vercel automatically exposes VERCEL_GIT_COMMIT_SHA environment variables during the build process.
+    release: process.env.VERCEL_GIT_COMMIT_SHA,
+    include: '.next', // 👈 Upload sourcemaps from Next.js build
+    ignore: ['node_modules'], // exclude noisy files
   },
 )
