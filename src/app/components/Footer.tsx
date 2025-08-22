@@ -4,6 +4,7 @@ import { When } from '@/components/hoc/When'
 import { useAppState } from '@/hooks/useAppState'
 import { calculateFileSize } from '@/utils/calculateFileSize'
 import { defaultBannerImagePath } from '@/utils/constants'
+import { replaceCustomLabelsWithPlaceholders } from '@/utils/customLabels'
 import { getFont } from '@/utils/font'
 import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
@@ -40,8 +41,10 @@ export const Footer = () => {
   const handleSave = async () => {
     setSaving(true)
     //get editor content
-    const content = appState?.appState.editor?.getHTML() || ''
-
+    const content = replaceCustomLabelsWithPlaceholders(
+      appState?.appState.editor?.getHTML() || '',
+      appState?.appState.customLabels,
+    )
     let payload = {}
     const bgColor = appState?.appState.editorColor || '#ffffff'
 
@@ -67,7 +70,7 @@ export const Footer = () => {
       )
       payload = {
         backgroundColor: bgColor,
-        content: content,
+        content,
         bannerImageId: data?.id,
         token: appState?.appState.token,
         displayTasks: appState?.appState.displayTasks,
@@ -80,7 +83,7 @@ export const Footer = () => {
     if (!appState?.appState.bannerImgUrl) {
       payload = {
         backgroundColor: bgColor,
-        content: content,
+        content,
         token: appState?.appState.token,
         bannerImageId: null,
         displayTasks: appState?.appState.displayTasks,
