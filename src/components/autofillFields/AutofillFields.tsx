@@ -5,6 +5,7 @@ import { TiptapEditorUtils } from '@/utils/tiptapEditorUtils'
 import { Editor } from '@tiptap/react'
 import { When } from '../hoc/When'
 import { useEffect, useState } from 'react'
+import { prepareCustomLabel } from '@/utils/customLabels'
 
 const AutofillFields = () => {
   const appState = useAppState()
@@ -56,27 +57,31 @@ const AutofillFields = () => {
         <When condition={appState?.appState?.readOnly as boolean}>
           <AutofillTextStaticField
             labelName={'Given name'}
-            labelValues={
-              appState?.appState?.selectedClient?.givenName as string
-            }
+            labelValues={prepareCustomLabel(
+              appState?.appState?.selectedClient?.givenName as string,
+              appState?.appState.customLabels,
+            )}
           />
           <AutofillTextStaticField
             labelName={'Family name'}
-            labelValues={
-              appState?.appState?.selectedClient?.familyName as string
-            }
+            labelValues={prepareCustomLabel(
+              appState?.appState?.selectedClient?.familyName as string,
+              appState?.appState.customLabels,
+            )}
           />
           <AutofillTextStaticField
             labelName={'Email'}
-            labelValues={appState?.appState?.selectedClient?.email as string}
+            labelValues={prepareCustomLabel(
+              appState?.appState?.selectedClient?.email as string,
+              appState?.appState.customLabels,
+            )}
           />
           <AutofillTextStaticField
             labelName={'Company'}
-            labelValues={
-              appState?.appState?.selectedClientCompanyName
-                ? appState?.appState?.selectedClientCompanyName
-                : ''
-            }
+            labelValues={prepareCustomLabel(
+              (appState?.appState?.selectedClientCompanyName as string) || '',
+              appState?.appState.customLabels,
+            )}
           />
           {appState?.appState?.selectedClient &&
             Object.keys(
@@ -108,13 +113,22 @@ const AutofillFields = () => {
         {/* edit mode */}
         <When condition={!appState?.appState.readOnly}>
           {staticAutofillValues.map((el, key) => {
+            const labelText = el.replaceAll('{{', '').replaceAll('}}', '')
             return (
               <AutofillText
                 key={key}
-                label={el.replaceAll('{{', '').replaceAll('}}', '')}
+                label={prepareCustomLabel(
+                  labelText,
+                  appState?.appState.customLabels,
+                )}
                 handleClick={() => {
                   if (appState?.appState.readOnly) return
-                  tiptapEditorUtils.insertAutofill(`${el}`)
+                  tiptapEditorUtils.insertAutofill(
+                    prepareCustomLabel(
+                      `${el}`,
+                      appState?.appState.customLabels,
+                    ),
+                  )
                 }}
               />
             )
@@ -124,10 +138,18 @@ const AutofillFields = () => {
               return (
                 <AutofillText
                   key={key}
-                  label={`__client__.${el.key}`}
+                  label={prepareCustomLabel(
+                    `__client__.${el.key}`,
+                    appState?.appState.customLabels,
+                  )}
                   handleClick={() => {
                     if (appState?.appState.readOnly) return
-                    tiptapEditorUtils.insertAutofill(`{{__client__.${el.key}}}`)
+                    tiptapEditorUtils.insertAutofill(
+                      prepareCustomLabel(
+                        `{{__client__.${el.key}}}`,
+                        appState?.appState.customLabels,
+                      ),
+                    )
                   }}
                 />
               )
@@ -147,12 +169,15 @@ const AutofillText = ({
   label: string
   handleClick?: () => void
 }) => {
+  const appState = useAppState()
   return (
     <p
       className='text-new-gray hover:text-text cursor-pointer'
       onClick={handleClick}
     >
-      &#123;&#123;{label}&#125;&#125;
+      &#123;&#123;
+      {prepareCustomLabel(label, appState?.appState.customLabels)}
+      &#125;&#125;
     </p>
   )
 }

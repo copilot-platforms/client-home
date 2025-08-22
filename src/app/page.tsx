@@ -3,7 +3,11 @@ import InvalidToken from '@/app/components/InvalidToken'
 import SideBarInterface from '@/app/components/SideBarInterface'
 import NotificationsModal from '@/components/NotificationsModal'
 import { apiUrl } from '@/config'
-import { ClientsResponseSchema, CompanyResponse } from '@/types/common'
+import {
+  ClientsResponseSchema,
+  CompanyResponse,
+  CustomLabels,
+} from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { CopilotAPI } from '@/utils/copilotApiUtils'
 import { z } from 'zod'
@@ -75,6 +79,13 @@ export default async function Page({
       getCustomFields(token),
     ])
 
+  const labels = Object.keys(workspace.labels).reduce((acc, key) => {
+    // Make label values lowercase as only that is being used in the client home app
+    const lookupKey = key as keyof CustomLabels
+    acc[lookupKey] = workspace.labels[lookupKey]?.toLowerCase()
+    return acc
+  }, {} as CustomLabels)
+
   return (
     <>
       <head>
@@ -90,7 +101,7 @@ export default async function Page({
               settings={settings}
               token={token}
               font={workspace.font}
-              customLabels={workspace.labels}
+              customLabels={labels}
             />
           </div>
           <div
