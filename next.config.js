@@ -20,13 +20,11 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
-
 // SENTRY CONFIG
 const { withSentryConfig } = require('@sentry/nextjs')
 
 module.exports = withSentryConfig(
-  module.exports,
+  nextConfig,
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
@@ -35,6 +33,11 @@ module.exports = withSentryConfig(
     silent: true,
     org: process.env.NEXT_PUBLIC_SENTRY_ORG,
     project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
+    // maps errors to exact release. Vercel automatically exposes VERCEL_GIT_COMMIT_SHA environment variables during the build process.
+    release: process.env.VERCEL_GIT_COMMIT_SHA,
+    include: '.next', // 👈 Upload sourcemaps from Next.js build
+    ignore: ['node_modules'], // exclude noisy files
+    urlPrefix: '~/_next',
   },
   {
     // For all available options, see:
@@ -60,10 +63,5 @@ module.exports = withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-
-    // maps errors to exact release. Vercel automatically exposes VERCEL_GIT_COMMIT_SHA environment variables during the build process.
-    release: process.env.VERCEL_GIT_COMMIT_SHA,
-    include: '.next', // 👈 Upload sourcemaps from Next.js build
-    ignore: ['node_modules'], // exclude noisy files
   },
 )
