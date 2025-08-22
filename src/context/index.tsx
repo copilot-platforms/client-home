@@ -7,7 +7,7 @@ import {
   ISettings,
 } from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
-import { FC, ReactNode, useState, createContext } from 'react'
+import { FC, ReactNode, useState, createContext, useEffect } from 'react'
 import { AppDataProvider } from '@/hooks/useAppData'
 import { CompanyResponse, CustomLabels } from '@/types/common'
 
@@ -71,6 +71,8 @@ interface IAppCoreProvider {
   children: ReactNode
 }
 
+export let appContextData: IAppState | null = null
+
 export const AppContext = createContext<IAppContext | null>(null)
 
 export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
@@ -99,6 +101,14 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     tasks: undefined,
     customLabels: undefined,
   })
+
+  useEffect(() => {
+    // NOTE: only update appContextData when `customLabels` changes
+    // In the future, you can make it update the var for other state variables as well
+    if (!appContextData?.customLabels && state.customLabels) {
+      appContextData = state
+    }
+  }, [state])
 
   const toggleShowLinkInput = (v: boolean) => {
     setState((prev) => ({ ...prev, showLinkInput: v }))

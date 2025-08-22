@@ -5,6 +5,8 @@ import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
 import { z } from 'zod'
 import { AutofillMenu } from './AutofillMenu'
+import { appContextData } from '@/context'
+import { prepareCustomLabel } from '@/utils/customLabels'
 
 async function getCustomFields(token: string) {
   const res = await fetch(`/api/autofill?token=${token}`, {
@@ -28,10 +30,13 @@ let customFields: ICustomField[] = []
 
 export const autofillMenuSuggestion = {
   items: async ({ query }: any) => {
+    if (!window) return []
+
     return [
       ...staticAutofillValues,
       ...customFields.map((el: any) => `{{__client__.${el.key}}}`),
     ]
+      .map((text) => prepareCustomLabel(text, appContextData?.customLabels))
 
       .filter((item: any) =>
         item.toLowerCase().replaceAll('{{', '').startsWith(query.toLowerCase()),

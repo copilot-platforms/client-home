@@ -42,6 +42,8 @@ export const prepareCustomLabel = (
   text: string,
   customLabels?: CustomLabels,
 ) => {
+  if (!text) return text
+
   let result = text
 
   for (const [placeholder, key] of Object.entries(customLabelKeyMapping)) {

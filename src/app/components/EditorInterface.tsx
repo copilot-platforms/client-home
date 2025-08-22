@@ -77,92 +77,98 @@ const EditorInterface = ({
 
   const initialEditorContent = 'Type "/" for commands'
 
-  const editor = useEditor({
-    extensions: [
-      AutofillExtension,
-      NotificationWidgetExtension,
-      IframeExtension.configure({
-        allowFullscreen: true,
-      }),
-      Document,
-      Paragraph,
-      Heading,
-      Text,
-      Underline,
-      Bold,
-      Italic,
-      Strike,
-      CalloutExtension,
-      LinkpdfExtension,
-      Gapcursor,
-      History,
-      Hardbreak,
-      FloatingCommandExtension.configure({
-        suggestion: floatingMenuSuggestion,
-      }),
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-          const headingPlaceholders: any = {
-            1: 'Heading 1',
-            2: 'Heading 2',
-            3: 'Heading 3',
-          }
+  const editor = useEditor(
+    {
+      extensions: [
+        AutofillExtension,
+        NotificationWidgetExtension,
+        IframeExtension.configure({
+          allowFullscreen: true,
+        }),
+        Document,
+        Paragraph,
+        Heading,
+        Text,
+        Underline,
+        Bold,
+        Italic,
+        Strike,
+        CalloutExtension,
+        LinkpdfExtension,
+        Gapcursor,
+        History,
+        Hardbreak,
+        FloatingCommandExtension.configure({
+          suggestion: floatingMenuSuggestion,
+        }),
+        Placeholder.configure({
+          placeholder: ({ node }) => {
+            const headingPlaceholders: any = {
+              1: 'Heading 1',
+              2: 'Heading 2',
+              3: 'Heading 3',
+            }
 
-          if (node.type.name === 'heading') {
-            return headingPlaceholders[node.attrs.level]
-          }
+            if (node.type.name === 'heading') {
+              return headingPlaceholders[node.attrs.level]
+            }
 
-          return initialEditorContent
-        },
-      }),
-      Link.extend({
-        exitable: true,
-      }).configure({
-        autolink: false,
-      }),
-      OrderedList.configure({
-        itemTypeName: 'listItem',
-        keepMarks: true,
-        keepAttributes: true,
-        HTMLAttributes: {
-          class: 'list-decimal',
-          type: '1',
-        },
-      }),
-      ListItem,
-      BulletList.configure({
-        HTMLAttributes: {
-          class: 'list-disc',
-        },
-      }),
-      ImageResize,
-      Table.configure({
-        resizable: true,
-      }),
-      Mention.configure({
-        HTMLAttributes: {
-          class: 'autofill-pill',
-        },
-        suggestion: autofillMenuSuggestion,
-        renderLabel({ node }) {
-          return `${node.attrs.label ?? node.attrs.id}`
-        },
-      }),
-      TableRow,
-      TableCell,
-      TableHeader.configure({
-        HTMLAttributes: {
-          class: 'font-bold',
-        },
-      }),
-      CodeBlock,
-      Code,
-    ],
-    content: prepareCustomLabel(
-      settings?.content || defaultState,
-      customLabels,
-    ),
-  })
+            return initialEditorContent
+          },
+        }),
+        Link.extend({
+          exitable: true,
+        }).configure({
+          autolink: false,
+        }),
+        OrderedList.configure({
+          itemTypeName: 'listItem',
+          keepMarks: true,
+          keepAttributes: true,
+          HTMLAttributes: {
+            class: 'list-decimal',
+            type: '1',
+          },
+        }),
+        ListItem,
+        BulletList.configure({
+          HTMLAttributes: {
+            class: 'list-disc',
+          },
+        }),
+        ImageResize,
+        Table.configure({
+          resizable: true,
+        }),
+        Mention.configure({
+          HTMLAttributes: {
+            class: 'autofill-pill',
+          },
+          suggestion: autofillMenuSuggestion,
+          renderLabel({ node }) {
+            return prepareCustomLabel(
+              `${node.attrs.label ?? node.attrs.id}`,
+              appState?.appState.customLabels,
+            )
+          },
+        }),
+        TableRow,
+        TableCell,
+        TableHeader.configure({
+          HTMLAttributes: {
+            class: 'font-bold',
+          },
+        }),
+        CodeBlock,
+        Code,
+      ],
+      content: prepareCustomLabel(
+        settings?.content || defaultState,
+        customLabels,
+      ),
+    },
+    [appState?.appState.customLabels],
+  )
 
   const [bannerImage, setBannerImage] = useState<string>('')
   const [bannerImageHovered, setBannerImageHovered] = useState(false)
@@ -347,6 +353,7 @@ const EditorInterface = ({
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
   if (!editor) return null
+  if (!appState?.appState.customLabels) return null
 
   return (
     <>
