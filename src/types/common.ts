@@ -83,12 +83,6 @@ export const CustomFieldResponseSchema = z.object({
 })
 export type CustomFieldResponse = z.infer<typeof CustomFieldResponseSchema>
 
-export const WorkspaceInfoSchema = z.object({
-  font: z.string(),
-})
-
-export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>
-
 export const NotificationsSchema = z.array(
   z.object({
     event: z.string(),
@@ -117,3 +111,17 @@ export const AppInstallsDataSchema = z.object({
 })
 export const AppInstallsResponseSchema = z.array(AppInstallsDataSchema)
 export type AppInstallsResponse = z.infer<typeof AppInstallsResponseSchema>
+
+export const CustomLabelsSchema = z.object({
+  individualTerm: z.string().optional(),
+  individualTermPlural: z.string().optional(),
+  groupTerm: z.string().optional(),
+  groupTermPlural: z.string().optional(),
+})
+export type CustomLabels = z.infer<typeof CustomLabelsSchema>
+
+export const WorkspaceInfoSchema = z.object({
+  font: z.string(),
+  labels: CustomLabelsSchema,
+})
+export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>

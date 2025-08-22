@@ -7,9 +7,9 @@ import {
   ISettings,
 } from '@/types/interfaces'
 import { Editor } from '@tiptap/react'
-import { FC, ReactNode, useState, createContext } from 'react'
+import { FC, ReactNode, useState, createContext, useEffect } from 'react'
 import { AppDataProvider } from '@/hooks/useAppData'
-import { CompanyResponse } from '@/types/common'
+import { CompanyResponse, CustomLabels } from '@/types/common'
 
 export interface IAppState {
   editor: Editor | null
@@ -35,6 +35,7 @@ export interface IAppState {
   showEmbedInput: boolean
   font: string
   tasks?: number
+  customLabels?: CustomLabels
 }
 
 export interface IAppContext {
@@ -62,12 +63,15 @@ export interface IAppContext {
   setShowEmbedInput: (v: boolean) => void
   setFont: (font: string) => void
   setTasks: (tasks: number) => void
+  setCustomLabels: (customLabels?: CustomLabels) => void
   /* eslint-enable no-unused-vars */
 }
 
 interface IAppCoreProvider {
   children: ReactNode
 }
+
+export let appContextData: IAppState | null = null
 
 export const AppContext = createContext<IAppContext | null>(null)
 
@@ -95,7 +99,16 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     showEmbedInput: false,
     font: 'Inter', //default font
     tasks: undefined,
+    customLabels: undefined,
   })
+
+  useEffect(() => {
+    // NOTE: only update appContextData when `customLabels` changes
+    // In the future, you can make it update the var for other state variables as well
+    if (!appContextData?.customLabels && state.customLabels) {
+      appContextData = state
+    }
+  }, [state])
 
   const toggleShowLinkInput = (v: boolean) => {
     setState((prev) => ({ ...prev, showLinkInput: v }))
@@ -187,6 +200,9 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
 
   const setTasks = (tasks: number) => setState((prev) => ({ ...prev, tasks }))
 
+  const setCustomLabels = (customLabels?: CustomLabels) =>
+    setState((prev) => ({ ...prev, customLabels }))
+
   return (
     <AppContext.Provider
       value={{
@@ -213,6 +229,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setShowEmbedInput,
         setFont,
         setTasks,
+        setCustomLabels,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>

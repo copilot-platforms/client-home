@@ -57,109 +57,124 @@ import { useAppDataContext } from '@/hooks/useAppData'
 import { defaultNotificationOptions } from '@/utils/notifications'
 import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
+import { CustomLabels } from '@/types/common'
+import { prepareCustomLabel } from '@/utils/customLabels'
 
 interface IEditorInterface {
   settings: ISettings | null
   token: string
   font: string
+  customLabels?: CustomLabels
 }
 
-const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
+const EditorInterface = ({
+  settings,
+  token,
+  font,
+  customLabels,
+}: IEditorInterface) => {
   const appState = useAppState()
 
   const initialEditorContent = 'Type "/" for commands'
 
-  const editor = useEditor({
-    extensions: [
-      AutofillExtension,
-      NotificationWidgetExtension,
-      IframeExtension.configure({
-        allowFullscreen: true,
-      }),
-      Document,
-      Paragraph,
-      Heading,
-      Text,
-      Underline,
-      Bold,
-      Italic,
-      Strike,
-      CalloutExtension,
-      LinkpdfExtension,
-      Gapcursor,
-      History,
-      Hardbreak,
-      FloatingCommandExtension.configure({
-        suggestion: floatingMenuSuggestion,
-      }),
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-          const headingPlaceholders: any = {
-            1: 'Heading 1',
-            2: 'Heading 2',
-            3: 'Heading 3',
-          }
+  const editor = useEditor(
+    {
+      extensions: [
+        AutofillExtension,
+        NotificationWidgetExtension,
+        IframeExtension.configure({
+          allowFullscreen: true,
+        }),
+        Document,
+        Paragraph,
+        Heading,
+        Text,
+        Underline,
+        Bold,
+        Italic,
+        Strike,
+        CalloutExtension,
+        LinkpdfExtension,
+        Gapcursor,
+        History,
+        Hardbreak,
+        FloatingCommandExtension.configure({
+          suggestion: floatingMenuSuggestion,
+        }),
+        Placeholder.configure({
+          placeholder: ({ node }) => {
+            const headingPlaceholders: any = {
+              1: 'Heading 1',
+              2: 'Heading 2',
+              3: 'Heading 3',
+            }
 
-          if (node.type.name === 'heading') {
-            return headingPlaceholders[node.attrs.level]
-          }
+            if (node.type.name === 'heading') {
+              return headingPlaceholders[node.attrs.level]
+            }
 
-          return initialEditorContent
-        },
-      }),
-      Link.extend({
-        exitable: true,
-      }).configure({
-        autolink: false,
-      }),
-      OrderedList.configure({
-        itemTypeName: 'listItem',
-        keepMarks: true,
-        keepAttributes: true,
-        HTMLAttributes: {
-          class: 'list-decimal',
-          type: '1',
-        },
-      }),
-      ListItem,
-      BulletList.configure({
-        HTMLAttributes: {
-          class: 'list-disc',
-        },
-      }),
-      ImageResize,
-      Table.configure({
-        resizable: true,
-      }),
-      Mention.configure({
-        HTMLAttributes: {
-          class: 'autofill-pill',
-        },
-        suggestion: autofillMenuSuggestion,
-        renderLabel({ node }) {
-          return `${node.attrs.label ?? node.attrs.id}`
-        },
-      }),
-      TableRow,
-      TableCell,
-      TableHeader.configure({
-        HTMLAttributes: {
-          class: 'font-bold',
-        },
-      }),
-      CodeBlock,
-      Code,
-    ],
-    content: settings?.content || defaultState,
-  })
+            return initialEditorContent
+          },
+        }),
+        Link.extend({
+          exitable: true,
+        }).configure({
+          autolink: false,
+        }),
+        OrderedList.configure({
+          itemTypeName: 'listItem',
+          keepMarks: true,
+          keepAttributes: true,
+          HTMLAttributes: {
+            class: 'list-decimal',
+            type: '1',
+          },
+        }),
+        ListItem,
+        BulletList.configure({
+          HTMLAttributes: {
+            class: 'list-disc',
+          },
+        }),
+        ImageResize,
+        Table.configure({
+          resizable: true,
+        }),
+        Mention.configure({
+          HTMLAttributes: {
+            class: 'autofill-pill',
+          },
+          suggestion: autofillMenuSuggestion,
+          renderLabel({ node }) {
+            return prepareCustomLabel(
+              `${node.attrs.label ?? node.attrs.id}`,
+              appState?.appState.customLabels,
+            )
+          },
+        }),
+        TableRow,
+        TableCell,
+        TableHeader.configure({
+          HTMLAttributes: {
+            class: 'font-bold',
+          },
+        }),
+        CodeBlock,
+        Code,
+      ],
+      content: prepareCustomLabel(
+        settings?.content || defaultState,
+        customLabels,
+      ),
+    },
+    [appState?.appState.customLabels],
+  )
 
   const [bannerImage, setBannerImage] = useState<string>('')
   const [bannerImageHovered, setBannerImageHovered] = useState(false)
 
   useEffect(() => {
-    if (editor) {
-      editor?.setEditable(!appState?.appState.readOnly as boolean)
-    }
+    editor?.setEditable(!appState?.appState.readOnly as boolean)
   }, [appState?.appState.readOnly, editor])
 
   const appData = useAppDataContext()
@@ -290,10 +305,11 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
         )
         appState?.setToken(token)
         appState?.setFont(font)
+        appState?.setCustomLabels(customLabels)
       }
       appState?.setLoading(false)
     })()
-  }, [settings, token, font])
+  }, [settings, token, font, customLabels])
 
   useEffect(() => {
     if (!appState?.appState.settings) return
@@ -337,6 +353,7 @@ const EditorInterface = ({ settings, token, font }: IEditorInterface) => {
   }, [editor?.getHTML(), appState?.appState.readOnly])
 
   if (!editor) return null
+  if (!appState?.appState.customLabels) return null
 
   return (
     <>

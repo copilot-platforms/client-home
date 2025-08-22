@@ -1,8 +1,8 @@
 export const staticAutofillValues = [
-  '{{client.givenName}}',
-  '{{client.familyName}}',
-  '{{client.email}}',
-  '{{client.company}}',
+  '{{__client__.givenName}}',
+  '{{__client__.familyName}}',
+  '{{__client__.email}}',
+  '{{__client__.company}}',
 ]
 
 export const defaultBannerImagePath = '/images/default_bg.jpg'
