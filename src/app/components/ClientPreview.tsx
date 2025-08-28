@@ -40,17 +40,21 @@ import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import { defaultBgColor } from '@/utils/constants'
+import { prepareCustomLabel } from '@/utils/customLabels'
+import { CustomLabels } from '@/types/common'
 
 const ClientPreview = ({
   content,
   settings,
   token,
   font,
+  labels,
 }: {
   content: string
   settings: ISettings
   token: string
   font: string
+  labels: CustomLabels
 }) => {
   /**
    * Importing all the editor related imports and settings up this editor
@@ -156,7 +160,11 @@ const ClientPreview = ({
         displayTasks: false,
       }
       editor.setEditable(false)
-      editor.chain().focus().setContent(content).run()
+      editor
+        .chain()
+        .focus()
+        .setContent(prepareCustomLabel(content, labels))
+        .run()
       if (settings?.displayTasks) {
         appState?.toggleDisplayTasks()
       }

@@ -11,6 +11,7 @@ import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
 import { getPreviewMode } from '@/utils/previewMode'
 import { NoPreviewSupport } from './NoPreviewSupport'
 import { preprocessTemplate } from '@/utils/string'
+import { prepareCustomLabel } from '@/utils/customLabels'
 
 export const revalidate = 0
 
@@ -109,7 +110,13 @@ export default async function ClientPreviewPage({
     }
   }
 
-  const template = Handlebars?.compile(preprocessTemplate(settings?.content))
+  const template = Handlebars?.compile(
+    preprocessTemplate(
+      prepareCustomLabel(settings?.content, workspace.labels, {
+        isClientMode: true,
+      }),
+    ),
+  )
 
   //add comma separator for custom fields
   const customFields: any = _client?.customFields
@@ -192,6 +199,7 @@ export default async function ClientPreviewPage({
             settings={settings}
             token={searchParams.token}
             font={workspace.font}
+            labels={workspace.labels}
           />
         </div>
       </div>

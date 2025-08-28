@@ -41,18 +41,22 @@ const customLabelDefaultMapping: Record<CustomLabelPlaceholders, string> = {
 export const prepareCustomLabel = (
   text: string,
   customLabels?: CustomLabels,
+  opts?: {
+    isClientMode?: boolean
+  },
 ) => {
   if (!text) return text
 
   let result = text
 
   for (const [placeholder, key] of Object.entries(customLabelKeyMapping)) {
-    const replacement =
-      customLabels?.[key] ||
-      customLabelDefaultMapping[key as CustomLabelPlaceholders]
-    result = result.replaceAll(placeholder, replacement)
+    let replacement =
+      customLabelDefaultMapping[placeholder as CustomLabelPlaceholders]
+    if (!opts?.isClientMode) {
+      replacement = customLabels?.[key] || replacement
+    }
+    result = result.replaceAll(placeholder, replacement.toLowerCase())
   }
-
   return result
 }
 
@@ -61,8 +65,6 @@ export const replaceCustomLabelsWithPlaceholders = (
   customLables?: CustomLabels,
 ) => {
   if (!customLables) return content
-  console.log('xxx content', content)
-  console.log('xxxcustom', customLables.individualTerm)
 
   // NOTE: Only hardcoded for client as per Client Home requirements. It's highly unlikely we will
   // get other patterns since these are customFields
