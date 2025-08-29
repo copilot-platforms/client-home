@@ -213,7 +213,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
-          defaultState.replace(/\s/g, '') ||
+          prepareCustomLabel(
+            defaultState.replace(/\s/g, ''),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
         (appState?.appState.settings.displayTasks !==
           appState?.appState.displayTasks &&
