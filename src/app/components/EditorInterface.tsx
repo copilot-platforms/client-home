@@ -232,7 +232,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content?.toString() ||
+          prepareCustomLabel(
+            appState?.appState.settings?.content?.toString(),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
