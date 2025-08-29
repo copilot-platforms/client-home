@@ -213,7 +213,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
-          defaultState.replace(/\s/g, '') ||
+          prepareCustomLabel(
+            defaultState.replaceAll(' ', ''),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
         (appState?.appState.settings.displayTasks !==
           appState?.appState.displayTasks &&
@@ -232,7 +235,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content?.toString() ||
+          prepareCustomLabel(
+            appState?.appState.settings?.content?.toString(),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
