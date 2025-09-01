@@ -1,64 +1,67 @@
 'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 
-import { Toaster } from 'react-hot-toast'
-import Handlebars from 'handlebars'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion'
 import CalloutExtension from '@/components/tiptap/callout/CalloutExtension'
+import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension'
+import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion'
+import { ImageResize } from '@/components/tiptap/image/image'
 import LinkpdfExtension from '@/components/tiptap/pdf/PdfExtension'
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Heading from '@tiptap/extension-heading'
-import Text from '@tiptap/extension-text'
-import OrderedList from '@tiptap/extension-ordered-list'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item'
-import Table from '@tiptap/extension-table'
 import { TableCell } from '@/components/tiptap/table/table-cell'
+import Bold from '@tiptap/extension-bold'
+import BulletList from '@tiptap/extension-bullet-list'
+import Code from '@tiptap/extension-code'
+import CodeBlock from '@tiptap/extension-code-block'
+import Document from '@tiptap/extension-document'
+import Gapcursor from '@tiptap/extension-gapcursor'
+import Hardbreak from '@tiptap/extension-hard-break'
+import Heading from '@tiptap/extension-heading'
+import History from '@tiptap/extension-history'
+import Italic from '@tiptap/extension-italic'
+import Link from '@tiptap/extension-link'
+import ListItem from '@tiptap/extension-list-item'
+import Mention from '@tiptap/extension-mention'
+import OrderedList from '@tiptap/extension-ordered-list'
+import Paragraph from '@tiptap/extension-paragraph'
+import Placeholder from '@tiptap/extension-placeholder'
+import Strike from '@tiptap/extension-strike'
+import Table from '@tiptap/extension-table'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
+import Text from '@tiptap/extension-text'
 import Underline from '@tiptap/extension-underline'
-import CodeBlock from '@tiptap/extension-code-block'
-import Code from '@tiptap/extension-code'
-import Link from '@tiptap/extension-link'
-import Bold from '@tiptap/extension-bold'
-import Italic from '@tiptap/extension-italic'
-import Strike from '@tiptap/extension-strike'
-import Gapcursor from '@tiptap/extension-gapcursor'
-import History from '@tiptap/extension-history'
-import Placeholder from '@tiptap/extension-placeholder'
-import Mention from '@tiptap/extension-mention'
-import FloatingCommandExtension from '@/components/tiptap/floatingMenu/floatingCommandExtension'
-import Hardbreak from '@tiptap/extension-hard-break'
-import { floatingMenuSuggestion } from '@/components/tiptap/floatingMenu/floatingMenuSuggestion'
-import { autofillMenuSuggestion } from '@/components/tiptap/autofieldSelector/autofillMenuSuggestion'
-import { ImageResize } from '@/components/tiptap/image/image'
+import Handlebars from 'handlebars'
+import { Scrollbars } from 'react-custom-scrollbars'
+import { Toaster } from 'react-hot-toast'
 
-import ControlledBubbleMenu from '@/components/tiptap/bubbleMenu/ControlledBubbleMenu'
-import BubbleMenuContainer from '@/components/tiptap/bubbleMenu/BubbleMenu'
 import NoteDisplay from '@/components/display/NoteDisplay'
 import { When } from '@/components/hoc/When'
+import BubbleMenuContainer from '@/components/tiptap/bubbleMenu/BubbleMenu'
+import ControlledBubbleMenu from '@/components/tiptap/bubbleMenu/ControlledBubbleMenu'
 
-import { useAppState } from '@/hooks/useAppState'
-import { ISettings } from '@/types/interfaces'
 import LoaderComponent from '@/components/display/Loader'
-import { ImagePickerUtils } from '@/utils/imagePickerUtils'
-import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput'
-import { defaultState } from '../../../defaultState'
-import Image from 'next/image'
-import { Box } from '@mui/material'
-import { Delete } from '@mui/icons-material'
-import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
-import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
-import { useAppDataContext } from '@/hooks/useAppData'
-import { defaultNotificationOptions } from '@/utils/notifications'
 import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
+import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput'
+import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
+import { useAppDataContext } from '@/hooks/useAppData'
+import { useAppState } from '@/hooks/useAppState'
 import { CustomLabels } from '@/types/common'
-import { prepareCustomLabel } from '@/utils/customLabels'
+import { ISettings } from '@/types/interfaces'
+import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
+import {
+  prepareCustomLabel,
+  replaceCustomLabelsWithPlaceholders,
+} from '@/utils/customLabels'
+import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import { defaultNotificationOptions } from '@/utils/notifications'
+import { Delete } from '@mui/icons-material'
+import { Box } from '@mui/material'
+import Image from 'next/image'
+import { defaultState } from '../../../defaultState'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -213,7 +216,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
-          defaultState.replace(/\s/g, '') ||
+          replaceCustomLabelsWithPlaceholders(
+            defaultState.replaceAll(' ', ''),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
         (appState?.appState.settings.displayTasks !==
           appState?.appState.displayTasks &&
@@ -232,7 +238,10 @@ const EditorInterface = ({
     ) {
       if (
         appState?.appState.originalTemplate?.toString() !==
-          appState?.appState.settings?.content?.toString() ||
+          replaceCustomLabelsWithPlaceholders(
+            appState?.appState.settings?.content?.toString(),
+            appState?.appState?.customLabels,
+          ) ||
         appState?.appState.settings?.backgroundColor !==
           appState?.appState.editorColor ||
         (appState?.appState.settings.bannerImage?.url || '') !==
