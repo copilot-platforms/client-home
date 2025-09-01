@@ -86,6 +86,8 @@ export type CustomFieldResponse = z.infer<typeof CustomFieldResponseSchema>
 export const NotificationsSchema = z.array(
   z.object({
     event: z.string(),
+    companyId: z.string().optional(),
+    recipientCompanyId: z.string().optional(),
   }),
 )
 export type Notifications = z.infer<typeof NotificationsSchema>
