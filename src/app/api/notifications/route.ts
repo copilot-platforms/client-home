@@ -4,6 +4,7 @@ import { notificationEvents } from '@/utils/notifications'
 import { errorHandler } from '@/utils/common'
 import httpStatus from 'http-status'
 import { ApiError } from '@/exceptions/ApiError'
+import { z } from 'zod'
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,12 +32,21 @@ export async function GET(request: NextRequest) {
       tasks: taskCounts,
     }
 
-    notifications.forEach(({ event }) => {
-      if (event === notificationEvents.forms) {
+    notifications.forEach((notification) => {
+      const notificationCompanyId = z
+        .string()
+        .min(1)
+        // We use both fields for backwards compatibility
+        .parse(notification.recipientCompanyId || notification.companyId)
+      if (companyId !== notificationCompanyId) {
+        return
+      }
+
+      if (notification.event === notificationEvents.forms) {
         counts.forms += 1
-      } else if (event === notificationEvents.billing) {
+      } else if (notification.event === notificationEvents.billing) {
         counts.billing += 1
-      } else if (event === notificationEvents.contracts) {
+      } else if (notification.event === notificationEvents.contracts) {
         counts.contracts += 1
       }
     })
