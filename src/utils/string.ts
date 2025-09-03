@@ -16,4 +16,4 @@ export const normalizeParagraphWhitespace = (html: string) => {
     const collapsed = cleaned.replace(/\s+/g, ' ')
     return `<p>${collapsed}</p>`
   })
-} //the client home content in client side is automatically clearing whitespaces in paragraph tags. So while saving the content, we need to util to balance things out.
+} //the client home content in client side is automatically clearing whitespaces in paragraph tags. So while saving the content, we need this util to balance things out.
