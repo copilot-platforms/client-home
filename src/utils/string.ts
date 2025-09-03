@@ -9,3 +9,11 @@ export const preprocessTemplate = (template: string) => {
     return /^[a-zA-Z0-9.\s]+$/.test(p1) ? match : ''
   })
 }
+
+export const normalizeParagraphWhitespace = (html: string) => {
+  return html.replace(/<p>(.*?)<\/p>/g, (_, inner) => {
+    const cleaned = inner.trim()
+    const collapsed = cleaned.replace(/\s+/g, ' ')
+    return `<p>${collapsed}</p>`
+  })
+} //the client home content in client side is automatically clearing whitespaces in paragraph tags. So while saving the content, we need to util to balance things out.

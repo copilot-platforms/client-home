@@ -8,6 +8,7 @@ import { replaceCustomLabelsWithPlaceholders } from '@/utils/customLabels'
 import { getFont } from '@/utils/font'
 import { handleBannerImageUpload } from '@/utils/handleBannerImageUpload'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
+import { normalizeParagraphWhitespace } from '@/utils/string'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -41,9 +42,11 @@ export const Footer = () => {
   const handleSave = async () => {
     setSaving(true)
     //get editor content
-    const content = replaceCustomLabelsWithPlaceholders(
-      appState?.appState.editor?.getHTML() || '',
-      appState?.appState.customLabels,
+    const content = normalizeParagraphWhitespace(
+      replaceCustomLabelsWithPlaceholders(
+        appState?.appState.editor?.getHTML() || '',
+        appState?.appState.customLabels,
+      ),
     )
     let payload = {}
     const bgColor = appState?.appState.editorColor || '#ffffff'
