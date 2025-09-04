@@ -61,15 +61,15 @@ export const prepareCustomLabel = (
 }
 
 export const replaceCustomLabelsWithPlaceholders = (
-  content: string,
-  customLables?: CustomLabels,
+  content?: string,
+  customLabels?: CustomLabels,
 ) => {
-  if (!customLables) return content
+  if (!customLabels) return content
 
   // NOTE: Only hardcoded for client as per Client Home requirements. It's highly unlikely we will
   // get other patterns since these are customFields
-  return content.replaceAll(
-    `{{${customLables.individualTerm}.`,
+  return content?.replaceAll(
+    `{{${customLabels.individualTerm}.`,
     `{{__client__.`,
   )
 }
