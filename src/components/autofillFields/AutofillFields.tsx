@@ -113,7 +113,7 @@ const AutofillFields = () => {
         {/* edit mode */}
         <When condition={!appState?.appState.readOnly}>
           {staticAutofillValues.map((el, key) => {
-            const labelText = el.replaceAll('{{', '').replaceAll('}}', '')
+            const labelText = el?.replaceAll('{{', '').replaceAll('}}', '')
             return (
               <AutofillText
                 key={key}

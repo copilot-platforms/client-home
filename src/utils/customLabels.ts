@@ -55,7 +55,7 @@ export const prepareCustomLabel = (
     if (!opts?.isClientMode) {
       replacement = customLabels?.[key] || replacement
     }
-    result = result.replaceAll(placeholder, replacement.toLowerCase())
+    result = result?.replaceAll(placeholder, replacement.toLowerCase())
   }
   return result
 }
