@@ -40,7 +40,7 @@ export const autofillMenuSuggestion = {
 
       .filter((item: any) =>
         item
-          .toLowerCase()
+          ?.toLowerCase()
           ?.replaceAll('{{', '')
           .startsWith(query.toLowerCase()),
       )
