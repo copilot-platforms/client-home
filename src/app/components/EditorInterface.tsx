@@ -215,7 +215,10 @@ const EditorInterface = ({
       appState?.appState.originalTemplate
     ) {
       if (
-        appState?.appState.originalTemplate?.replace(/\s/g, '') !==
+        replaceCustomLabelsWithPlaceholders(
+          appState?.appState.originalTemplate?.replace(/\s/g, ''),
+          appState?.appState?.customLabels,
+        ) !==
           replaceCustomLabelsWithPlaceholders(
             defaultState.replaceAll(' ', ''),
             appState?.appState?.customLabels,
@@ -237,7 +240,10 @@ const EditorInterface = ({
       appState?.appState.originalTemplate
     ) {
       if (
-        appState?.appState.originalTemplate?.toString() !==
+        replaceCustomLabelsWithPlaceholders(
+          appState?.appState.originalTemplate?.toString(),
+          appState?.appState?.customLabels,
+        ) !==
           replaceCustomLabelsWithPlaceholders(
             appState?.appState.settings?.content?.toString(),
             appState?.appState?.customLabels,
