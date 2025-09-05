@@ -168,7 +168,7 @@ export default async function ClientPreviewPage({
       <div
         className={`overflow-y-auto overflow-x-hidden max-h-screen w-full`}
         style={{
-          fontFamily: workspace.font.replaceAll('+', ' '),
+          fontFamily: workspace.font?.replaceAll('+', ' '),
           background: `${settings.backgroundColor}`,
         }}
       >

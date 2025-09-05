@@ -9,7 +9,6 @@ import {
   BulletListIcon,
   UploadIcon2,
   CalloutIcon,
-  LinkIcon,
   TableIcon,
   EmbedIcon,
 } from '@/icons'
@@ -86,19 +85,28 @@ export const FloatingMenu = forwardRef((props: any, ref: any) => {
   }
 
   const upHandler = () => {
+    if (props.items.length === 0) {
+      return
+    }
     setSelectedIndex(
       (selectedIndex + props.items.length - 1) % props.items.length,
     )
   }
 
   const downHandler = () => {
+    if (props.items.length === 0) {
+      return
+    }
     setSelectedIndex((selectedIndex + 1) % props.items.length)
   }
 
   const enterHandler = () => {
+    if (props.items.length === 0) {
+      return
+    }
     selectItem(selectedIndex)
     //handle link input here
-    if (props.items[0].title === 'Link') {
+    if (props.items[0]?.title === 'Link') {
       appState?.toggleShowLinkInput(true)
     }
   }

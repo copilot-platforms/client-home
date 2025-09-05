@@ -217,7 +217,7 @@ const EditorInterface = ({
       if (
         appState?.appState.originalTemplate?.replace(/\s/g, '') !==
           replaceCustomLabelsWithPlaceholders(
-            defaultState.replaceAll(' ', ''),
+            defaultState?.replaceAll(' ', ''),
             appState?.appState?.customLabels,
           ) ||
         appState?.appState.bannerImgUrl !== defaultBannerImagePath ||
