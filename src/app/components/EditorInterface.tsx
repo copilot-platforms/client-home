@@ -185,10 +185,26 @@ const EditorInterface = ({
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
-      const template = Handlebars?.compile(
+      console.log(
+        1234,
+
         preprocessTemplate(
           prepareCustomLabel(
             appState?.appState?.originalTemplate ?? '',
+            appState?.appState?.customLabels,
+            {
+              isClientMode: true,
+            },
+          ),
+        ),
+      )
+      const template = Handlebars?.compile(
+        preprocessTemplate(
+          prepareCustomLabel(
+            replaceCustomLabelsWithPlaceholders(
+              appState?.appState?.originalTemplate ?? '',
+              appState?.appState?.customLabels,
+            ),
             appState?.appState?.customLabels,
             {
               isClientMode: true,
