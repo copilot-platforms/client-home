@@ -190,9 +190,9 @@ const EditorInterface = ({
           prepareCustomLabel(
             replaceCustomLabelsWithPlaceholders(
               appState?.appState?.originalTemplate ?? '',
-              appState?.appState?.customLabels,
+              appState?.appState?.customLabels ?? {},
             ),
-            appState?.appState?.customLabels,
+            appState?.appState?.customLabels ?? {},
             {
               isClientMode: true,
             },
