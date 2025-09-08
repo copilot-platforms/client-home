@@ -188,8 +188,11 @@ const EditorInterface = ({
       const template = Handlebars?.compile(
         preprocessTemplate(
           prepareCustomLabel(
-            appState?.appState?.originalTemplate ?? '',
-            appState?.appState?.customLabels,
+            replaceCustomLabelsWithPlaceholders(
+              appState?.appState?.originalTemplate ?? '',
+              appState?.appState?.customLabels ?? {},
+            ),
+            appState?.appState?.customLabels ?? {},
             {
               isClientMode: true,
             },
