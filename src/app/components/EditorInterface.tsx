@@ -62,6 +62,7 @@ import { Delete } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import Image from 'next/image'
 import { defaultState } from '../../../defaultState'
+import { preprocessTemplate } from '@/utils/string'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -185,7 +186,15 @@ const EditorInterface = ({
   useEffect(() => {
     if (appState?.appState.readOnly) {
       const template = Handlebars?.compile(
-        appState?.appState.originalTemplate || '',
+        preprocessTemplate(
+          prepareCustomLabel(
+            appState?.appState?.originalTemplate ?? '',
+            appState?.appState?.customLabels,
+            {
+              isClientMode: true,
+            },
+          ),
+        ),
       )
       const c = template(appData)
       setTimeout(() => {
