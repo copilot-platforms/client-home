@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     return errorHandler('Missing token', 422)
   }
   if (!clientId) {
-    errorHandler('Missing client Id', 422)
+    return errorHandler('Missing client Id', 422)
   }
   const copilotClient = new CopilotAPI(z.string().parse(token))
   try {
