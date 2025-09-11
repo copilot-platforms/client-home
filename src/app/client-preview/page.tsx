@@ -16,36 +16,54 @@ import { prepareCustomLabel } from '@/utils/customLabels'
 export const revalidate = 0
 
 async function getSettings(token: string) {
-  const { data } = await fetch(`${apiUrl}/api/settings?token=${token}`).then(
-    (res) => res.json(),
-  )
-  return data
+  try {
+    const { data } = await fetch(`${apiUrl}/api/settings?token=${token}`).then(
+      (res) => res.json(),
+    )
+    return data
+  } catch (error: unknown) {
+    console.error({ error })
+    throw error
+  }
 }
 
 async function getClient(clientId: string, token: string): Promise<IClient> {
-  const res = await fetch(
-    `${apiUrl}/api/client?clientId=${clientId}&token=${token}`,
-  )
-  if (!res.ok) {
-    throw new Error(`No client found with '${token}' token`)
+  try {
+    const res = await fetch(
+      `${apiUrl}/api/client?clientId=${clientId}&token=${token}`,
+    )
+    if (!res.ok) {
+      throw new Error(`No client found with '${token}' token`)
+    }
+    const { data } = await res.json()
+    return data
+  } catch (error: unknown) {
+    console.error({ error })
+    throw error
   }
-  const { data } = await res.json()
-  return data
 }
 
 async function getCompany(companyId: string, token: string) {
-  const res = await fetch(
-    `${apiUrl}/api/companies?companyId=${companyId}&token=${token}`,
-  )
+  try {
+    const res = await fetch(
+      `${apiUrl}/api/companies?companyId=${companyId}&token=${token}`,
+    )
+    if (!res.ok) {
+      throw new Error(`No company found with '${token}' token`)
+    }
 
-  const { data } = await res.json()
-  return data
+    const { data } = await res.json()
+    return data
+  } catch (error: unknown) {
+    console.error({ error })
+    throw error
+  }
 }
 
 async function getCustomFields(token: string) {
   const copilotClient = new CopilotAPI(token)
   const customFieldsList = await copilotClient.getCustomFields()
-  return (customFieldsList.data || []) as ICustomField[]
+  return ((customFieldsList && customFieldsList.data) || []) as ICustomField[]
 }
 
 export default async function ClientPreviewPage({

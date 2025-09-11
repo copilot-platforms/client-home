@@ -12,8 +12,12 @@ async function getCustomFields(token: string) {
   const res = await fetch(`/api/autofill?token=${token}`, {
     next: { revalidate: 0 },
   })
-  const { autofillFields } = await res.json()
+  if (!res.ok) {
+    console.error(`No custom fields found with '${token}' token`)
+    return []
+  }
 
+  const { autofillFields } = await res.json()
   return autofillFields
 }
 
