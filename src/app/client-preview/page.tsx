@@ -61,14 +61,9 @@ async function getCompany(companyId: string, token: string) {
 }
 
 async function getCustomFields(token: string) {
-  try {
-    const copilotClient = new CopilotAPI(token)
-    const customFieldsList = await copilotClient.getCustomFields()
-    return (customFieldsList.data || []) as ICustomField[]
-  } catch (error: unknown) {
-    console.error({ error })
-    throw error
-  }
+  const copilotClient = new CopilotAPI(token)
+  const customFieldsList = await copilotClient.getCustomFields()
+  return ((customFieldsList && customFieldsList.data) || []) as ICustomField[]
 }
 
 export default async function ClientPreviewPage({
