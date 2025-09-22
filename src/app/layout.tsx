@@ -6,7 +6,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Client Home App',
-  description: 'Copilot Client Home App',
+  description: 'Assembly Client Home App',
 }
 
 export default async function RootLayout({
