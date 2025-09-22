@@ -1,4 +1,4 @@
-// These events are included in the `event` key from Copilot API notifications response
+// These events are included in the `event` key from Assembly API notifications response
 // "tasks" is not included because we can directly access the tasks from its API
 export const notificationEvents = {
   forms: 'formResponse.requested',
