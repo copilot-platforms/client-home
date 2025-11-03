@@ -6,7 +6,7 @@ import Handlebars, { TemplateDelegate } from 'handlebars'
  * Missing properties resolve to empty string.
  */
 export const safeCompile = (templateSource: string): TemplateDelegate => {
-  const sanitizedTemplate = templateSource.replace(/{{\s*[\w]+\.\s*}}/g, '') // Remove placeholders ending with a dot
+  const sanitizedTemplate = templateSource.replaceAll(/{{\s*[\w]+\.\s*}}/, '') // Remove placeholders ending with a dot
 
   Handlebars.registerHelper('helperMissing', () => '')
 
