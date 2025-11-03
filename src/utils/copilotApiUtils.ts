@@ -111,6 +111,7 @@ export class CopilotAPI {
     )
     baseUrl.searchParams.set('limit', '1000000')
     baseUrl.searchParams.set('parentTaskId', 'null')
+    companyId && baseUrl.searchParams.set('companyId', companyId) //only includes assignned task to the logged in client.
 
     const todoUrl = new URL(baseUrl)
     todoUrl.searchParams.set('status', 'todo')
