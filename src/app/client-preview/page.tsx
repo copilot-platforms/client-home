@@ -1,17 +1,17 @@
-import Handlebars from 'handlebars'
-import { IClient, ICustomField, ISettings } from '@/types/interfaces'
-import ClientPreview from '../components/ClientPreview'
 import { apiUrl } from '@/config'
+import { IClient, ICustomField, ISettings } from '@/types/interfaces'
+import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
+import { CopilotAPI } from '@/utils/copilotApiUtils'
+import { prepareCustomLabel } from '@/utils/customLabels'
+import { getPreviewMode } from '@/utils/previewMode'
+import { safeCompile } from '@/utils/safeCompile'
+import { preprocessTemplate } from '@/utils/string'
 import Image from 'next/image'
 import { z } from 'zod'
-import { CopilotAPI } from '@/utils/copilotApiUtils'
-import InvalidToken from '../components/InvalidToken'
 import { defaultState } from '../../../defaultState'
-import { defaultBannerImagePath, defaultBgColor } from '@/utils/constants'
-import { getPreviewMode } from '@/utils/previewMode'
+import ClientPreview from '../components/ClientPreview'
+import InvalidToken from '../components/InvalidToken'
 import { NoPreviewSupport } from './NoPreviewSupport'
-import { preprocessTemplate } from '@/utils/string'
-import { prepareCustomLabel } from '@/utils/customLabels'
 
 export const revalidate = 0
 
@@ -128,7 +128,7 @@ export default async function ClientPreviewPage({
     }
   }
 
-  const template = Handlebars?.compile(
+  const template = safeCompile(
     preprocessTemplate(
       prepareCustomLabel(settings?.content, workspace.labels, {
         isClientMode: true,

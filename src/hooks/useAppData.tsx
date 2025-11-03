@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { useAppState } from '@/hooks/useAppState'
 import { IClient, INotification } from '@/types/interfaces'
-import Handlebars from 'handlebars'
-import { CustomField, CustomFieldsSchema } from '@/types/common'
+import { CustomField } from '@/types/common'
+import { safeCompile } from '@/utils/safeCompile'
 
 const AppDataContext = createContext<null | Record<string, unknown>>({})
 
@@ -17,7 +17,7 @@ export const useAppData = (template: string) => {
     return template
   }
 
-  return Handlebars?.compile(template || '')(appData)
+  return safeCompile(template || '')(appData)
 }
 
 export const AppDataProvider = ({ children }: PropsWithChildren) => {
