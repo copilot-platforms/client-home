@@ -63,6 +63,7 @@ import { Box } from '@mui/material'
 import Image from 'next/image'
 import { defaultState } from '../../../defaultState'
 import { preprocessTemplate } from '@/utils/string'
+import { safeCompile } from '@/utils/safeCompile'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -185,7 +186,7 @@ const EditorInterface = ({
 
   useEffect(() => {
     if (appState?.appState.readOnly) {
-      const template = Handlebars?.compile(
+      const template = safeCompile(
         preprocessTemplate(
           prepareCustomLabel(
             replaceCustomLabelsWithPlaceholders(
