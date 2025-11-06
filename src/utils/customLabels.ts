@@ -45,7 +45,7 @@ export const prepareCustomLabel = (
     isClientMode?: boolean
   },
 ) => {
-  if (!text) return text
+  if (!text || !text.includes('__client__')) return text
 
   let result = text
 
