@@ -125,5 +125,6 @@ export type CustomLabels = z.infer<typeof CustomLabelsSchema>
 export const WorkspaceInfoSchema = z.object({
   font: z.string(),
   labels: CustomLabelsSchema,
+  brandName: z.string().nullish(),
 })
 export type WorkspaceInfo = z.infer<typeof WorkspaceInfoSchema>

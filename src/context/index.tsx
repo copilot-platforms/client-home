@@ -36,6 +36,7 @@ export interface IAppState {
   font: string
   tasks?: number
   customLabels?: CustomLabels
+  brandName?: string
 }
 
 export interface IAppContext {
@@ -64,6 +65,7 @@ export interface IAppContext {
   setFont: (font: string) => void
   setTasks: (tasks: number) => void
   setCustomLabels: (customLabels?: CustomLabels) => void
+  setBrandName: (brandName?: string | null) => void
   /* eslint-enable no-unused-vars */
 }
 
@@ -100,6 +102,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     font: 'Inter', //default font
     tasks: undefined,
     customLabels: undefined,
+    brandName: 'us',
   })
 
   useEffect(() => {
@@ -203,6 +206,10 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
   const setCustomLabels = (customLabels?: CustomLabels) =>
     setState((prev) => ({ ...prev, customLabels }))
 
+  const setBrandName = (brandName?: string | null) => {
+    setState((prev) => ({ ...prev, brandName: brandName || 'us' }))
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -230,6 +237,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
         setFont,
         setTasks,
         setCustomLabels,
+        setBrandName,
       }}
     >
       <AppDataProvider>{children}</AppDataProvider>
