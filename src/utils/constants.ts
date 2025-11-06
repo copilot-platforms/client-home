@@ -1,4 +1,5 @@
 export const staticAutofillValues = [
+  '{{workspace.brandName}}',
   '{{__client__.givenName}}',
   '{{__client__.familyName}}',
   '{{__client__.email}}',
