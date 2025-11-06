@@ -117,6 +117,7 @@ export default async function Page({
               displayTasks={settings?.displayTasks}
               clientList={clientList}
               companies={companies}
+              workspace={workspace}
               customFields={customFields}
             />
           </div>

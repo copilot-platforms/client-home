@@ -6,7 +6,7 @@ import AutofillFields from '@/components/autofillFields/AutofillFields'
 import ColorPicker from '@/components/colorPicker/ColorPicker'
 import DisplayTasksToggle from '@/components/display/DisplayTasksToggle'
 import { useAppState } from '@/hooks/useAppState'
-import { CompanyResponse } from '@/types/common'
+import { CompanyResponse, WorkspaceInfo } from '@/types/common'
 import { IClient, ICustomField } from '@/types/interfaces'
 import { flattenClients } from '@/utils/api'
 import {
@@ -23,6 +23,7 @@ interface IEditorInterface {
   displayTasks: boolean
   clientList: IClient[]
   companies: CompanyResponse[]
+  workspace: WorkspaceInfo
   customFields: ICustomField[]
 }
 
@@ -30,6 +31,7 @@ const SideBarInterface: FC<IEditorInterface> = ({
   displayTasks,
   clientList,
   companies,
+  workspace,
   customFields,
 }) => {
   const sideBarRef = useRef<HTMLDivElement | null>(null)
@@ -96,7 +98,12 @@ const SideBarInterface: FC<IEditorInterface> = ({
     appState?.setClientList(clientList)
     appState?.setCompanies(companies)
     appState?.setCustomFields(customFields)
-  }, [displayTasks, clientList, companies, customFields])
+    appState?.setBrandName(workspace.brandName)
+  }, [displayTasks, clientList, companies, customFields, workspace])
+
+  useEffect(() => {
+    console.log('xxx', appState?.appState?.brandName)
+  }, [appState])
 
   useEffect(() => {
     ;(async () => {
