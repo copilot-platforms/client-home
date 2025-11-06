@@ -41,7 +41,6 @@ export const autofillMenuSuggestion = {
       ...customFields.map((el: any) => `{{__client__.${el.key}}}`),
     ]
       .map((text) => prepareCustomLabel(text, appContextData?.customLabels))
-
       .filter((item: any) =>
         item
           ?.toLowerCase()
