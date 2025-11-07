@@ -200,9 +200,10 @@ const EditorInterface = ({
           ),
         ),
       )
-      const c = template(appData)
+      const htmlContent = template(appData)
+
       setTimeout(() => {
-        editor?.chain().focus().setContent(c).run()
+        editor?.chain().focus().setContent(htmlContent).run()
         editor?.chain().focus().setTextSelection(0).run()
       })
     } else {

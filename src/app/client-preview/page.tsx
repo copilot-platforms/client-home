@@ -169,7 +169,10 @@ export default async function ClientPreviewPage({
     company: company?.name,
   }
 
-  const htmlContent = template({ client })
+  const htmlContent = template({
+    client,
+    workspace: { brandName: workspace.brandName },
+  })
 
   const bannerImgUrl = !defaultSetting
     ? defaultBannerImagePath
