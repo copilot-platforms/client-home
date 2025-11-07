@@ -102,7 +102,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     font: 'Inter', //default font
     tasks: undefined,
     customLabels: undefined,
-    brandName: 'us',
+    brandName: '',
   })
 
   useEffect(() => {
@@ -207,7 +207,7 @@ export const AppContextProvider: FC<IAppCoreProvider> = ({ children }) => {
     setState((prev) => ({ ...prev, customLabels }))
 
   const setBrandName = (brandName?: string | null) => {
-    setState((prev) => ({ ...prev, brandName: brandName || 'us' }))
+    setState((prev) => ({ ...prev, brandName: brandName || '' }))
   }
 
   return (
