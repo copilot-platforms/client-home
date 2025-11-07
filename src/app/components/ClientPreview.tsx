@@ -42,6 +42,7 @@ import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import { defaultBgColor } from '@/utils/constants'
 import { prepareCustomLabel } from '@/utils/customLabels'
 import { CustomLabels } from '@/types/common'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
 
 const ClientPreview = ({
   content,
@@ -131,6 +132,11 @@ const ClientPreview = ({
       TableHeader,
       CodeBlock,
       Code,
+      HorizontalRule.configure({
+        HTMLAttributes: {
+          class: 'divider',
+        },
+      }),
     ],
     content: content || defaultState,
   })
