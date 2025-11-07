@@ -102,10 +102,6 @@ const SideBarInterface: FC<IEditorInterface> = ({
   }, [displayTasks, clientList, companies, customFields, workspace])
 
   useEffect(() => {
-    console.log('xxx', appState?.appState?.brandName)
-  }, [appState])
-
-  useEffect(() => {
     ;(async () => {
       const imagePickerUtils = new ImagePickerUtils()
       if (appState?.appState.bannerImgUrl instanceof Blob) {
