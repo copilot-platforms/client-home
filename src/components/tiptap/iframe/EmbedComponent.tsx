@@ -68,7 +68,7 @@ export const EmbedComponent = (props: any) => {
           height='100%'
           onError={(e) => {
             e.stopPropagation()
-            console.log('[iframe error]:', e)
+            console.info('[iframe error]:', e)
           }}
         />
       </div>

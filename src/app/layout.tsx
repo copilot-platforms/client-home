@@ -24,12 +24,12 @@ export default async function RootLayout({
               var t = ev.target;
               if (t && t.tagName === 'IFRAME') {
                 ev.stopImmediatePropagation();
-                console.log('[iframe load error]', t.src);
+                console.info('[iframe load error]', t.src);
                 return;
               }
               if (ev instanceof ErrorEvent && ev.message === 'Script error.') {
                 ev.stopImmediatePropagation();
-                console.log('[iframe script error]', ev.filename);
+                console.info('[iframe script error]', ev.filename);
                 return;
               }
             }, true);
