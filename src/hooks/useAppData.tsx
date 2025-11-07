@@ -107,11 +107,13 @@ export const AppDataProvider = ({ children }: PropsWithChildren) => {
       form,
       contract,
       tasks,
+      workspace: { brandName: appState?.appState.brandName || '' },
     }
   }, [
     appState?.appState.selectedClient,
     appState?.appState.selectedClientCompanyName,
     appState?.appState.notifications,
+    appState?.appState.brandName,
   ])
 
   return (
