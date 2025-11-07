@@ -1,2 +1,85 @@
-export const defaultState = `<notification_widget></notification_widget><callout>This page is a sample of what you can include in your Home app. Edit the content and add a banner image to give your __client__ a personalized experience when they open up the __client__  portal. <br><br>The Tasks widget will show __client__ notifications for actions they have to take (in real-time), if they have any.</callout><h1>Welcome, <span data-type="mention" class="autofill-pill" data-id="{{__client__.givenName}}">{{__client__.givenName}}</span></h1><p>Welcome to Assembly, a full-service marketing agency that helps businesses increase their brand awareness, attract new customers, and grow their bottom line. We specialize in crafting unique and effective marketing strategies that align with your business goals and help you stand out in a crowded marketplace.</p><p></p><p>Here are our Working Hours:</p><table><tbody><tr><th class="font-bold" colspan="1" rowspan="1"><p>Days</p></th><th class="font-bold" colspan="1" rowspan="1"><p>Hours (EST)</p></th></tr><tr><td colspan="1" rowspan="1"><p>M-F</p></td><td colspan="1" rowspan="1"><p>9AM - 6PM</p></td></tr><tr><td colspan="1" rowspan="1"><p>Sat</p></td><td colspan="1" rowspan="1"><p>10AM - 5PM</p></td></tr><tr><td colspan="1" rowspan="1"><p>Sun</p></td><td colspan="1" rowspan="1"><p>Closed</p></td></tr></tbody></table><h1>How to use the Assembly portal</h1><h3>💬&nbsp;Messages</h3><p>Chat with the Assembly team or ask questions — make sure to check the Helpdesk first for some FAQs!</p><h3>📂&nbsp;Files</h3><p>Use this tab to share files with the Assembly team — you can upload any required documents and assets here. This is where we will store files for reference in the future.</p><h3>📜&nbsp;Contracts</h3><p>View and sign contracts shared by our team.</p><h3>📤&nbsp;Forms</h3><p>We’ve already shared our onboarding form with you. Please fill out the form and include all relevant information, including your brand guidelines and company details.</p><h3>💵&nbsp;Billing</h3><p>Here you will see active subscription and invoices once they’ve been assigned to you.</p><h3>🆘&nbsp;Helpdesk</h3><p>Access a collection of helpful articles we have put together.</p><h3>📊&nbsp;Analytics</h3><p>View custom analytics reports for your business.</p><h3>🌇&nbsp;Media Gallery</h3><p>See any visual and design work that the Assembly team has completed.</p><h3>📈&nbsp;Project status</h3><p>Track the projects we’re working on for you.</p>`;
+export const defaultState = `
+<notification_widget></notification_widget>
 
+<callout>
+  This page is an example. Edit the content and add a banner image in your
+  Client Home app to give your clients a personalized experience when they open
+  up the client portal.
+  <br /><br />
+  The action items widget will show client notifications for actions they have
+  to take (in real-time), if they have any.
+</callout>
+
+<h2>
+  Welcome,
+  <span
+    data-type="mention"
+    class="autofill-pill"
+    data-id="{{__client__.givenName}}"
+    >{{__client__.givenName}}</span
+  >
+</h2>
+<p></p>
+
+<p>Welcome to your {workspace.brandName} client portal.</p>
+
+<p>
+  This portal is your all-in-one experience while working with
+  {workspace.brandName} where you can view and complete important tasks and
+  connect with our team.
+</p>
+<p></p>
+
+<p>Here are our Working Hours:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <th class="font-bold" colspan="1" rowspan="1">
+        <p>Days</p>
+      </th>
+      <th class="font-bold" colspan="1" rowspan="1">
+        <p>Hours (EST)</p>
+      </th>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p>M-F</p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p>9AM - 6PM</p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p>Sat</p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p>9AM - 6PM</p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" rowspan="1">
+        <p>Sun</p>
+      </td>
+      <td colspan="1" rowspan="1">
+        <p>Closed</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>How to use the {workspace.brandName} portal</h2>
+<p></p>
+
+<p>
+  Save the link to this portal. If you miss an email notification, you can
+  always log in and check this portal for reminders on important tasks and
+  actions required. Explore the options on your left sidebar. We may add more
+  options tailored to your experience.
+</p>
+<p></p>
+
+<h3>💬&nbsp;Messages</h3>
+<p>Questions? Chat with the {workspace.brandName} team and get answers.</p>
+`
