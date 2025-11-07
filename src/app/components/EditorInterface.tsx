@@ -32,7 +32,6 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Text from '@tiptap/extension-text'
 import Underline from '@tiptap/extension-underline'
-import Handlebars from 'handlebars'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { Toaster } from 'react-hot-toast'
 
@@ -40,11 +39,12 @@ import NoteDisplay from '@/components/display/NoteDisplay'
 import { When } from '@/components/hoc/When'
 import BubbleMenuContainer from '@/components/tiptap/bubbleMenu/BubbleMenu'
 import ControlledBubbleMenu from '@/components/tiptap/bubbleMenu/ControlledBubbleMenu'
+import HorizontalRule from '@tiptap/extension-horizontal-rule'
 
 import LoaderComponent from '@/components/display/Loader'
 import { AutofillExtension } from '@/components/tiptap/autofieldSelector/ext_autofill'
-import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import BubbleEmbedInput from '@/components/tiptap/iframe/IFrameInput'
+import { IframeExtension } from '@/components/tiptap/iframe/ext_iframe'
 import BubbleLinkInput from '@/components/tiptap/linkInput/BubbleLinkInput'
 import { NotificationWidgetExtension } from '@/components/tiptap/notificationWidget/ext_notification_widget'
 import { useAppDataContext } from '@/hooks/useAppData'
@@ -58,12 +58,12 @@ import {
 } from '@/utils/customLabels'
 import { ImagePickerUtils } from '@/utils/imagePickerUtils'
 import { defaultNotificationOptions } from '@/utils/notifications'
+import { safeCompile } from '@/utils/safeCompile'
+import { preprocessTemplate } from '@/utils/string'
 import { Delete } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import Image from 'next/image'
 import { defaultState } from '../../../defaultState'
-import { preprocessTemplate } from '@/utils/string'
-import { safeCompile } from '@/utils/safeCompile'
 
 interface IEditorInterface {
   settings: ISettings | null
@@ -166,6 +166,11 @@ const EditorInterface = ({
         }),
         CodeBlock,
         Code,
+        HorizontalRule.configure({
+          HTMLAttributes: {
+            class: 'divider',
+          },
+        }),
       ],
       content: prepareCustomLabel(
         settings?.content || defaultState,
