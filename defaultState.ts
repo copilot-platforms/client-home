@@ -1,3 +1,13 @@
+const brandNameAutofill = `
+  <span
+    data-type="mention"
+    class="autofill-pill"
+    data-id="{{workspace.brandName}}"
+  >
+    {{workspace.brandName}}
+  </span>
+`
+
 export const defaultState = `
 <notification_widget></notification_widget>
 
@@ -11,22 +21,20 @@ export const defaultState = `
 </callout>
 
 <h2>
-  Welcome,
+  Welcome, 
   <span
     data-type="mention"
     class="autofill-pill"
     data-id="{{__client__.givenName}}"
-    >{{__client__.givenName}}</span
-  >
+    >{{__client__.givenName}}
+  </span>
 </h2>
 <p></p>
 
-<p>Welcome to your {workspace.brandName} client portal.</p>
+<p>Welcome to your ${brandNameAutofill} client portal.</p>
 
 <p>
-  This portal is your all-in-one experience while working with
-  {workspace.brandName} where you can view and complete important tasks and
-  connect with our team.
+  This portal is your all-in-one experience while working with ${brandNameAutofill} where you can view and complete important tasks and connect with our team.
 </p>
 <p></p>
 
@@ -69,7 +77,7 @@ export const defaultState = `
   </tbody>
 </table>
 
-<h2>How to use the {workspace.brandName} portal</h2>
+<h2>How to use the ${brandNameAutofill} portal</h2>
 <p></p>
 
 <p>
