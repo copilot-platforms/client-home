@@ -160,6 +160,7 @@ export const NotificationWidget = () => {
               },
             )}
           </Stack>
+
           <Box
             sx={{
               position: 'absolute',
