@@ -182,6 +182,7 @@ const EditorInterface = ({
 
   const [bannerImage, setBannerImage] = useState<string>('')
   const [bannerImageHovered, setBannerImageHovered] = useState(false)
+  const [isBannerError, setIsBannerError] = useState(false)
 
   useEffect(() => {
     editor?.setEditable(!appState?.appState.readOnly as boolean)
@@ -417,21 +418,24 @@ const EditorInterface = ({
               onMouseEnter={() => setBannerImageHovered(true)}
               onMouseLeave={() => setBannerImageHovered(false)}
             >
-              {!!appState?.appState.bannerImgUrl && bannerImage && (
-                <Image
-                  className='w-full'
-                  src={bannerImage}
-                  alt='banner image'
-                  width={0}
-                  height={0}
-                  sizes='100vw'
-                  style={{
-                    width: '100%',
-                    height: '25vh',
-                    objectFit: 'cover',
-                  }}
-                />
-              )}
+              {!!appState?.appState.bannerImgUrl &&
+                bannerImage &&
+                !isBannerError && (
+                  <Image
+                    className='w-full'
+                    src={bannerImage}
+                    alt='banner image'
+                    width={0}
+                    height={0}
+                    sizes='100vw'
+                    style={{
+                      width: '100%',
+                      height: '25vh',
+                      objectFit: 'cover',
+                    }}
+                    onError={() => setIsBannerError(true)}
+                  />
+                )}
               <Delete
                 sx={{
                   position: 'absolute',
