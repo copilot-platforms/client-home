@@ -6,7 +6,7 @@ const brandNameAutofill = `
   >
     {{workspace.brandName}}
   </span>
-`;
+`
 
 export const defaultState = `
 <notification_widget></notification_widget>
@@ -90,4 +90,4 @@ export const defaultState = `
 
 <h3>💬&nbsp;Messages</h3>
 <p>Questions? Chat with the ${brandNameAutofill} team and get answers.</p>
-`;
+`
