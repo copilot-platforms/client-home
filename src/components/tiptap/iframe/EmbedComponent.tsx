@@ -4,6 +4,7 @@ import { Resize } from '../image/resizeIcon'
 import { useAppState } from '@/hooks/useAppState'
 import { usePathname } from 'next/navigation'
 import { debounce } from '@mui/material'
+import { IframeAttributes, linkToIframe } from 'link-to-iframe'
 
 export const EmbedComponent = (props: any) => {
   const [isResizing, setIsResizing] = useState(false)
@@ -52,6 +53,9 @@ export const EmbedComponent = (props: any) => {
 
   const appState = useAppState()
   const pathname = usePathname()
+  const video = linkToIframe(extractIframeSrc(props.node.attrs.src), {
+    returnObject: true,
+  }) as IframeAttributes //safe to do. returnObject: true always returns an IframeAttributes object.
 
   return (
     <NodeViewWrapper className='embed relative'>
@@ -63,13 +67,14 @@ export const EmbedComponent = (props: any) => {
         }}
       >
         <iframe
-          src={extractIframeSrc(props.node.attrs.src)}
+          src={video?.src}
           width='100%'
           height='100%'
           onError={(e) => {
             e.stopPropagation()
             console.info('[iframe error]:', e)
           }}
+          allowFullScreen
         />
       </div>
       {!pathname.includes('client-preview') && !appState?.appState.readOnly && (
