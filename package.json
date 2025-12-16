@@ -39,7 +39,10 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css}": [
-      "pnpm format",
+      "pnpm lint"
+    ],
+    "*.{ts,tsx}": [
+      "pnpm typecheck",
       "pnpm lint"
     ]
   }
