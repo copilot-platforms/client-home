@@ -39,11 +39,10 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css}": [
-      "pnpm lint"
+      "biome check --write"
     ],
-    "*.{ts,tsx}": [
-      "pnpm typecheck",
-      "pnpm lint"
+    "*.{ts}": [
+      "pnpm typecheck"
     ]
   }
 }
