@@ -33,8 +33,7 @@
         },
         "noExplicitAny": "error",
         "noEmptyBlockStatements": "error",
-        "useAwait": "warn",
-        "noUnknownAtRules": "off"
+        "useAwait": "warn"
       },
       "nursery": {
         "noFloatingPromises": "error",
