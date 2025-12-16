@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# Enforce conventional commits
+pnpm commitlint --edit $1
