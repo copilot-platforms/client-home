@@ -9,5 +9,4 @@ const EnvSchema = z.object({
 })
 
 const env = process.env.GITHUB_ACTIONS === 'true' ? {} : EnvSchema.parse(process.env)
-meowmeow
 export default env
